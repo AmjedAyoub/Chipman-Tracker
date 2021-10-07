@@ -1,0 +1,17 @@
+.Search {
+    max-height: 550px;
+    overflow-x: auto;
+    width: 100%;
+}
+
+ul {
+    list-style: none;
+    overflow-x: auto;
+    max-height: 320px;
+    width: 95%;
+}
+
+li {
+    padding: 5px;
+    width: 95%;
+}

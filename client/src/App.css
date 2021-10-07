@@ -1,0 +1,28 @@
+.App {
+  text-align: center;
+  position: absolute; 
+  top: 0; 
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

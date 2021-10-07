@@ -1,0 +1,51 @@
+{
+  "name": "Chipman-Tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:prod": "node server.js",
+    "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
+    "client": "cd client && npm run start",
+    "install": "cd client && npm install",
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AmjedAyoub/Chipman-Tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AmjedAyoub/Chipman-Tracker/issues"
+  },
+  "homepage": "https://github.com/AmjedAyoub/Chipman-Tracker#readme",
+  "dependencies": {
+    "axios": "^0.22.0",
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "connect-mongo": "^3.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "dotenv-expand": "^5.1.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "express-validator": "^6.12.2",
+    "form-data": "^4.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.13.10",
+    "path": "^0.12.7",
+    "querystring": "^0.2.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "^4.0.3",
+    "session": "^0.1.0",
+    "web-vitals": "^1.1.2"
+  },
+  "devDependencies": {}
+}

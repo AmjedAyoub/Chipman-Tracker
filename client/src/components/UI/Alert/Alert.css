@@ -1,0 +1,22 @@
+.Alert {
+    text-align: center;
+    position: relative;
+    z-index: 1500;
+    background-color: rgb(245, 191, 160);
+    max-width: 350px;
+    max-height: 300px;
+    border: 1px solid rgba(173, 0, 0, 0.603);
+    box-shadow: 1px 1px 1px black;
+    padding: 16px;
+    overflow-x: auto;
+    box-sizing: border-box;
+    transition: all 0.3s ease-out;
+    margin: -27% auto;
+}
+
+@media (min-width: 600px) {
+    .Alert {
+        /* width: 500px; */
+        /* left: calc(50% - 250px); */
+    }
+}

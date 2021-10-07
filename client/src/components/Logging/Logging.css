@@ -1,0 +1,38 @@
+.Logging {
+    position: absolute; 
+    top: 0; 
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    background-image: url('../../assets/img/frg.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+  }
+
+  .Header1 {
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+      color: orangered; 
+      border: 2px solid; 
+      padding: 1rem;  
+      max-width: fit-content; 
+      display: inline; 
+      margin-top: 1%; 
+      background-color: #c5ff0054; 
+      appearance: auto;
+  }
+
+  form {
+    background-color: rgba(255, 255, 255, 0.685);
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px black;
+    padding: 16px;
+    width: 350px;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 600px) {
+    .Logging {
+      height: 120% !important;
+    }
+  }
