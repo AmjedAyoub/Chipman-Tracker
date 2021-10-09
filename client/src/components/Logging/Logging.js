@@ -1,7 +1,10 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import axios from 'axios';
 import "./Logging.css";
 import Alert from "../UI/Alert/Alert";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 class Logging extends Component {
     state = {
@@ -135,12 +138,60 @@ class Logging extends Component {
         });
     }
 
+    /* Open when someone clicks on the span element */
+    openNav= () => {
+        document.getElementById("myNav").style.width = "100%";
+    }
+  
+    /* Close when someone clicks on the "x" symbol inside the overlay */
+    closeNav = () => {
+        document.getElementById("myNav").style.width = "0%";
+    }
+
     render() {
         return (
             <div className="Logging">
-                <h1 className="Header1">What To Cook?</h1>
-                <div className="row" style={{ justifyContent: 'space-evenly' }}>
-                    <div className="Col-md-6">
+                <div id="myNav" className="overlay">
+                {/* Button to close the overlay navigation */}
+                <Link to="#"><Link to="javascript:void(0)" className="closebtn" onClick={this.closeNav}>&times;</Link></Link>
+                {/* Overlay content */}
+                <div className="overlay-content">
+                    <Link to="#" onClick={this.closeNav}>Calender</Link>
+                    <Link to="#" onClick={this.closeNav}>Emails</Link>
+                    <Link to="#" onClick={this.closeNav}>Hours</Link>
+                    <Link to="#" onClick={this.closeNav}>TERRA</Link>
+                    <Link to="#" onClick={this.closeNav}>Logout</Link>
+                </div>
+            </div>
+            {/* Use any element to open/show the overlay navigation menu */}
+            <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
+                <div className="row LogForm" style={{justifyContent: 'space-evenly', alignItems: 'center', height: 'inherit', width: '100%'}}>
+                <div className="Col-sm-6">
+                        <form onSubmit={this.handleSginInSubmit}>
+                            <h3>Sign In</h3>
+                            <div className="form-group">
+                                <label htmlFor="logemail" style={{ display: 'flex' }}>Email address</label>
+                                <input
+                                    onChange={this.handleInputChange}
+                                    value={this.state.logemail}
+                                    icon="envelope"
+                                    id="logemail"
+                                    type="email"
+                                    name="logemail" className="form-control" aria-describedby="emailHelp" placeholder="Enter email" />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="logpassword" style={{ display: 'flex' }}>Password</label>
+                                <input
+                                    onChange={this.handleInputChange}
+                                    value={this.state.logpassword}
+                                    icon="lock"
+                                    type="password"
+                                    name="logpassword" className="form-control" id="logpassword" placeholder="Password" />
+                            </div>
+                            <button type="submit" className="btn primary">Sign In</button>
+                        </form>
+                    </div>
+                    <div className="Col-sm-6">
                         <form onSubmit={this.handleFormSubmit}>
                             <h3>Sign Up</h3>
                             <div className="form-group">
@@ -189,31 +240,6 @@ class Logging extends Component {
                             </div>
                             <button className="btn danger" onClick={this.clearHandler}>Clear</button>
                             <button type="submit" className="btn warning ml-2">Sign Up</button>
-                        </form>
-                    </div>
-                    <div className="Col-md-6">
-                        <form onSubmit={this.handleSginInSubmit}>
-                            <h3>Sign In</h3>
-                            <div className="form-group">
-                                <label htmlFor="logemail" style={{ display: 'flex' }}>Email address</label>
-                                <input
-                                    onChange={this.handleInputChange}
-                                    value={this.state.logemail}
-                                    icon="envelope"
-                                    id="logemail"
-                                    type="email"
-                                    name="logemail" className="form-control" aria-describedby="emailHelp" placeholder="Enter email" />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="logpassword" style={{ display: 'flex' }}>Password</label>
-                                <input
-                                    onChange={this.handleInputChange}
-                                    value={this.state.logpassword}
-                                    icon="lock"
-                                    type="password"
-                                    name="logpassword" className="form-control" id="logpassword" placeholder="Password" />
-                            </div>
-                            <button type="submit" className="btn primary">Sign In</button>
                         </form>
                     </div>
                 </div>

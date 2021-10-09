@@ -2,16 +2,12 @@ import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import axios from "axios";
-import { faHouseUser, faDoorOpen, faFire, faSignOutAlt, faSink, faListOl, faSearch, faCartArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import Modal from "../../components/UI/Modal/Modal";
 import Alert from "../../components/UI/Alert/Alert";
 import Fridge from "../../components/Fridge/Fridge";
 import Cook from "../../components/Cook/Cook";
-import Steps from "../../components/Steps/Steps";
-import Search from '../../components/Search/Search';
-import Wash from "../../components/Wash/Wash";
-import Recipe from "../../components/Recipe/Recipe";
 
 import './Home.css';
 
@@ -671,42 +667,27 @@ class Home extends Component {
           <Cook isCooking={this.state.isCooking}  cook={(recipe) => this.recipeToCookHandler(recipe)} recipe={this.state.recipeToCook} finish={this.finishCookHandler} viewSteps={() => this.switchToStepsHandler()} viewRecipe={(recipe, prevPage) => this.switchToViewRecipeHandler(recipe, prevPage)} myMeals={this.state.myMeals} deleteRecipe={(recipe) => this.deleteRecipeHandler(recipe)} hours={this.state.hours} minutes={this.state.minutes} seconds={this.state.seconds} getValue={(event) => this.startTimerHandler(event)} timer={this.state.timer} stopTimer={this.stopTimerHandler} showHours={this.state.showHours} showMinutes={this.state.showMinutes} showSeconds={this.state.showSeconds}/>
         );
         break
-      case 'Steps':
-        model = (
-          <Steps isCooking={this.state.isCooking} recipe={this.state.recipeToCook} steps={this.state.steps} finish={this.finishCookHandler} missed={this.state.missedIngredients}/>
-        );
-        break
-      case 'Search':
-        model = (
-          <Search cook={(recipe) => this.recipeToCookHandler(recipe)} viewRecipe={(recipe, prevPage) => this.switchToViewRecipeHandler(recipe, prevPage)} query={this.state.query} recipesResults={this.state.recipesResults} changed={(event) => this.queryChangedHandler(event)} clicked={(query) => this.searchSubmitHandler(query)} autoClicked={this.autoClickedHandler}/>
-        );
-        break
-      case 'Wash':
-        model = (
-          <Wash loads={this.state.washingLoads} finishWash={this.finishWashHandler} washing={this.state.washing} startWash={this.startWashHandler} count={this.state.washCount}/>
-        );
-        break
-      case 'Recipe':
-        model = (
-          <Recipe  recipe={this.state.recipeToView} steps={this.state.stepsToView} cook={() => this.viewRecipeToCookHandler()} back={() => this.switchBackHandler(this.state.prevPage)} missed={this.state.missedIngredients}/>
-        );
-        break
       default:
         model = null;
         break;
     }
 
     return (
-      <div className="Home">
-        <h1 className="Header">What To Cook?</h1>
-        <Link to="/Home"><button className="Button btnHome" onClick={this.closeModelHandler} data-toggle="tooltip" data-placement="auto" title="Home Page"><FontAwesomeIcon className="fa-3x" icon={faHouseUser} /></button></Link>
-        <button className="Button btnFridge" onClick={() => this.openModelHandler('Fridge', false)} data-toggle="tooltip" data-placement="auto" title="View Items"><FontAwesomeIcon className="fa-3x" icon={faDoorOpen} /></button>
-        <button className="Button btnCook" onClick={() => this.openModelHandler('Cook', false)} data-toggle="tooltip" data-placement="auto" title="What's cooking?"><FontAwesomeIcon className="fa-3x" icon={faFire} /></button>
-        <button className="Button btnSink" data-toggle="tooltip" data-placement="auto" title="Wash" onClick={() => this.openModelHandler('Wash', false)} ><FontAwesomeIcon className="fa-3x" icon={faSink} /></button>
-        <button className="Button btnSearch" data-toggle="tooltip" data-placement="auto" title="Search for recipes!" onClick={() => this.openModelHandler('Search', false)}><FontAwesomeIcon className="fa-5x" icon={faSearch} /></button>
-        <button className="Button btnRecipe" data-toggle="tooltip" data-placement="auto" title="View Steps" onClick={() => this.switchToStepsHandler()}><FontAwesomeIcon className="fa-3x" icon={faListOl} /></button>
-        <button className="Button btnManage" onClick={() => this.openModelHandler('Fridge', true)} data-toggle="tooltip" data-placement="auto" title="Manage Inventory"><FontAwesomeIcon className="fa-3x" icon={faCartArrowDown} /></button>
-        <button className="Button btnOut" data-toggle="tooltip" data-placement="auto" title="Exit the kitchen" onClick={this.logoutHandler}><FontAwesomeIcon className="fa-3x" icon={faSignOutAlt} /></button>
+      <div className="Home">        
+        <div id="myNav" className="overlay">
+                {/* Button to close the overlay navigation */}
+                <Link to="#"><Link to="javascript:void(0)" className="closebtn" onClick={this.closeNav}>&times;</Link></Link>
+                {/* Overlay content */}
+                <div className="overlay-content">
+                    <Link to="#" onClick={this.closeNav}>Calender</Link>
+                    <Link to="#" onClick={this.closeNav}>Emails</Link>
+                    <Link to="#" onClick={this.closeNav}>Hours</Link>
+                    <Link to="#" onClick={this.closeNav}>TERRA</Link>
+                    <Link to="#" onClick={this.closeNav}>Logout</Link>
+                </div>
+            </div>
+            {/* Use any element to open/show the overlay navigation menu */}
+            <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
         <Modal show={this.state.showModel} modalClosed={this.closeModelHandler}>
           {model}
         </Modal>
