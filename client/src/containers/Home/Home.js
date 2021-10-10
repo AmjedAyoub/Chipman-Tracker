@@ -88,6 +88,7 @@ class Home extends Component {
   }
 
   logoutHandler=()=>{
+      this.closeNav();
       localStorage.removeItem("userID");
       localStorage.clear("userID");
       localStorage.removeItem("token");
@@ -148,7 +149,7 @@ class Home extends Component {
                     <Link to="#" onClick={this.closeNav}>Emails</Link>
                     <Link to="#" onClick={this.closeNav}>Hours</Link>
                     <Link to="#" onClick={this.closeNav}>TERRA</Link>
-                    <Link to="#" onClick={this.closeNav}>Logout</Link>
+                    <Link to="#" onClick={this.logoutHandler}>Logout</Link>
                 </div>
             </div>
             {/* Use any element to open/show the overlay navigation menu */}

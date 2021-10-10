@@ -151,6 +151,17 @@ class Logging extends Component {
     /* Close when someone clicks on the "x" symbol inside the overlay */
     closeNav = () => {
         document.getElementById("myNav").style.width = "0%";
+    }        
+
+    logoutHandler=()=>{
+        this.closeNav();
+        localStorage.removeItem("userID");
+        localStorage.clear("userID");
+        localStorage.removeItem("token");
+        localStorage.clear("token");
+        // this.props.history.push("/Logging");
+        this.props.checked();
+        // window.location.reload();
     }
 
     render() {
@@ -165,7 +176,7 @@ class Logging extends Component {
                     <Link to="#" onClick={this.closeNav}>Emails</Link>
                     <Link to="#" onClick={this.closeNav}>Hours</Link>
                     <Link to="#" onClick={this.closeNav}>TERRA</Link>
-                    <Link to="#" onClick={this.closeNav}>Logout</Link>
+                    <Link to="#" onClick={this.logoutHandler}>Logout</Link>
                 </div>
             </div>
             {/* Use any element to open/show the overlay navigation menu */}
