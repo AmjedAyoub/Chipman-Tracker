@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import './App.css';
 
-// import Home from "./containers/Home/Home";
+import Home from "./containers/Home/Home";
 import Logging from "./components/Logging/Logging";
 
 class App extends Component {
@@ -30,8 +30,8 @@ class App extends Component {
       routes =  (
         <Switch>
           {/* <Route path="/Home" exact component={Home}/> */}
-          <Route path="/Logging" exact render={() => <Logging checked={() => this.componentDidMount()}/>} />
-          <Redirect from="/" to="/Logging" />
+          <Route path="/Home" exact render={() => <Home checked={() => this.componentDidMount()}/>} />
+          <Redirect from="/" to="/Home" />
         </Switch>
       );
     }
