@@ -140,7 +140,12 @@ class Logging extends Component {
 
     /* Open when someone clicks on the span element */
     openNav= () => {
-        document.getElementById("myNav").style.width = "100%";
+        const w = window.innerWidth;
+        if(w >= 600){
+            document.getElementById("myNav").style.width = "25%";
+        }else{
+            document.getElementById("myNav").style.width = "100%";
+        }
     }
   
     /* Close when someone clicks on the "x" symbol inside the overlay */
@@ -153,7 +158,7 @@ class Logging extends Component {
             <div className="Logging">
                 <div id="myNav" className="overlay">
                 {/* Button to close the overlay navigation */}
-                <Link to="#"><Link to="javascript:void(0)" className="closebtn" onClick={this.closeNav}>&times;</Link></Link>
+                <Link to="#"><button id = "closeMenuBtn" href="javascript:void(0)" className="closebtn" onClick={this.closeNav}>&times;</button></Link>
                 {/* Overlay content */}
                 <div className="overlay-content">
                     <Link to="#" onClick={this.closeNav}>Calender</Link>
@@ -165,6 +170,7 @@ class Logging extends Component {
             </div>
             {/* Use any element to open/show the overlay navigation menu */}
             <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
+
                 <div className="row LogForm" style={{justifyContent: 'space-evenly', alignItems: 'center', height: 'inherit', width: '100%'}}>
                 <div className="Col-sm-6">
                         <form onSubmit={this.handleSginInSubmit}>
