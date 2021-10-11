@@ -60,23 +60,50 @@
       right: 35px;
     }
   }
-  
-  .Home {
-    background-attachment: fixed;
-    background-position: center; 
-    /* width: 50% !important;
-    height: 50% !important; */
-    background-image: url('../../assets/img/chipman-tracker-logo.png');
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 100%;
-    justify-content: space-evenly;
+
+button:focus {
+    outline: none;
 }
 
-button:focus{
-    outline: none;
+.react-calendar__month-view__days__day {
+  height: 110px !important;
+  font-size: large;
+  border: none;
+}
+
+.react-calendar__tile--active {
+  border: solid crimson 5px !important;
+}
+
+.react-calendar__navigation__label {
+  font-size: xx-large;
+}
+
+.react-calendar__navigation__arrow {
+  border-radius: 25%;
+  border: solid blue 1px;
+  width: 7%;
+  font-size: xx-large;
+}
+
+.react-calendar {
+  box-sizing: border-box !important;
+  width: auto !important;
+  margin-top: 15px !important;
+  border: solid rgb(27, 27, 117) 2px;
+  background: rgb(0 173 255);
+}
+
+.react-calendar__month-view__weekdays {
+  background: rgb(0 243 255);
+  font-size: large;
+  font: bold;
+
 }
 
 @media (max-width: 600px) {
    
+  .react-calendar__navigation__label {
+    font-size: x-large;
   }
+}
