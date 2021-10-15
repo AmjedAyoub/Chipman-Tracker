@@ -101,6 +101,14 @@ button:focus {
 
 }
 
+.authorize_button .signout_button{
+  display: none;
+}
+
+#content {
+  white-space: pre-wrap;
+}
+
 @media (max-width: 600px) {
    
   .react-calendar__navigation__label {

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
+import { Route, Switch, Redirect, withRouter, BrowserRouter as Router, Link } from 'react-router-dom';
+import Logintbygoogle from './components/Logintbygoogle/Logintbygoogle'
+import Dashboard from "./components/Dashboard/Dashboard"; 
+import { GApiProvider } from 'react-gapi-auth2';
 import './App.css';
 
 import Home from "./containers/Home/Home";
@@ -32,12 +35,13 @@ class App extends Component {
           {/* <Route path="/Home" exact component={Home}/> */}
           <Route path="/Home" exact render={() => <Home checked={() => this.componentDidMount()}/>} />
           <Redirect from="/" to="/Home" />
+          <Route path='/Dashboard' component={Dashboard} ></Route>  
         </Switch>
       );
     }
     return (
       <div className="App">
-        {routes}
+        {routes}   
       </div>
     );
   }
