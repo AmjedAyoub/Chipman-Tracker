@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import FacebookLogin from 'react-facebook-login';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import axios from 'axios'
 export class Logintbygoogle extends Component {
@@ -10,10 +9,11 @@ export class Logintbygoogle extends Component {
   }
 
   responseGoogle = (response) => {
-    console.log(response);
-    console.log(response.profileObj.email);
-    console.log(response.accessToken);
     this.getMessages(response);
+  }
+
+  errGoogle = (err) => {
+    console.log("error", err);
   }
 
   getMessages = (user) => {
@@ -21,26 +21,75 @@ export class Logintbygoogle extends Component {
       header:{
         'Access-Control-Allow-Origin':'*',
         'Access-Control-Allow-Methods': 'GET',
-        'Access-Control-Allow-Headers': 'X-PINGOTHER, Content-Type',
         'Content-Type': 'application/json',
-        "access-token":user.accessToken,
-        Authorization: "Bearer " + user.accessToken},
+        access_token: user.accessToken,
+        Authorization: user.accessToken,client_id:"826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
+        client_secret:"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",
+        redirect_uris:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
+        key:"AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+        scope: "https://www.googleapis.com/auth/gmail.readonly"
+      },
+      params:{
+        client_id:"826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
+        client_secret:"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",
+        redirect_uris:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
+        key:"AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+        scope: "https://www.googleapis.com/auth/gmail.readonly",
+        access_token: user.accessToken
+      },
       auth:{
-        "client_id":"826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
-        "project_id":"gmail-access-323",
-        "auth_uri":"https://accounts.google.com/o/oauth2/auth",
-        "token_uri":"https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
-        "client_secret":"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",
-        "redirect_uris":["https://chipmantrack.herokuapp.com","http://localhost:3000"],
-        "apiKey":"AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
-        "scope": "https://www.googleapis.com/auth/gmail.readonly",
-        "javascript_origins":["https://chipmantrack.herokuapp.com","http://localhost:3000"],
-        "access-token":user.accessToken
+        client_id:"826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
+        client_secret:"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",
+        redirect_uris:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
+        key:"AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+        scope: "https://www.googleapis.com/auth/gmail.readonly",
+        access_token: user.accessToken
     }})
     .then((result) => {
-      console.log("result");
-      console.log(result);
+      console.log(result.data.messages);
+      this.getMessagesContent(user, result.data.messages)
+    })
+    .catch((err) => {
+      console.log("err");
+      console.log(err);
+    });
+  }
+
+  getMessagesContent = (user, messages) => {
+    
+    axios.get('https://www.googleapis.com/gmail/v1/users/'+ user.profileObj.email + '/messages/' + messages[10].id, {
+      header:{
+        'Access-Control-Allow-Origin':'*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Content-Type': 'application/json, text/plain, */*',
+        access_token: user.accessToken,
+        Authorization: user.accessToken,client_id:"826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
+        client_secret:"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",
+        redirect_uris:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
+        key:"AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+        scope: "https://www.googleapis.com/auth/gmail.readonly"
+      },
+      params:{
+        client_id:"826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
+        client_secret:"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",
+        redirect_uris:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
+        key:"AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+        scope: "https://www.googleapis.com/auth/gmail.readonly",
+        access_token: user.accessToken,
+        format:'full'        
+      },
+      auth:{
+        client_id:"826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
+        client_secret:"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",
+        redirect_uris:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
+        key:"AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+        scope: "https://www.googleapis.com/auth/gmail.readonly",
+        access_token: user.accessToken
+    }})
+    .then((message) => {
+      console.log("message");
+      console.log(message);
+      // console.log(Buffer.from(message.data.payload.body.data, 'base64').toString('ascii'));
     })
     .catch((err) => {
       console.log("err");
@@ -49,7 +98,8 @@ export class Logintbygoogle extends Component {
   }
 
   logout = () => {
-    console.log("Logged out");
+    console.log("Logged out from Google");
+    document.location.replace("https://chipmantrack.herokuapp.com/#/Logging");
   }
 
   render() {
@@ -63,11 +113,14 @@ export class Logintbygoogle extends Component {
           apiKey="AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs"
           scope="https://www.googleapis.com/auth/gmail.readonly"
           onSuccess={this.responseGoogle}
-          onFailure={this.responseGoogle}
-          isSignedIn={true}></GoogleLogin>
+          onFailure={this.errGoogle}
+          isSignedIn={true}
+          accessType="online"
+          cookiePolicy={'single_host_origin'}></GoogleLogin>
         <GoogleLogout
           clientId="604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com"
           buttonText="Logout"
+          redirectUri={["https://chipmantrack.herokuapp.com","http://localhost:3000"]}
           onLogoutSuccess={this.logout}>
         </GoogleLogout>
       </div>

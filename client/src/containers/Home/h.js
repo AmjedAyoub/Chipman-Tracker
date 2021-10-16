@@ -24,7 +24,7 @@ fs.readFile('gmail.config.json', (err, content) => {
  */
 function authorize(credentials, callback) {
   const oAuth2Client = new google.auth.OAuth2(
-      "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com", "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", "https://chipmantrack.herokuapp.com");
+      "604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com", "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", "http://localhost:3000");
 
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, (err, token) => {
@@ -71,6 +71,7 @@ function getNewToken(oAuth2Client, callback) {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
 function listLabels(auth) {
+  console.log(auth);
   const gmail = google.gmail({version: 'v1', auth});
   gmail.users.labels.list({
     userId: 'me',
