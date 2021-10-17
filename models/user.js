@@ -4,8 +4,6 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   user: { type: String, required: false, trim: true },
   email: { type: String, required: true, trim: true },
-  gooogleEmail: { type: String, required: false, trim: true },
-  googleToken: { type: String, required: false, trim: true },
   password: { type: String, required: true },
   schedule: [
     {

@@ -25,11 +25,186 @@ class Home extends Component {
     modelContent: '',
     isManaging: false,
     calendarValue: new Date(),
-    schedule: []
+    schedule: [],
+    showCal: false
   }
 
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    const token = localStorage.getItem('googleToken');
+    const email = localStorage.getItem('googleEmail');
+    await this.getMessages(token, email);
+  }
+
+  getMessages = (token, email) => {
+    axios.get('https://gmail.googleapis.com/gmail/v1/users/' + email + '/messages', {
+      header: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Content-Type': 'application/json',
+        access_token: token,
+        Authorization: token, client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
+        client_secret: "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",
+        redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+        key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+        scope: "https://www.googleapis.com/auth/gmail.readonly",
+        maxResults: 500,
+        q: "from:.*\.chipmanrelo.com$"
+      },
+      params: {
+        client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
+        client_secret: "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",
+        redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+        key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+        scope: "https://www.googleapis.com/auth/gmail.readonly",
+        access_token: token,
+        maxResults: 500,
+        q: "from:.*\.chipmanrelo.com$"
+      },
+      auth: {
+        client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
+        client_secret: "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",
+        redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+        key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+        scope: "https://www.googleapis.com/auth/gmail.readonly",
+        access_token: token,
+        maxResults: 500,
+        q: "from:.*\.chipmanrelo.com$"
+      }
+    })
+      .then((result) => {
+        // console.log(result.data.messages);
+        this.getMessagesContent(token, email, result.data.messages)
+      })
+      .catch((err) => {
+        console.log("err");
+        console.log(err);
+      });
+  }
+
+  getMessagesContent = async (token, email, messages) => {
+    this.setState({
+      ...this.state,
+      showCal: false
+    })
+    // console.log(messages.length);
+    for (let index = 0; index < messages.length; index++) {
+      await axios.get('https://www.googleapis.com/gmail/v1/users/' + email + '/messages/' + messages[index].id, {
+        header: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET',
+          'Content-Type': 'application/json, text/plain, */*',
+          access_token: token,
+          Authorization: token, client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
+          client_secret: "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",
+          redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+          key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+          scope: "https://www.googleapis.com/auth/gmail.readonly"
+        },
+        params: {
+          client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
+          client_secret: "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",
+          redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+          key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+          scope: "https://www.googleapis.com/auth/gmail.readonly",
+          access_token: token,
+          format: 'raw'
+        },
+        auth: {
+          client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
+          client_secret: "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",
+          redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+          key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+          scope: "https://www.googleapis.com/auth/gmail.readonly",
+          access_token: token
+        }
+      })
+        .then((message) => {
+          let m = Buffer.from(message.data.raw, 'base64').toString('ascii');
+          let content = "";
+          let start = m.indexOf("MOVE DETAILS");
+          let end = m.split("--000", 2).join("--000").length;
+          if (start > -1) {
+            content = m.substring(start, end);
+            content = this.replaceAll(content, '>', '');
+            content = this.replaceAll(content, '--', '');
+            content = this.replaceAll(content, '=20', '');
+            content = this.replaceAll(content, 'Lead:', 'Lead: *');
+            content = this.replaceAll(content, '*', '\n');
+            content = this.replaceAll(content, '\r', '><');
+            content = this.replaceAll(content, '\n', '><');
+            let d = content.split("><");
+            let data = [];
+            for (let i = 0; i < d.length; i++) {
+              if (d[i] !== '' && d[i] !== ' ') {
+                data.push(d[i]);
+              }
+            }
+            let dd = data[1].split(' ');
+            let date;
+            for (let k = 0; k < dd.length; k++) {
+              if (dd[k].includes('-') || dd[k].includes('/') || dd[k].includes(',')) {
+                date = dd[k];
+                break;
+              }
+            }
+            date = this.replaceAll(date, '-', ',');
+            date = this.replaceAll(date, '/', ',');
+            let year = new Date().getFullYear();
+            date = (date + ',' + year).trim();
+            let time = data[2].trim();
+            let building = data[3].trim();
+            let location = (data[4] + ',' + data[5]).trim();
+            let scope;
+            let supervisor;
+            let lead;
+            for (let j = 0; j < data.length; j++) {
+              if (data[j].toLowerCase().includes("scope")) {
+                scope = (data[j] + data[j + 1]).trim();
+                let str1 = scope.indexOf('Tech')
+                let str2 = scope.indexOf('Super')
+                if (str1 > -1) {
+                  scope = scope.substring(0, str1);
+                } else if (str2 > -1) {
+                  scope = scope.substring(0, str2);
+                }
+              }
+              else if (data[j].toLowerCase().includes("supervisor:")) {
+                supervisor = (data[j] + data[j + 1]).trim();
+              }
+              else if (data[j].toLowerCase().includes("lead:")) {
+                lead = (data[j] + data[j + 1]).trim();
+              }
+
+            }
+            let schedule = {
+              date: date,
+              time: time,
+              building: building,
+              location: location,
+              scope: scope,
+              supervisor: supervisor,
+              lead: lead
+            }
+            this.setState({
+              ...this.state,
+              schedule: [...this.state.schedule, schedule]
+            })
+          }
+        })
+        .catch((err) => {
+          console.log("err");
+          console.log(err);
+        });
+    }
+    this.setState({
+      ...this.state,
+      showCal: true
+    })
+  }
+
+  replaceAll = (str, chr, replace) => {
+    return str.split(chr).join(replace);
   }
 
   closeAlertHandler = () => {
@@ -38,7 +213,6 @@ class Home extends Component {
       showAlert: false
     });
   }
-
 
   openAlertHandler = (message, confirm = false, recipe = null) => {
     this.setState({
@@ -67,77 +241,53 @@ class Home extends Component {
     });
   }
 
-  logoutHandler=()=>{
-      this.closeNav("Logout");
-      localStorage.removeItem("userID");
-      localStorage.clear("userID");
-      localStorage.removeItem("token");
-      localStorage.clear("token");
-      localStorage.removeItem("google");
-      localStorage.clear("google");
-      // this.props.history.push("/Logging");
-      this.props.checked();
-      // window.location.reload();
-  }
-
   calendarOnChange = () => {
 
-  } 
+  }
 
   calendarTitleConent = ({ date = new Date(), view = "month" }) => {
-    if(this.state.schedule.find((x)=>(new Date(x.date).getDate() === date.getDate() && new Date(x.date).getMonth() === date.getMonth() && new Date(x.date).getFullYear() === date.getFullYear()))){
-      let idx;
-      for (let index = 0; index < this.state.schedule.length; index++) {
-        if(new Date(this.state.schedule[index].date).getDate() === date.getDate() && new Date(this.state.schedule[index].date).getMonth() === date.getMonth() && new Date(this.state.schedule[index].date).getFullYear() === date.getFullYear()){
-          idx = index;
-          break;
-        }
-      }
+    let d = this.state.schedule.find((x, i) => (new Date(x.date).getDate() === date.getDate() && new Date(x.date).getMonth() === date.getMonth() && new Date(x.date).getFullYear() === date.getFullYear()));
+    if (d) {
       return <div className="dayView">
-      <p style={{fontSize:"10px", background:"lightblue"}}><strong>{this.state.schedule[idx].time}</strong><br />{this.state.schedule[idx].building}<br />{this.state.schedule[idx].location}<br />{this.state.schedule[idx].scope}<br />{this.state.schedule[idx].supervisor}<br />{this.state.schedule[idx].lead}</p>
-    </div>
-    }else{
+        <p style={{ fontSize: "10px", background: "lightblue" }}><strong>{d.time}</strong><br />{d.building}<br />{d.location}<br />{d.scope}<br />{d.supervisor}<br />{d.lead}</p>
+      </div>
+    } else {
       return null;
     }
   }
 
   /* Open when someone clicks on the span element */
-  openNav= () => {
+  openNav = () => {
     const w = window.innerWidth;
-    if(w >= 600){
-        document.getElementById("myNav").style.width = "25%";
-    }else{
-        document.getElementById("myNav").style.width = "100%";
+    if (w >= 600) {
+      document.getElementById("myNav").style.width = "25%";
+    } else {
+      document.getElementById("myNav").style.width = "100%";
     }
   }
 
   /* Close when someone clicks on the "x" symbol inside the overlay */
   closeNav = (navBtn) => {
-      document.getElementById("myNav").style.width = "0%";
-      if(navBtn === "TERRA"){
-        document.location.replace("https://www.terrastaffinggroup.com/myaccount/login");
-      }
-  }
-
-  componentWillUnmount(){
-      // clearInterval(this.state.interval);
-  }  
-
-  parentFunction = async (data_from_child) => {
-    this.setState({
-      ...this.state,
-      schedule: data_from_child
-    })
-    console.log(this.state.schedule);
-    for (let index = 0; index < this.state.schedule.length; index++) {
-      let d = this.state.schedule[index].date;
-      d = new Date(d);
-      await this.calendarTitleConent(d);
+    document.getElementById("myNav").style.width = "0%";
+    if (navBtn === "TERRA") {
+      document.location.replace("https://www.terrastaffinggroup.com/myaccount/login");
     }
   }
 
+  compDidChanged = () => {
+    const t = localStorage.getItem("token");
+    const g = localStorage.getItem("google");
+    this.setState({
+      ...this.state,
+      token: t,
+      googleSignedIn: g
+    })
+    this.props.checked();
+  }
+
   onSelect = (e) => {
-    console.log(e);
+    let d = this.state.schedule.find((x, i) => (new Date(x.date).getDate() === e.getDate() && new Date(x.date).getMonth() === e.getMonth() && new Date(x.date).getFullYear() === e.getFullYear()));
+    console.log(d);
   }
 
   render() {
@@ -151,7 +301,7 @@ class Home extends Component {
         break;
       case 'Cook':
         model = (
-          <Cook/>
+          <Cook />
         );
         break
       default:
@@ -160,36 +310,36 @@ class Home extends Component {
     }
 
     return (
-      <div className="Home">        
+      <div className="Home">
         <div id="myNav" className="overlay">
-                {/* Button to close the overlay navigation */}
-                <Link to=""><button id = "closeMenuBtn" className="closebtn" onClick={() => this.closeNav("Close")}>&times;</button></Link>
-                {/* Overlay content */}
-                <div className="overlay-content">
-                    <Link to="" onClick={() => this.closeNav("Cal")}>Calender</Link>
-                    <Link to="" onClick={() => this.closeNav("Emalis")}>Emails</Link>
-                    <Link to="" onClick={() => this.closeNav("Hours")}>Hours</Link>
-                    <Link to="" onClick={() => this.closeNav("TERRA")}>TERRA</Link>
-                    <Link to="" onClick={this.logoutHandler}>Logout</Link>
-                </div>
-            </div>
-            {/* Use any element to open/show the overlay navigation menu */}
-           <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
-           <div>
-      </div>
-      <h2 style={{color: "Naive"}}>My Calendar</h2> 
-      <Calendar 
-        id="myCalendar"
-        onChange={this.calendarOnChange}
-        value={this.state.calendarValue}
-        tileContent = {this.calendarTitleConent}
-        onSelect={this.onSelect}
-        onClickDay = {this.onSelect}
-        />
-        {/* <Modal show={this.state.showModel} modalClosed={this.closeModelHandler}>
-          {model}
-        </Modal> */}
-        <Alert show={this.state.showAlert} modalClosed={this.closeAlertHandler} message={this.state.alertMessage} confirm={this.state.alertConfirm}confirmYes={this.confirmYesHandler}/>
+          {/* Button to close the overlay navigation */}
+          <Link to=""><button id="closeMenuBtn" className="closebtn" onClick={() => this.closeNav("Close")}>&times;</button></Link>
+          {/* Overlay content */}
+          <div className="overlay-content">
+            <Link to="" onClick={() => this.closeNav("Close")}><Logintbygoogle checked={() => this.compDidChanged()} /></Link>
+            <Link to="" onClick={() => this.closeNav("Cal")}>Calender</Link>
+            <Link to="" onClick={() => this.closeNav("Emalis")}>Emails</Link>
+            <Link to="" onClick={() => this.closeNav("Hours")}>Hours</Link>
+            <Link to="" onClick={() => this.closeNav("TERRA")}>TERRA</Link>
+          </div>
+        </div>
+        {/* Use any element to open/show the overlay navigation menu */}
+        <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
+        {this.state.showCal ? <div>
+          <h2 style={{ color: "Naive" }}>My Calendar</h2>
+          <Calendar
+            id="myCalendar"
+            onChange={this.calendarOnChange}
+            value={this.state.calendarValue}
+            tileContent={this.calendarTitleConent}
+            onClickDay={this.onSelect}
+          />
+        </div> : <div className="loaderDiv"><div className="loader"></div><strong>Please wait...</strong></div>}
+        {this.state.showModel ?
+          <Modal show={this.state.showModel} modalClosed={this.closeModelHandler}>
+            {model}
+          </Modal> : null}
+        <Alert show={this.state.showAlert} modalClosed={this.closeAlertHandler} message={this.state.alertMessage} confirm={this.state.alertConfirm} confirmYes={this.confirmYesHandler} />
       </div>
     );
   };

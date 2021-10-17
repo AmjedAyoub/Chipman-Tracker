@@ -22,9 +22,6 @@ class Logging extends Component {
         googleSignedIn: false
     };
 
-    componentDidMount = () => {
-    }
-
     compDidChanged = () => {
         const t = localStorage.getItem("token");
         const g = localStorage.getItem("google");
@@ -123,7 +120,6 @@ class Logging extends Component {
                         })
                     }else{
                         localStorage.setItem("token", res.data.token)
-                        localStorage.setItem("google", false);
                         localStorage.setItem("userID", res.data.user._id)
                         this.setState({
                             user: "",
@@ -132,7 +128,8 @@ class Logging extends Component {
                             password2: "",
                             logpassword: "",
                             logemail: "",
-                            isAuthenticated: true
+                            isAuthenticated: true,
+                            token: res.data.token
                         });
                         // React redirect to /home route.
                         // this.props.history.push("/Home");
@@ -172,20 +169,8 @@ class Logging extends Component {
         }
     }       
 
-    logoutHandler=()=>{
-        this.closeNav();
-        localStorage.removeItem("userID");
-        localStorage.clear("userID");
-        localStorage.removeItem("token");
-        localStorage.clear("token");
-        localStorage.removeItem("google");
-        localStorage.clear("google");
-        // this.props.history.push("/Logging");
-        this.props.checked();
-        // window.location.reload();
-    }
-
     render() {
+        const t = localStorage.getItem("token")
         return (
             <div className="Logging">        
             <div id="myNav" className="overlay">
@@ -193,11 +178,11 @@ class Logging extends Component {
                     <Link to=""><button id = "closeMenuBtn" className="closebtn" onClick={() => this.closeNav("Close")}>&times;</button></Link>
                     {/* Overlay content */}
                     <div className="overlay-content">
+                        <Link to="" onClick={() => this.closeNav("Close")}><Logintbygoogle checked={() => this.compDidChanged()}/></Link>
                         <Link to="" onClick={() => this.closeNav("Cal")}>Calender</Link>
                         <Link to="" onClick={() => this.closeNav("Emalis")}>Emails</Link>
                         <Link to="" onClick={() => this.closeNav("Hours")}>Hours</Link>
                         <Link to="" onClick={() => this.closeNav("TERRA")}>TERRA</Link>
-                        <Link to="" onClick={this.logoutHandler}>Logout</Link>
                     </div>
                 </div>
                 {/* Use any element to open/show the overlay navigation menu */}
@@ -205,10 +190,10 @@ class Logging extends Component {
                <div>
           </div>
                 {
-                (localStorage.getItem('google') || this.state.googleSignedIn) ? 
+                ((!localStorage.getItem('google') || !this.state.googleSignedIn) && (t || this.state.token)) ? 
                 <div>
                     <Logintbygoogle checked={() => this.compDidChanged()}/>
-                </div> : 
+                </div> : ((!localStorage.getItem('google') || !this.state.googleSignedIn) && (!t || !this.state.token)) ?
                 <div className="row LogForm" style={{justifyContent: 'space-evenly', alignItems: 'center', height: 'inherit', width: '100%'}}>
                 <div className="Col-sm-6">
                         <form onSubmit={this.handleSginInSubmit}>
@@ -286,7 +271,7 @@ class Logging extends Component {
                             <button type="submit" className="btn warning ml-2">Sign Up</button>
                         </form>
                     </div>
-                </div>
+                </div>:this.props.checked()
                 }
                 <Alert show={this.state.showAlert} modalClosed={this.closeAlertHandler} message={this.state.error} confirm={false}/>
             </div>

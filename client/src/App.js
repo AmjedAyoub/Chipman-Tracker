@@ -22,6 +22,7 @@ class App extends Component {
 
   render(){
     const g = localStorage.getItem("google");
+    const t = localStorage.getItem("token");
     let routes =  (
       <Switch>
         {/* <Route path="/Logging" exact component={Logging}/> */}
@@ -29,14 +30,16 @@ class App extends Component {
         <Redirect from="/" to="/Logging" />
       </Switch>
     );
-    if(this.state.googleSignedIn || g){
-      routes =  (
-        <Switch>
-          {/* <Route path="/Home" exact component={Home}/> */}
-          <Route path="/Home" exact render={() => <Home checked={() => this.componentDidMount()}/>} />
-          <Redirect from="/" to="/Home" />
-        </Switch>
-      );
+    if(this.state.token || t){
+      if(this.state.googleSignedIn || g){
+        routes =  (
+          <Switch>
+            {/* <Route path="/Home" exact component={Home}/> */}
+            <Route path="/Home" exact render={() => <Home checked={() => this.componentDidMount()}/>} />
+            <Redirect from="/" to="/Home" />
+          </Switch>
+        );
+      }
     }
     return (
       <div className="App">
