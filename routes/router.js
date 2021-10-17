@@ -148,34 +148,10 @@ router.post('/logout', function (req, res, next) {
     return res.send('/Logging');
   });
 
-router.post('/addItems', function (req, res, next) {
+router.post('/addSchedule', function (req, res, next) {
    User.find({_id: req.body.userID}).then(function(user){
-     let existItem=false;
-    for (let i = 0; i < user[0].items.length; i++){
-      if(user[0].items[i].name.toLowerCase() === req.body.name.toLowerCase()){
-        // console.log(user[0].items[i].name.toLowerCase(),req.body.name.toLowerCase())
-        existItem=true;
-        const qty = parseFloat(user[0].items[i].quantity)
-        const total = qty+parseFloat(req.body.quantity)
-        // console.log(total,"      ",user[0].items[i].name)
-        if(req.body.image==="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtUW-NhL541eHkTOKzBjghAfFPz-D1FUHjNQ&usqp=CAU"){
-          User.updateOne({"_id": user[0]._id, "items._id": user[0].items[i]._id}, {$set: {"items.$.quantity":total,"items.$.name":req.body.name,"items.$.unit":req.body.unit}, new: true}).then(function (params) {
-            // console.log(params)
-          }).catch(function (err) {
-            throw err
-          })
-        }else{
-            User.updateOne({"_id": user[0]._id, "items._id": user[0].items[i]._id}, {$set: {"items.$.quantity":total,"items.$.name":req.body.name,"items.$.unit":req.body.unit,"items.$.image":req.body.image}, new: true}).then(function (params) {
-              // console.log(params)
-            }).catch(function (err) {
-              throw err
-            })
-        }}      
-    }
-    if(!existItem){
-      const newData = User.updateOne({"_id": user[0]._id}, {$push: {"items":{name:req.body.name,quantity:req.body.quantity,unit:req.body.unit,image:req.body.image}}, new: true})
+    const newData = User.updateOne({"_id": user[0]._id}, {$push: {"schedule":{googleId:req.body.googleId,date:req.body.date,time:req.body.time,building:req.body.building,location:req.body.location,scope:req.body.scope,supervisor:req.body.supervisor,lead:req.body.lead}}, new: true})
       return newData
-    }
   }).then(function(data){
     return res.json(data)
   }).catch(function(err){
@@ -293,7 +269,7 @@ router.post('/wash', function(req, res) {
 });
 });
 
-router.get('/AllItems/:query', function (req,res) {
+router.get('/AllSchedule/:query', function (req,res) {
   User.find({_id: req.params.query}).then(function(user){
     return res.json(user);
   })

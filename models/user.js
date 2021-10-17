@@ -7,6 +7,7 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
   schedule: [
     {
+      googleId:{type: String, default: "WILL BE UPDATED"},
       date:{type: String, default: "WILL BE UPDATED"},
       time:{type: String, default: "WILL BE UPDATED"},
       building:{type: String, default: "WILL BE UPDATED"},

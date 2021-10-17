@@ -179,9 +179,6 @@ class Logging extends Component {
                     {/* Overlay content */}
                     <div className="overlay-content">
                         <Link to="" onClick={() => this.closeNav("Close")}><Logintbygoogle checked={() => this.compDidChanged()}/></Link>
-                        <Link to="" onClick={() => this.closeNav("Cal")}>Calender</Link>
-                        <Link to="" onClick={() => this.closeNav("Emalis")}>Emails</Link>
-                        <Link to="" onClick={() => this.closeNav("Hours")}>Hours</Link>
                         <Link to="" onClick={() => this.closeNav("TERRA")}>TERRA</Link>
                     </div>
                 </div>
@@ -191,7 +188,7 @@ class Logging extends Component {
           </div>
                 {
                 ((!localStorage.getItem('google') || !this.state.googleSignedIn) && (t || this.state.token)) ? 
-                <div>
+                <div style={{marginTop: '10%'}}>
                     <Logintbygoogle checked={() => this.compDidChanged()}/>
                 </div> : ((!localStorage.getItem('google') || !this.state.googleSignedIn) && (!t || !this.state.token)) ?
                 <div className="row LogForm" style={{justifyContent: 'space-evenly', alignItems: 'center', height: 'inherit', width: '100%'}}>

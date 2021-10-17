@@ -82,53 +82,6 @@ class Fridge extends Component {
         });
     }
 
-    addItemsHandler = (event) => {
-        // event.preventDefault();
-        for (let i = 0; i < this.state.receiptResults.length; i++) {
-            axios.post("http://whatcook.herokuapp.com/addItems", {
-                userID: localStorage.getItem("userID"),
-                name: this.state.receiptResults[i].annotation,
-                quantity: this.state.receiptResults[i].tag,
-                unit: this.state.receiptResults[i].unit,
-                image: this.state.receiptResults[i].image
-            }
-            )
-                .then(res => {
-                    if (res.status === "error") {
-                        throw new Error(res.data.message);
-                    }
-                    axios.get("http://whatcook.herokuapp.com/AllItems/" + localStorage.getItem("userID"))
-                        .then(res => {
-                            if (res.status === "error") {
-                                throw new Error(res.data.message);
-                            }
-                            res.data[0].items.sort((a, b) => {
-                                if (a.name < b.name) {
-                                    return -1;
-                                }
-                                if (a.name > b.name) {
-                                    return 1;
-                                }
-                                return 0;
-                            })
-                            this.setState({
-                                ...this.state,
-                                items: res.data[0].items,
-                                receiptResults: []
-                            })
-                        })
-                        .catch(err => this.setState({
-                            ...this.state,
-                            error: err.message
-                        }));
-                })
-                .catch(err => this.setState({
-                    ...this.state,
-                    error: err.message
-                }));
-        }
-    }
-
     receiptItemsChangedHandler = (i, event) => {
         const { name, value } = event.target;
         let users = [...this.state.receiptResults];

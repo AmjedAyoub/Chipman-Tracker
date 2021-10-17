@@ -33,10 +33,15 @@ class Home extends Component {
   componentDidMount = async () => {
     const token = localStorage.getItem('googleToken');
     const email = localStorage.getItem('googleEmail');
+    this.setState({
+      ...this.state,
+      showCal: false
+    })
+    await this.getSchedule();
     await this.getMessages(token, email);
   }
 
-  getMessages = (token, email) => {
+  getMessages = async (token, email) => {
     axios.get('https://gmail.googleapis.com/gmail/v1/users/' + email + '/messages', {
       header: {
         'Access-Control-Allow-Origin': '*',
@@ -72,9 +77,27 @@ class Home extends Component {
         q: "from:.*\.chipmanrelo.com$"
       }
     })
-      .then((result) => {
+      .then(async (result) => {
         // console.log(result.data.messages);
-        this.getMessagesContent(token, email, result.data.messages)
+        let newMessages = [];
+        for (let i = 0; i < result.data.messages.length; i++) {
+          if (!this.state.schedule.find((x) => (x.googleId === result.data.messages[i].id))) {
+            newMessages.push(result.data.messages[i]);
+          }
+        }
+        if (newMessages.length > 0) {
+          this.setState({
+            ...this.state,
+            showCal: false
+          })
+          await this.getMessagesContent(token, email, newMessages);
+        }
+        else {
+          this.setState({
+            ...this.state,
+            showCal: true
+          })
+        }
       })
       .catch((err) => {
         console.log("err");
@@ -83,13 +106,8 @@ class Home extends Component {
   }
 
   getMessagesContent = async (token, email, messages) => {
-    this.setState({
-      ...this.state,
-      showCal: false
-    })
-    // console.log(messages.length);
-    for (let index = 0; index < messages.length; index++) {
-      await axios.get('https://www.googleapis.com/gmail/v1/users/' + email + '/messages/' + messages[index].id, {
+    for (let idx = 0; idx < messages.length; idx++) {
+      await axios.get('https://www.googleapis.com/gmail/v1/users/' + email + '/messages/' + messages[idx].id, {
         header: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET',
@@ -158,6 +176,7 @@ class Home extends Component {
             let scope;
             let supervisor;
             let lead;
+            let googleId = messages[idx].id;
             for (let j = 0; j < data.length; j++) {
               if (data[j].toLowerCase().includes("scope")) {
                 scope = (data[j] + data[j + 1]).trim();
@@ -178,6 +197,7 @@ class Home extends Component {
 
             }
             let schedule = {
+              googleId: googleId,
               date: date,
               time: time,
               building: building,
@@ -186,10 +206,7 @@ class Home extends Component {
               supervisor: supervisor,
               lead: lead
             }
-            this.setState({
-              ...this.state,
-              schedule: [...this.state.schedule, schedule]
-            })
+            this.addScheduleHandler(schedule);
           }
         })
         .catch((err) => {
@@ -197,10 +214,53 @@ class Home extends Component {
           console.log(err);
         });
     }
+    await this.getSchedule();
+  }
+
+  addScheduleHandler = async(schedule) => {
+    await axios.post("https://chipmantrack.herokuapp.com/addSchedule", {
+      userID: localStorage.getItem("userID"),
+      googleId: schedule.googleId,
+      date: schedule.date,
+      time: schedule.time,
+      building: schedule.building,
+      location: schedule.location,
+      scope: schedule.scope,
+      supervisor: schedule.supervisor,
+      lead: schedule.lead
+    }
+    )
+      .then(res => {
+        if (res.status === "error") {
+          throw new Error(res.data.message);
+        }
+      })
+      .catch(err => this.setState({
+        ...this.state,
+        error: err.message
+      }));
+  }
+
+  getSchedule = async() => {
     this.setState({
       ...this.state,
-      showCal: true
+      showCal: false
     })
+    await axios.get("https://chipmantrack.herokuapp.com/AllSchedule/" + localStorage.getItem("userID"))
+    .then(res => {
+        if (res.status === "error") {
+            throw new Error(res.data.message);
+        }
+        this.setState({
+            ...this.state,
+            schedule: res.data[0].schedule,
+            showCal: true
+        })
+    })
+    .catch(err => this.setState({
+        ...this.state,
+        error: err.message
+    }));
   }
 
   replaceAll = (str, chr, replace) => {
@@ -320,6 +380,7 @@ class Home extends Component {
             <Link to="" onClick={() => this.closeNav("Cal")}>Calender</Link>
             <Link to="" onClick={() => this.closeNav("Emalis")}>Emails</Link>
             <Link to="" onClick={() => this.closeNav("Hours")}>Hours</Link>
+            <Link to="" onClick={() => this.closeNav("Hours")}>Chipman Tracker</Link>
             <Link to="" onClick={() => this.closeNav("TERRA")}>TERRA</Link>
           </div>
         </div>
