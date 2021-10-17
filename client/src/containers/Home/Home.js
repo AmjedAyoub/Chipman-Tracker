@@ -209,7 +209,7 @@ class Home extends Component {
           }
           else{
             let googleId = messages[idx].id;
-            let mContent = message.data.raw;
+            let mContent = message;
             let schedule = {
               googleId: googleId,
               content: mContent
