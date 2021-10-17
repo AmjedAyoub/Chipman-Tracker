@@ -133,7 +133,7 @@ class Logging extends Component {
                         });
                         // React redirect to /home route.
                         // this.props.history.push("/Home");
-                        // this.props.checked();
+                        this.props.checked();
                         // window.location.reload();
                     }
             })
