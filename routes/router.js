@@ -150,7 +150,7 @@ router.post('/logout', function (req, res, next) {
 
 router.post('/addSchedule', function (req, res, next) {
    User.find({_id: req.body.userID}).then(function(user){
-    const newData = User.updateOne({"_id": user[0]._id}, {$push: {"schedule":{googleId:req.body.googleId,date:req.body.date,time:req.body.time,building:req.body.building,location:req.body.location,scope:req.body.scope,supervisor:req.body.supervisor,lead:req.body.lead}}, new: true})
+    const newData = User.updateOne({"_id": user[0]._id}, {$push: {"schedule":{googleId:req.body.googleId,content:req.body.content,date:req.body.date,time:req.body.time,building:req.body.building,location:req.body.location,scope:req.body.scope,supervisor:req.body.supervisor,lead:req.body.lead}}, new: true})
       return newData
   }).then(function(data){
     return res.json(data)

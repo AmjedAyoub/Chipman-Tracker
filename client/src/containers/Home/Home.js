@@ -33,10 +33,6 @@ class Home extends Component {
   componentDidMount = async () => {
     const token = localStorage.getItem('googleToken');
     const email = localStorage.getItem('googleEmail');
-    this.setState({
-      ...this.state,
-      showCal: false
-    })
     await this.getSchedule();
     await this.getMessages(token, email);
   }
@@ -86,6 +82,7 @@ class Home extends Component {
           }
         }
         if (newMessages.length > 0) {
+          console.log(newMessages.length);
           this.setState({
             ...this.state,
             showCal: false
@@ -177,6 +174,7 @@ class Home extends Component {
             let supervisor;
             let lead;
             let googleId = messages[idx].id;
+            let mContent = message.data.raw;
             for (let j = 0; j < data.length; j++) {
               if (data[j].toLowerCase().includes("scope")) {
                 scope = (data[j] + data[j + 1]).trim();
@@ -198,6 +196,7 @@ class Home extends Component {
             }
             let schedule = {
               googleId: googleId,
+              content: mContent,
               date: date,
               time: time,
               building: building,
@@ -205,6 +204,15 @@ class Home extends Component {
               scope: scope,
               supervisor: supervisor,
               lead: lead
+            }
+            this.addScheduleHandler(schedule);
+          }
+          else{
+            let googleId = messages[idx].id;
+            let mContent = message.data.raw;
+            let schedule = {
+              googleId: googleId,
+              content: mContent
             }
             this.addScheduleHandler(schedule);
           }
