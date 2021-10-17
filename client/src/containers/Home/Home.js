@@ -229,6 +229,7 @@ class Home extends Component {
     await axios.post("https://chipmantrack.herokuapp.com/addSchedule", {
       userID: localStorage.getItem("userID"),
       googleId: schedule.googleId,
+      content: schedule.content,
       date: schedule.date,
       time: schedule.time,
       building: schedule.building,
