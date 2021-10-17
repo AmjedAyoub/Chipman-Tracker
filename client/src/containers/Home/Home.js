@@ -174,7 +174,7 @@ class Home extends Component {
             let supervisor;
             let lead;
             let googleId = messages[idx].id;
-            let mContent = message.data.raw;
+            let mContent = message;
             for (let j = 0; j < data.length; j++) {
               if (data[j].toLowerCase().includes("scope")) {
                 scope = (data[j] + data[j + 1]).trim();
