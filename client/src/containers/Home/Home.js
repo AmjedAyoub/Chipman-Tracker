@@ -25,33 +25,7 @@ class Home extends Component {
     modelContent: '',
     isManaging: false,
     calendarValue: new Date(),
-    arr: [
-      {
-        date:"2021, 10, 11",
-        time: "9:45 am",
-        building: "Amazon - Rufus",
-        location: "550 Terry Ave. Seattle 98018",
-        scope:"Reconnects/Post walk"
-      },{
-        date:"2021, 10, 15",
-        time: "11:45 am",
-        building: "Amazon - Apollo",
-        location: "354 Boren Ave. Seattle 98018",
-        scope:"Disconnects/Pre walk"
-      },{
-        date:"2021, 10, 17",
-        time: "12:45 pm",
-        building: "Amazon - Cloud 9",
-        location: "920 Madison St. Seattle 98018",
-        scope:"Reconnects/Post walk"
-      },{
-        date:"2021, 10, 27",
-        time: "3:45 pm",
-        building: "Amazon - Rufus",
-        location: "550 Terry Ave. Seattle 98018",
-        scope:"Disconnects/Pre walk"
-      }
-    ]
+    schedule: []
   }
 
 
@@ -99,6 +73,8 @@ class Home extends Component {
       localStorage.clear("userID");
       localStorage.removeItem("token");
       localStorage.clear("token");
+      localStorage.removeItem("google");
+      localStorage.clear("google");
       // this.props.history.push("/Logging");
       this.props.checked();
       // window.location.reload();
@@ -108,17 +84,17 @@ class Home extends Component {
 
   } 
 
-  calendarTitleConent = ({ date, view }) => {
-    if(this.state.arr.find((x)=>(new Date(x.date).getDate() === date.getDate() && new Date(x.date).getMonth() === date.getMonth() && new Date(x.date).getFullYear() === date.getFullYear()))){
+  calendarTitleConent = ({ date = new Date(), view = "month" }) => {
+    if(this.state.schedule.find((x)=>(new Date(x.date).getDate() === date.getDate() && new Date(x.date).getMonth() === date.getMonth() && new Date(x.date).getFullYear() === date.getFullYear()))){
       let idx;
-      for (let index = 0; index < this.state.arr.length; index++) {
-        if(new Date(this.state.arr[index].date).getDate() === date.getDate() && new Date(this.state.arr[index].date).getMonth() === date.getMonth() && new Date(this.state.arr[index].date).getFullYear() === date.getFullYear()){
+      for (let index = 0; index < this.state.schedule.length; index++) {
+        if(new Date(this.state.schedule[index].date).getDate() === date.getDate() && new Date(this.state.schedule[index].date).getMonth() === date.getMonth() && new Date(this.state.schedule[index].date).getFullYear() === date.getFullYear()){
           idx = index;
           break;
         }
       }
-      return <div>
-      <p style={{fontSize:"10px", background:"lightblue"}}><strong>{this.state.arr[idx].time}</strong><br />{this.state.arr[idx].building}<br />{this.state.arr[idx].location}<br />{this.state.arr[idx].scope}</p>
+      return <div className="dayView">
+      <p style={{fontSize:"10px", background:"lightblue"}}><strong>{this.state.schedule[idx].time}</strong><br />{this.state.schedule[idx].building}<br />{this.state.schedule[idx].location}<br />{this.state.schedule[idx].scope}<br />{this.state.schedule[idx].supervisor}<br />{this.state.schedule[idx].lead}</p>
     </div>
     }else{
       return null;
@@ -147,8 +123,24 @@ class Home extends Component {
       // clearInterval(this.state.interval);
   }  
 
+  parentFunction = async (data_from_child) => {
+    this.setState({
+      ...this.state,
+      schedule: data_from_child
+    })
+    console.log(this.state.schedule);
+    for (let index = 0; index < this.state.schedule.length; index++) {
+      let d = this.state.schedule[index].date;
+      d = new Date(d);
+      await this.calendarTitleConent(d);
+    }
+  }
+
+  onSelect = (e) => {
+    console.log(e);
+  }
+
   render() {
-    const { messages } = this.state;
     let model = null;
 
     switch (this.state.modelContent) {
@@ -171,10 +163,9 @@ class Home extends Component {
       <div className="Home">        
         <div id="myNav" className="overlay">
                 {/* Button to close the overlay navigation */}
-                <Link to=""><button id = "closeMenuBtn" href="javascript:void(0)" className="closebtn" onClick={() => this.closeNav("Close")}>&times;</button></Link>
+                <Link to=""><button id = "closeMenuBtn" className="closebtn" onClick={() => this.closeNav("Close")}>&times;</button></Link>
                 {/* Overlay content */}
                 <div className="overlay-content">
-                    <Link to="" onClick={() => this.closeNav("Close")}><Logintbygoogle/></Link>
                     <Link to="" onClick={() => this.closeNav("Cal")}>Calender</Link>
                     <Link to="" onClick={() => this.closeNav("Emalis")}>Emails</Link>
                     <Link to="" onClick={() => this.closeNav("Hours")}>Hours</Link>
@@ -186,12 +177,14 @@ class Home extends Component {
            <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
            <div>
       </div>
-      <h1 style={{color: "Naive"}}>My Calendar</h1> 
+      <h2 style={{color: "Naive"}}>My Calendar</h2> 
       <Calendar 
         id="myCalendar"
         onChange={this.calendarOnChange}
         value={this.state.calendarValue}
         tileContent = {this.calendarTitleConent}
+        onSelect={this.onSelect}
+        onClickDay = {this.onSelect}
         />
         {/* <Modal show={this.state.showModel} modalClosed={this.closeModelHandler}>
           {model}

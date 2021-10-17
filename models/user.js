@@ -4,15 +4,27 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   user: { type: String, required: false, trim: true },
   email: { type: String, required: true, trim: true },
+  gooogleEmail: { type: String, required: false, trim: true },
+  googleToken: { type: String, required: false, trim: true },
   password: { type: String, required: true },
   schedule: [
     {
-        date:{type: String, default: "WILL BE UPDATED"},
-        time:{type: String, default: "WILL BE UPDATED"},
-        location:{type: String, default: "WILL BE UPDATED"},
-        headCount:{type: String, default: "WILL BE UPDATED"},
-        supervisor:{type: String, default: "WILL BE UPDATED"},
-        lead:{type: String, default: "WILL BE UPDATED"}
+      date:{type: String, default: "WILL BE UPDATED"},
+      time:{type: String, default: "WILL BE UPDATED"},
+      building:{type: String, default: "WILL BE UPDATED"},
+      location:{type: String, default: "WILL BE UPDATED"},
+      scope:{type: String, default: "WILL BE UPDATED"},
+      headCount:{type: String, default: "WILL BE UPDATED"},
+      supervisor:{type: String, default: "WILL BE UPDATED"},
+      lead:{type: String, default: "WILL BE UPDATED"},
+      updated:{type: Boolean, default: false},
+      updatedAt:{type: String, default: "NOT-UPDATED"},
+      shift:{
+        start:{type: String, default: "00:00 AM"},
+        end:{type: String, default: "00:00 PM"},
+        lunch:{type: String, default: "00"},
+        hours:{type: String, default: "00"}
+      }
     }
   ] 
 });

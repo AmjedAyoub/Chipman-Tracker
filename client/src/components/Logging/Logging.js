@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import Logintbygoogle from '../../components/Logintbygoogle/Logintbygoogle';
 import "./Logging.css";
 import Alert from "../UI/Alert/Alert";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,8 +17,24 @@ class Logging extends Component {
         logpassword: "",
         isAuthenticated: false,
         error: "",
-        showAlert: false
+        showAlert: false,
+        token: "",
+        googleSignedIn: false
     };
+
+    componentDidMount = () => {
+    }
+
+    compDidChanged = () => {
+        const t = localStorage.getItem("token");
+        const g = localStorage.getItem("google");
+        this.setState({
+            ...this.state,
+            token: t,
+            googleSignedIn: g
+        })
+        this.props.checked();
+    }
 
     handleInputChange = event => {
         const { name, value } = event.target;
@@ -70,8 +87,6 @@ class Logging extends Component {
                             error:"signed up successfully",
                             showAlert: true
                         });
-                        // React redirect to /home route.
-                        // this.props.history.push("/Home");
                     }
                 })
                 .catch((err) => {
@@ -108,6 +123,7 @@ class Logging extends Component {
                         })
                     }else{
                         localStorage.setItem("token", res.data.token)
+                        localStorage.setItem("google", false);
                         localStorage.setItem("userID", res.data.user._id)
                         this.setState({
                             user: "",
@@ -120,7 +136,7 @@ class Logging extends Component {
                         });
                         // React redirect to /home route.
                         // this.props.history.push("/Home");
-                        this.props.checked();
+                        // this.props.checked();
                         // window.location.reload();
                     }
             })
@@ -147,11 +163,14 @@ class Logging extends Component {
             document.getElementById("myNav").style.width = "100%";
         }
     }
-  
+
     /* Close when someone clicks on the "x" symbol inside the overlay */
-    closeNav = () => {
+    closeNav = (navBtn) => {
         document.getElementById("myNav").style.width = "0%";
-    }        
+        if(navBtn === "TERRA"){
+          document.location.replace("https://www.terrastaffinggroup.com/myaccount/login");
+        }
+    }       
 
     logoutHandler=()=>{
         this.closeNav();
@@ -159,6 +178,8 @@ class Logging extends Component {
         localStorage.clear("userID");
         localStorage.removeItem("token");
         localStorage.clear("token");
+        localStorage.removeItem("google");
+        localStorage.clear("google");
         // this.props.history.push("/Logging");
         this.props.checked();
         // window.location.reload();
@@ -166,22 +187,28 @@ class Logging extends Component {
 
     render() {
         return (
-            <div className="Logging">
-                <div id="myNav" className="overlay">
-                {/* Button to close the overlay navigation */}
-                <Link to="#"><button id = "closeMenuBtn" href="javascript:void(0)" className="closebtn" onClick={this.closeNav}>&times;</button></Link>
-                {/* Overlay content */}
-                <div className="overlay-content">
-                    <Link to="#" onClick={this.closeNav}>Calender</Link>
-                    <Link to="#" onClick={this.closeNav}>Emails</Link>
-                    <Link to="#" onClick={this.closeNav}>Hours</Link>
-                    <Link to="#" onClick={this.closeNav}>TERRA</Link>
-                    <Link to="#" onClick={this.logoutHandler}>Logout</Link>
+            <div className="Logging">        
+            <div id="myNav" className="overlay">
+                    {/* Button to close the overlay navigation */}
+                    <Link to=""><button id = "closeMenuBtn" className="closebtn" onClick={() => this.closeNav("Close")}>&times;</button></Link>
+                    {/* Overlay content */}
+                    <div className="overlay-content">
+                        <Link to="" onClick={() => this.closeNav("Cal")}>Calender</Link>
+                        <Link to="" onClick={() => this.closeNav("Emalis")}>Emails</Link>
+                        <Link to="" onClick={() => this.closeNav("Hours")}>Hours</Link>
+                        <Link to="" onClick={() => this.closeNav("TERRA")}>TERRA</Link>
+                        <Link to="" onClick={this.logoutHandler}>Logout</Link>
+                    </div>
                 </div>
-            </div>
-            {/* Use any element to open/show the overlay navigation menu */}
-            <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
-
+                {/* Use any element to open/show the overlay navigation menu */}
+               <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
+               <div>
+          </div>
+                {
+                (localStorage.getItem('google') || this.state.googleSignedIn) ? 
+                <div>
+                    <Logintbygoogle checked={() => this.compDidChanged()}/>
+                </div> : 
                 <div className="row LogForm" style={{justifyContent: 'space-evenly', alignItems: 'center', height: 'inherit', width: '100%'}}>
                 <div className="Col-sm-6">
                         <form onSubmit={this.handleSginInSubmit}>
@@ -260,6 +287,7 @@ class Logging extends Component {
                         </form>
                     </div>
                 </div>
+                }
                 <Alert show={this.state.showAlert} modalClosed={this.closeAlertHandler} message={this.state.error} confirm={false}/>
             </div>
         )

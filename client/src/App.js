@@ -7,18 +7,21 @@ import Logging from "./components/Logging/Logging";
 
 class App extends Component {
   state={
-    token: ""
+    token: "",
+    googleSignedIn: false
   }
 
   componentDidMount () {
     const t = localStorage.getItem("token");
+    const g = localStorage.getItem("google");
     this.setState({
-      token: t
+      token: t,
+      googleSignedIn: g
     })
   }
 
   render(){
-    const t = localStorage.getItem("token");
+    const g = localStorage.getItem("google");
     let routes =  (
       <Switch>
         {/* <Route path="/Logging" exact component={Logging}/> */}
@@ -26,7 +29,7 @@ class App extends Component {
         <Redirect from="/" to="/Logging" />
       </Switch>
     );
-    if(this.state.token || t){
+    if(this.state.googleSignedIn || g){
       routes =  (
         <Switch>
           {/* <Route path="/Home" exact component={Home}/> */}

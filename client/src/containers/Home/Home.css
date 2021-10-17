@@ -86,12 +86,17 @@ button:focus {
   font-size: xx-large;
 }
 
+.dayView {
+  overflow-x: auto;
+}
+
 .react-calendar {
   box-sizing: border-box !important;
   width: auto !important;
   margin-top: 15px !important;
   border: solid rgb(27, 27, 117) 2px;
   background: rgb(0 173 255);
+  height: inherit;
 }
 
 .react-calendar__month-view__weekdays {
