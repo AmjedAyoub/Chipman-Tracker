@@ -177,7 +177,7 @@ class Home extends Component {
             content = this.replaceAll(content, '=20', '');
             content = this.replaceAll(content, '*', '\n');
             content = this.replaceAll(content, '\r', '><');
-            content = this.replaceAll(content, '\n', '><');
+            content = this.replaceAll(content, '\n', ' ');
             let d = content.split("><");
             let data = [];
             for (let i = 0; i < d.length; i++) {
@@ -197,7 +197,7 @@ class Home extends Component {
             date = this.replaceAll(date, '/', ',');
             let year = new Date().getFullYear();
             date = (date + ',' + year).trim();
-            let scheduleContent = d.join('');
+            let scheduleContent = data.join('\n');
             let googleId = messages[idx].id;
             let mContent = {data: message.data};
             let schedule = {};
