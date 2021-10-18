@@ -212,10 +212,10 @@ router.post('/updateItem', function (req, res, next) {
               {$set:
                 {
                   "items.$.shift":{
-                    "items.$.shift.$.start":req.body.start,
-                    "items.$.shift.$.end":req.body.end,
-                    "items.$.shift.$.lunch":req.body.lunch,
-                    "items.$.shift.$.hours":req.body.hours,
+                    "start":req.body.start,
+                    "end":req.body.end,
+                    "lunch":req.body.lunch,
+                    "hours":req.body.hours,
                   }
           }, new: true})
             return newData

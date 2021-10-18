@@ -116,7 +116,7 @@ class DayView extends Component {
         let start = this.state.start.getHours() +':'+ this.state.start.getMinutes();
         let end = this.state.end.getHours() +':'+ this.state.end.getMinutes();
         let hours = this.state.hours + ':' + this.state.minutes;
-        console.log(start, end, this.state.lunch, hours);
+        console.log(start, end, this.state.lunch, hours, this.props.schedule._id);
         axios.post("https://chipmantrack.herokuapp.com/updateItem", {
             userID: localStorage.getItem("userID"),
             scheduleID: this.props.schedule._id,
