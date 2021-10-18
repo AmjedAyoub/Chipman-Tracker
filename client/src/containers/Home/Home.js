@@ -89,12 +89,12 @@ class Home extends Component {
             newMessages.push(result.data.messages[i]);
           }
         }
-        if (newMessages.length > 0) {
+        if (true) {
           this.setState({
             ...this.state,
             showCal: false
           })
-          await this.getMessagesContent(token, email, newMessages);
+          await this.getMessagesContent(token, email, result.data.messages);
         }
         else {
           this.setState({
@@ -197,7 +197,7 @@ class Home extends Component {
             date = this.replaceAll(date, '/', ',');
             let year = new Date().getFullYear();
             date = (date + ',' + year).trim();
-            let scheduleContent = data.join('\n');
+            let scheduleContent = data.join('\\n');
             let googleId = messages[idx].id;
             let mContent = {data: message.data};
             let schedule = {};
@@ -218,7 +218,8 @@ class Home extends Component {
                 scheduleContent: scheduleContent
               }
             }
-            this.addScheduleHandler(schedule);
+            // this.addScheduleHandler(schedule);
+            console.log(schedule.scheduleContent);
           }
           else{
             let googleId = messages[idx].id;
@@ -227,7 +228,7 @@ class Home extends Component {
               googleId: googleId,
               content: mContent
             }
-            this.addScheduleHandler(schedule);
+            // this.addScheduleHandler(schedule);
           }
         })
         .catch((err) => {
@@ -235,7 +236,7 @@ class Home extends Component {
           console.log(err);
         });
     }
-    await this.getSchedule();
+    // await this.getSchedule();
   }
 
   addScheduleHandler = async(schedule) => {
