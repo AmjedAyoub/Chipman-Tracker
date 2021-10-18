@@ -34,7 +34,9 @@ class Home extends Component {
     const token = localStorage.getItem('googleToken');
     const email = localStorage.getItem('googleEmail');
     await this.getSchedule();
-    await this.getMessages(token, email);
+    if(token){
+      await this.getMessages(token, email);
+    }
   }
 
   getMessages = async (token, email) => {
