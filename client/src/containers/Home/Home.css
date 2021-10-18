@@ -66,7 +66,8 @@ button:focus {
 }
 
 .react-calendar__month-view__days__day {
-  height: 110px !important;
+  min-height: 90px !important;
+  max-height: 90px !important;
   font-size: large;
   border: none;
 }
@@ -87,7 +88,7 @@ button:focus {
 }
 
 .dayView {
-  overflow-x: auto;
+  /* overflow-y: auto; */
 }
 
 .react-calendar {
@@ -96,8 +97,24 @@ button:focus {
   margin-top: 15px !important;
   border: solid rgb(27, 27, 117) 2px;
   background: rgb(0 173 255);
-  height: inherit;
+  position: relative;
 }
+
+button.react-calendar__tile {
+  overflow-y: scroll !important; /* Add the ability to scroll */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+button.react-calendar__tile::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+button.react-calendar__tile {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 
 .react-calendar__month-view__weekdays {
   background: rgb(0 243 255);

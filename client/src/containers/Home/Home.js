@@ -446,7 +446,7 @@ class Home extends Component {
         </div>
         {/* Use any element to open/show the overlay navigation menu */}
         <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
-        {this.state.showCal ? <div>
+        {this.state.showCal ? <div className="myCalendar">
           <h2 style={{ color: "Naive" }}>My Calendar</h2>
           <Calendar
             id="myCalendar"
