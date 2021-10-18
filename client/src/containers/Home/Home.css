@@ -20,6 +20,7 @@
     width: 100%; /* 100% width */
     text-align: center; /* Centered text/links */
     margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+    display: inline-grid !important;
   }
   
   /* The navigation links inside the overlay */
@@ -45,6 +46,15 @@
     font-size: 60px;
   }
 
+  .navbtn {
+    border: none !important;
+    background: transparent !important;
+    color: #818181 !important;
+    font-size: 36px;
+    padding: 5px !important;
+    margin: 5px !important;
+  }
+
   #closeMenuBtn {
     border: none !important;
     background: transparent !important;
@@ -58,6 +68,9 @@
       font-size: 40px;
       top: 15px;
       right: 35px;
+    }
+    .navbtn {
+      font-size: 20px;
     }
   }
 

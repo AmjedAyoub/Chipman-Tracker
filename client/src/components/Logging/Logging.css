@@ -59,6 +59,19 @@
     top: 15px;
     right: 35px;
   }
+  .navbtn {
+    font-size: 20px;
+  }
+}
+
+
+.navbtn {
+  border: none !important;
+  background: transparent !important;
+  color: #818181 !important;
+  font-size: 36px;
+  padding: 5px !important;
+  margin: 5px !important;
 }
 
 .Logging {

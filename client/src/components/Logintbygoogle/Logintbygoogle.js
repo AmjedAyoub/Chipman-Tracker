@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 class Logintbygoogle extends Component {
-  state = {
-      schedule:[]
-    };
 
   responseGoogle = (response) => {
     localStorage.setItem('google', true);
@@ -38,11 +35,8 @@ class Logintbygoogle extends Component {
   }
 
   render() {
-    let g = localStorage.getItem('google');
-
     return (
       <div>
-        {!g ? 
         <GoogleLogin
           clientId="604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com"
           buttonText="Login with Google"
@@ -53,15 +47,14 @@ class Logintbygoogle extends Component {
           onFailure={this.errGoogle}
           isSignedIn={true}
           accessType="online"
-          cookiePolicy={'single_host_origin'}></GoogleLogin>
-        :
+          cookiePolicy={'single_host_origin'}>
+        </GoogleLogin>
         <GoogleLogout
           clientId="604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com"
           buttonText="Logout"
           redirectUri={["https://chipmantrack.herokuapp.com","http://localhost:3000"]}
           onLogoutSuccess={this.logout}>
         </GoogleLogout>
-        }
       </div>
     )
   }

@@ -7,7 +7,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import Modal from "../../components/UI/Modal/Modal";
 import Alert from "../../components/UI/Alert/Alert";
-import Fridge from "../../components/Fridge/Fridge";
+import DayView from "../../components/DayView/DayView";
 import Cook from "../../components/Cook/Cook";
 import Calendar from 'react-calendar';
 import Logintbygoogle from '../../components/Logintbygoogle/Logintbygoogle';
@@ -26,7 +26,9 @@ class Home extends Component {
     isManaging: false,
     calendarValue: new Date(),
     schedule: [],
-    showCal: false
+    showCal: false,
+    viewContent: "",
+    scheduleToView: null
   }
 
 
@@ -37,6 +39,10 @@ class Home extends Component {
     if(token){
       await this.getMessages(token, email);
     }
+    this.setState({
+      ...this.state,
+      viewContent: "calendarView"
+    })
   }
 
   getMessages = async (token, email) => {
@@ -163,13 +169,12 @@ class Home extends Component {
             updateContent = this.replaceAll(updateContent, '\n', ' ');
           }
           let start = m.indexOf("MOVE DETAILS");
-          let end = m.split("--000", 2).join("--000").length;
-          if (start > -1) {
+          let end = m.indexOf("Black");
+          if (start > -1 && end > -1) {
             content = m.substring(start, end);
             content = this.replaceAll(content, '>', '');
             content = this.replaceAll(content, '--', '');
             content = this.replaceAll(content, '=20', '');
-            content = this.replaceAll(content, 'Lead:', 'Lead: *');
             content = this.replaceAll(content, '*', '\n');
             content = this.replaceAll(content, '\r', '><');
             content = this.replaceAll(content, '\n', '><');
@@ -192,45 +197,16 @@ class Home extends Component {
             date = this.replaceAll(date, '/', ',');
             let year = new Date().getFullYear();
             date = (date + ',' + year).trim();
-            let time = data[2].trim();
-            let building = data[3].trim();
-            let location = (data[4] + ',' + data[5]).trim();
-            let scope;
-            let supervisor;
-            let lead;
+            let scheduleContent = d.join('');
             let googleId = messages[idx].id;
             let mContent = {data: message.data};
-            for (let j = 0; j < data.length; j++) {
-              if (data[j].toLowerCase().includes("scope")) {
-                scope = (data[j] + data[j + 1]).trim();
-                let str1 = scope.indexOf('Tech')
-                let str2 = scope.indexOf('Super')
-                if (str1 > -1) {
-                  scope = scope.substring(0, str1);
-                } else if (str2 > -1) {
-                  scope = scope.substring(0, str2);
-                }
-              }
-              else if (data[j].toLowerCase().includes("supervisor:")) {
-                supervisor = (data[j] + data[j + 1]).trim();
-              }
-              else if (data[j].toLowerCase().includes("lead:")) {
-                lead = (data[j] + data[j + 1]).trim();
-              }
-
-            }
             let schedule = {};
             if(updateContent){
               schedule = {
                 googleId: googleId,
                 content: mContent,
                 date: date,
-                time: time,
-                building: building,
-                location: location,
-                scope: scope,
-                supervisor: supervisor,
-                lead: lead,
+                scheduleContent: scheduleContent,
                 updated: true,
                 updatedContent: updateContent
               }
@@ -239,12 +215,7 @@ class Home extends Component {
                 googleId: googleId,
                 content: mContent,
                 date: date,
-                time: time,
-                building: building,
-                location: location,
-                scope: scope,
-                supervisor: supervisor,
-                lead: lead
+                scheduleContent: scheduleContent
               }
             }
             this.addScheduleHandler(schedule);
@@ -273,12 +244,7 @@ class Home extends Component {
       googleId: schedule.googleId,
       content: schedule.content,
       date: schedule.date,
-      time: schedule.time,
-      building: schedule.building,
-      location: schedule.location,
-      scope: schedule.scope,
-      supervisor: schedule.supervisor,
-      lead: schedule.lead,
+      scheduleContent: schedule.scheduleContent,
       updated: schedule.updated,
       updatedContent: schedule.updatedContent
     }
@@ -341,16 +307,17 @@ class Home extends Component {
     this.componentDidMount();
     this.setState({
       ...this.state,
-      showModel: false
+      showModel: false,
+      modelContent: ''
     });
   }
 
-  openModelHandler = (content, isManag) => {
+  openModelHandler = (content, sch) => {
     this.setState({
       ...this.state,
+      scheduleToView: sch,
       showModel: true,
-      modelContent: content,
-      isManaging: isManag
+      modelContent: content
     });
   }
 
@@ -364,11 +331,11 @@ class Home extends Component {
       if(d.updated){
         return <div className="dayView">
         <p style={{ fontSize: "10px", background: "lightsalmon" }}><strong>{d.updatedContent}</strong></p>
-        <p style={{ fontSize: "10px", background: "lightblue" }}>{d.time}<br />{d.building}<br />{d.location}<br />{d.scope}<br />{d.supervisor}<br />{d.lead}</p>
+        <p style={{ fontSize: "10px", background: "lightblue" }}>{d.scheduleContent}</p>
       </div>
       }else{
       return <div className="dayView">
-        <p style={{ fontSize: "10px", background: "lightblue" }}><strong>{d.time}</strong><br />{d.building}<br />{d.location}<br />{d.scope}<br />{d.supervisor}<br />{d.lead}</p>
+      <p style={{ fontSize: "10px", background: "lightblue" }}>{d.scheduleContent}</p>
       </div>
       }
     } else {
@@ -391,10 +358,13 @@ class Home extends Component {
     document.getElementById("myNav").style.width = "0%";
     if (navBtn === "TERRA") {
       document.location.replace("https://www.terrastaffinggroup.com/myaccount/login");
+    }else if(navBtn !== "close"){
+      this.changeViewHandler(navBtn);
     }
   }
 
   compDidChanged = () => {
+    this.closeNav("close")
     const t = localStorage.getItem("token");
     const g = localStorage.getItem("google");
     this.setState({
@@ -407,16 +377,26 @@ class Home extends Component {
 
   onSelect = (e) => {
     let d = this.state.schedule.find((x, i) => (new Date(x.date).getDate() === e.getDate() && new Date(x.date).getMonth() === e.getMonth() && new Date(x.date).getFullYear() === e.getFullYear()));
-    console.log(d);
+    if(d){
+      this.openModelHandler("DayView", d)
+    }
+  }
+  
+  changeViewHandler = (content) => {
+      this.setState({
+        ...this.state,
+        viewContent: content
+      })
   }
 
   render() {
+    let page = null;
     let model = null;
 
     switch (this.state.modelContent) {
-      case 'Fridge':
+      case 'DayView':
         model = (
-          <Fridge />
+          <DayView schedule={this.state.scheduleToView}/>
         );
         break;
       case 'Cook':
@@ -429,33 +409,68 @@ class Home extends Component {
         break;
     }
 
+    switch (this.state.viewContent) {
+      case 'calendarView':
+        page = ( 
+          this.state.showCal ? 
+          <div className="myCalendar">
+            <h2 style={{ color: "Naive" }}>My Calendar</h2>
+            <Calendar
+              id="myCalendar"
+              onChange={this.calendarOnChange}
+              value={this.state.calendarValue}
+              tileContent={this.calendarTitleConent}
+              onClickDay={this.onSelect}
+            />
+          </div> 
+          : <div className="loaderDiv"><div className="loader"></div><strong>Please wait...</strong></div>
+        );
+        break;
+      case 'hoursView':
+        page = (
+          <div>here is the hours</div>
+        );
+        break
+      case 'chipmanView':
+        page = (
+          <div>Chipman</div>
+        );
+        break
+      default:
+        page = ( 
+          this.state.showCal ? 
+          <div className="myCalendar">
+            <h2 style={{ color: "Naive" }}>My Calendar</h2>
+            <Calendar
+              id="myCalendar"
+              onChange={this.calendarOnChange}
+              value={this.state.calendarValue}
+              tileContent={this.calendarTitleConent}
+              onClickDay={this.onSelect}
+            />
+          </div> 
+          : <div className="loaderDiv"><div className="loader"></div><strong>Please wait...</strong></div>
+        );
+        break;
+    }
+
     return (
       <div className="Home">
         <div id="myNav" className="overlay">
           {/* Button to close the overlay navigation */}
-          <Link to=""><button id="closeMenuBtn" className="closebtn" onClick={() => this.closeNav("Close")}>&times;</button></Link>
+          <button id="closeMenuBtn" className="closebtn" onClick={() => this.closeNav("close")}>&times;</button>
           {/* Overlay content */}
           <div className="overlay-content">
-            <Link to="" onClick={() => this.closeNav("Close")}><Logintbygoogle checked={() => this.compDidChanged()} /></Link>
-            <Link to="" onClick={() => this.closeNav("Calendar")}>Calendar</Link>
-            <Link to="" onClick={() => this.closeNav("Emalis")}>Emails</Link>
-            <Link to="" onClick={() => this.closeNav("Hours")}>Hours</Link>
-            <Link to="" onClick={() => this.closeNav("Chipman Tracker")}>Chipman Tracker</Link>
-            <Link to="" onClick={() => this.closeNav("TERRA")}>TERRA</Link>
+            <Logintbygoogle checked={() => this.compDidChanged()} />
+            <button className="navbtn" onClick={() => this.closeNav("calendarView")}>Calendar</button>
+            <button className="navbtn" onClick={() => this.closeNav("hoursView")}>Hours</button>
+            <button className="navbtn" onClick={() => this.closeNav("chipmanView")}>Chipman Tracker</button>
+            <button className="navbtn" onClick={() => this.closeNav("TERRA")}>TERRA</button>
           </div>
         </div>
         {/* Use any element to open/show the overlay navigation menu */}
         <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
-        {this.state.showCal ? <div className="myCalendar">
-          <h2 style={{ color: "Naive" }}>My Calendar</h2>
-          <Calendar
-            id="myCalendar"
-            onChange={this.calendarOnChange}
-            value={this.state.calendarValue}
-            tileContent={this.calendarTitleConent}
-            onClickDay={this.onSelect}
-          />
-        </div> : <div className="loaderDiv"><div className="loader"></div><strong>Please wait...</strong></div>}
+        {page}
         {this.state.showModel ?
           <Modal show={this.state.showModel} modalClosed={this.closeModelHandler}>
             {model}
