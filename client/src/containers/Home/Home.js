@@ -103,7 +103,7 @@ class Home extends Component {
       });
   }
 
-  getMessagesContent = async (token, email, messages) => {
+  getMessagesContent = async (token, email, messages) => { 
     for (let idx = 0; idx < messages.length; idx++) {
       await axios.get('https://www.googleapis.com/gmail/v1/users/' + email + '/messages/' + messages[idx].id, {
         header: {
@@ -159,7 +159,8 @@ class Home extends Component {
             }else if(updateContent.indexOf("On Sun,") > -1){
               updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Sun,"));
             }
-            console.log(updateContent);
+            updateContent = this.replaceAll(updateContent, '\r', '');
+            updateContent = this.replaceAll(updateContent, '\n', ' ');
           }
           let start = m.indexOf("MOVE DETAILS");
           let end = m.split("--000", 2).join("--000").length;
@@ -360,9 +361,16 @@ class Home extends Component {
   calendarTitleConent = ({ date = new Date(), view = "month" }) => {
     let d = this.state.schedule.find((x, i) => (new Date(x.date).getDate() === date.getDate() && new Date(x.date).getMonth() === date.getMonth() && new Date(x.date).getFullYear() === date.getFullYear()));
     if (d) {
+      if(d.updated){
+        return <div className="dayView">
+        <p style={{ fontSize: "10px", background: "lightsalmon" }}><strong>{d.updatedContent}</strong></p>
+        <p style={{ fontSize: "10px", background: "lightblue" }}>{d.time}<br />{d.building}<br />{d.location}<br />{d.scope}<br />{d.supervisor}<br />{d.lead}</p>
+      </div>
+      }else{
       return <div className="dayView">
         <p style={{ fontSize: "10px", background: "lightblue" }}><strong>{d.time}</strong><br />{d.building}<br />{d.location}<br />{d.scope}<br />{d.supervisor}<br />{d.lead}</p>
       </div>
+      }
     } else {
       return null;
     }
