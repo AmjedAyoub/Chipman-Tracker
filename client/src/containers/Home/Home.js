@@ -174,7 +174,7 @@ class Home extends Component {
             let supervisor;
             let lead;
             let googleId = messages[idx].id;
-            let mContent = message;
+            let mContent = {data: message.data};
             for (let j = 0; j < data.length; j++) {
               if (data[j].toLowerCase().includes("scope")) {
                 scope = (data[j] + data[j + 1]).trim();
@@ -209,7 +209,7 @@ class Home extends Component {
           }
           else{
             let googleId = messages[idx].id;
-            let mContent = message;
+            let mContent = {data: message.data};
             let schedule = {
               googleId: googleId,
               content: mContent
