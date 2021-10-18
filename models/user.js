@@ -17,7 +17,7 @@ const UserSchema = new Schema({
         start:{type: String, default: "00:00"},
         end:{type: String, default: "00:00"},
         lunch:{type: String, default: "00"},
-        hours:{type: String, default: "00"}
+        hours:{type: String, default: "00:00"}
       }
     }
   ] 

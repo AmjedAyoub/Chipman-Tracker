@@ -36,7 +36,7 @@ class Home extends Component {
     const token = localStorage.getItem('googleToken');
     const email = localStorage.getItem('googleEmail');
     await this.getSchedule();
-    if(token){
+    if (token) {
       await this.getMessages(token, email);
     }
     this.setState({
@@ -109,7 +109,7 @@ class Home extends Component {
       });
   }
 
-  getMessagesContent = async (token, email, messages) => { 
+  getMessagesContent = async (token, email, messages) => {
     for (let idx = 0; idx < messages.length; idx++) {
       await axios.get('https://www.googleapis.com/gmail/v1/users/' + email + '/messages/' + messages[idx].id, {
         header: {
@@ -147,22 +147,22 @@ class Home extends Component {
           let updateContent;
           let updateStart = m.indexOf("Update");
           let updateEnd = m.indexOf("MOVE DETAILS");
-          if(updateStart > -1 && updateEnd > -1) {
+          if (updateStart > -1 && updateEnd > -1) {
             updateContent = m.substring(updateStart, updateEnd);
             updateStart = updateContent.indexOf("Update");
-            if(updateContent.indexOf("On Mon,") > -1){
+            if (updateContent.indexOf("On Mon,") > -1) {
               updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Mon,"));
-            }else if(updateContent.indexOf("On Tue,") > -1){
+            } else if (updateContent.indexOf("On Tue,") > -1) {
               updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Tue,"));
-            }else if(updateContent.indexOf("On Wen,") > -1){
+            } else if (updateContent.indexOf("On Wen,") > -1) {
               updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Wen,"));
-            }else if(updateContent.indexOf("On Thu,") > -1){
+            } else if (updateContent.indexOf("On Thu,") > -1) {
               updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Thu,"));
-            }else if(updateContent.indexOf("On Fri,") > -1){
+            } else if (updateContent.indexOf("On Fri,") > -1) {
               updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Fri,"));
-            }else if(updateContent.indexOf("On Sat,") > -1){
+            } else if (updateContent.indexOf("On Sat,") > -1) {
               updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Sat,"));
-            }else if(updateContent.indexOf("On Sun,") > -1){
+            } else if (updateContent.indexOf("On Sun,") > -1) {
               updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Sun,"));
             }
             updateContent = this.replaceAll(updateContent, '\r', '');
@@ -199,9 +199,9 @@ class Home extends Component {
             date = (date + ',' + year).trim();
             let scheduleContent = data.join('\n');
             let googleId = messages[idx].id;
-            let mContent = {data: message.data};
+            let mContent = { data: message.data };
             let schedule = {};
-            if(updateContent){
+            if (updateContent) {
               schedule = {
                 googleId: googleId,
                 content: mContent,
@@ -210,7 +210,7 @@ class Home extends Component {
                 updated: true,
                 updatedContent: updateContent
               }
-            }else{
+            } else {
               schedule = {
                 googleId: googleId,
                 content: mContent,
@@ -221,9 +221,9 @@ class Home extends Component {
             this.addScheduleHandler(schedule);
             // console.log(schedule.scheduleContent);
           }
-          else{
+          else {
             let googleId = messages[idx].id;
-            let mContent = {data: message.data};
+            let mContent = { data: message.data };
             let schedule = {
               googleId: googleId,
               content: mContent
@@ -239,7 +239,7 @@ class Home extends Component {
     await this.getSchedule();
   }
 
-  addScheduleHandler = async(schedule) => {
+  addScheduleHandler = async (schedule) => {
     await axios.post("https://chipmantrack.herokuapp.com/addSchedule", {
       userID: localStorage.getItem("userID"),
       googleId: schedule.googleId,
@@ -261,26 +261,26 @@ class Home extends Component {
       }));
   }
 
-  getSchedule = async() => {
+  getSchedule = async () => {
     this.setState({
       ...this.state,
       showCal: false
     })
     await axios.get("https://chipmantrack.herokuapp.com/AllSchedule/" + localStorage.getItem("userID"))
-    .then(res => {
+      .then(res => {
         if (res.status === "error") {
-            throw new Error(res.data.message);
+          throw new Error(res.data.message);
         }
         this.setState({
-            ...this.state,
-            schedule: res.data[0].schedule,
-            showCal: true
+          ...this.state,
+          schedule: res.data[0].schedule,
+          showCal: true
         })
-    })
-    .catch(err => this.setState({
+      })
+      .catch(err => this.setState({
         ...this.state,
         error: err.message
-    }));
+      }));
   }
 
   replaceAll = (str, chr, replace) => {
@@ -329,15 +329,19 @@ class Home extends Component {
   calendarTitleConent = ({ date = new Date(), view = "month" }) => {
     let d = this.state.schedule.find((x, i) => (new Date(x.date).getDate() === date.getDate() && new Date(x.date).getMonth() === date.getMonth() && new Date(x.date).getFullYear() === date.getFullYear()));
     if (d) {
-      if(d.updated){
+      let data = d.scheduleContent.split('\n');
+      if (d.updated) {
         return <div className="dayView">
-        <p style={{ fontSize: "10px", background: "lightsalmon" }}><strong>{d.updatedContent}</strong></p>
-        <p style={{ fontSize: "10px", background: "lightblue" }}>{d.scheduleContent}</p>
-      </div>
-      }else{
-      return <div className="dayView">
-      <p style={{ fontSize: "10px", background: "lightblue" }}>{d.scheduleContent}</p>
-      </div>
+          <p style={{ fontSize: "10px", background: "lightsalmon" }}><strong>{d.updatedContent}</strong></p>
+          {data.map((cont, i) => (
+            <p key={cont + " " + i} style={{fontSize: "10px", background: "lightblue", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</p>
+          ))}
+        </div>
+      } else {
+        return <div className="dayView">{data.map((cont, i) => (
+          <p key={cont + " " + i} style={{fontSize: "10px", background: "lightblue", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</p>
+        ))}
+        </div>
       }
     } else {
       return null;
@@ -359,7 +363,7 @@ class Home extends Component {
     document.getElementById("myNav").style.width = "0%";
     if (navBtn === "TERRA") {
       document.location.replace("https://www.terrastaffinggroup.com/myaccount/login");
-    }else if(navBtn !== "close"){
+    } else if (navBtn !== "close") {
       this.changeViewHandler(navBtn);
     }
   }
@@ -378,16 +382,16 @@ class Home extends Component {
 
   onSelect = (e) => {
     let d = this.state.schedule.find((x, i) => (new Date(x.date).getDate() === e.getDate() && new Date(x.date).getMonth() === e.getMonth() && new Date(x.date).getFullYear() === e.getFullYear()));
-    if(d){
+    if (d) {
       this.openModelHandler("DayView", d)
     }
   }
-  
+
   changeViewHandler = (content) => {
-      this.setState({
-        ...this.state,
-        viewContent: content
-      })
+    this.setState({
+      ...this.state,
+      viewContent: content
+    })
   }
 
   render() {
@@ -397,7 +401,7 @@ class Home extends Component {
     switch (this.state.modelContent) {
       case 'DayView':
         model = (
-          <DayView schedule={this.state.scheduleToView}/>
+          <DayView schedule={this.state.scheduleToView} />
         );
         break;
       case 'Cook':
@@ -412,19 +416,19 @@ class Home extends Component {
 
     switch (this.state.viewContent) {
       case 'calendarView':
-        page = ( 
-          this.state.showCal ? 
-          <div className="myCalendar">
-            <h2 style={{ color: "Naive" }}>My Calendar</h2>
-            <Calendar
-              id="myCalendar"
-              onChange={this.calendarOnChange}
-              value={this.state.calendarValue}
-              tileContent={this.calendarTitleConent}
-              onClickDay={this.onSelect}
-            />
-          </div> 
-          : <div className="loaderDiv"><div className="loader"></div><strong>Please wait...</strong></div>
+        page = (
+          this.state.showCal ?
+            <div className="myCalendar">
+              <h2 style={{ color: "Naive" }}>My Calendar</h2>
+              <Calendar
+                id="myCalendar"
+                onChange={this.calendarOnChange}
+                value={this.state.calendarValue}
+                tileContent={this.calendarTitleConent}
+                onClickDay={this.onSelect}
+              />
+            </div>
+            : <div className="loaderDiv"><div className="loader"></div><strong>Please wait...</strong></div>
         );
         break;
       case 'hoursView':
@@ -438,19 +442,19 @@ class Home extends Component {
         );
         break
       default:
-        page = ( 
-          this.state.showCal ? 
-          <div className="myCalendar">
-            <h2 style={{ color: "Naive" }}>My Calendar</h2>
-            <Calendar
-              id="myCalendar"
-              onChange={this.calendarOnChange}
-              value={this.state.calendarValue}
-              tileContent={this.calendarTitleConent}
-              onClickDay={this.onSelect}
-            />
-          </div> 
-          : <div className="loaderDiv"><div className="loader"></div><strong>Please wait...</strong></div>
+        page = (
+          this.state.showCal ?
+            <div className="myCalendar">
+              <h2 style={{ color: "Naive" }}>My Calendar</h2>
+              <Calendar
+                id="myCalendar"
+                onChange={this.calendarOnChange}
+                value={this.state.calendarValue}
+                tileContent={this.calendarTitleConent}
+                onClickDay={this.onSelect}
+              />
+            </div>
+            : <div className="loaderDiv"><div className="loader"></div><strong>Please wait...</strong></div>
         );
         break;
     }

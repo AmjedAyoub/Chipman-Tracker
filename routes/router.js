@@ -203,17 +203,20 @@ router.post('/addRecipe', function(req, res) {
 
 router.post('/updateItem', function (req, res, next) {
   User.find({_id: req.body.userID}).then(function(user){  
-    for (let i = 0; i < user[0].items.length; i++){   
-          if(user[0].items[i]._id == req.body.itemID){
+    for (let i = 0; i < user[0].schedule.length; i++){   
+          if(user[0].schedule[i]._id == req.body.scheduleID){
             const newData = User.updateOne(
               {
-                "items._id": user[0].items[i]._id,
+                "schedule._id": user[0].schedule[i]._id,
               }, 
               {$set:
                 {
-                  "items.$.name":req.body.name,
-                  "items.$.quantity":req.body.quantity,
-                  "items.$.unit":req.body.unit,
+                  "items.$.shift":{
+                    "items.$.shift.$.start":req.body.start,
+                    "items.$.shift.$.end":req.body.end,
+                    "items.$.shift.$.lunch":req.body.lunch,
+                    "items.$.shift.$.hours":req.body.hours,
+                  }
           }, new: true})
             return newData
           }      

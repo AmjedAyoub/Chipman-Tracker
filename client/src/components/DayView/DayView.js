@@ -11,79 +11,98 @@ class DayView extends Component {
         lunch: '00',
         start: '',
         end: '',
-        total: '',
-        lunchTime: ['00', '30 min.', '45 min.', '1 hr.']
+        hours: '',
+        minutes: '',
+        lunchTime: ['00', '30 min.', '45 min.', '1 hr.'],
+        lunchShow: []
     }
 
     componentDidMount = () => {
         let t = this.props.schedule.shift.start;
         t = t.split(':')
         let val1 = new Date(this.props.schedule.date).setHours(t[0]);
-        val1 = val1 + t[1]*60000;
+        val1 = val1 + t[1] * 60000;
         let t2 = this.props.schedule.shift.end;
         t2 = t2.split(':')
         let val2 = new Date(this.props.schedule.date).setHours(t2[0]);
-        val2 = val2 + t2[1]*60000;
+        val2 = val2 + t2[1] * 60000;
+        let arr = [];
+        for (let i = 0; i < this.state.lunchTime.length; i++) {
+            if (this.props.schedule.shift.lunch !== this.state.lunchTime[i]) {
+                arr.push(this.state.lunchTime[i]);
+            }
+        }
+        let hrs = this.props.schedule.shift.hours.split(':');
         this.setState({
             ...this.state,
-            start: val1,
-            end: val2,
-            hours: this.props.schedule.shift.hours,
-            lunch: this.props.schedule.shift.lunch
-        })
-    }
-
-    componentDidUpdate() {
-        if (this.props.isManaging && this.state.manageShow) {
-            this.setState({
-                ...this.state,
-                manageShow: false
-            })
-        }
-    }
-
-    manageShowHandler = () => {
-        this.setState((prevState) => {
-            return {
-                ...prevState,
-                manageShow: !prevState.manageShow
-            }
+            start: new Date(val1),
+            end: new Date(val2),
+            hours: hrs[0],
+            minutes: hrs[1],
+            lunch: this.props.schedule.shift.lunch,
+            lunchShow: arr
         })
     }
 
     lunchUnitChangedHandler = (event) => {
-        this.setState({
-            ...this.state,
-            lunch: event.target.value
-        })
+        let arr = [];
+        for (let i = 0; i < this.state.lunchTime.length; i++) {
+            if (event.target.value !== this.state.lunchTime[i]) {
+                arr.push(this.state.lunchTime[i]);
+            }
+        }
+        this.calculateHours(this.state.start, this.state.end, event.target.value, arr);
     }
 
     startToAddChangedHandler = (event) => {
-        if(event){
+        if (event) {
             let nowTime = new Date();
             nowTime.setHours(0 + event.getHours());
             nowTime.setMinutes(0 + event.getMinutes());
-             this.setState({
-                 ...this.state,
-                 start: nowTime
-             })
+            this.calculateHours(nowTime, this.state.end, this.state.lunch);
         }
     }
 
     endToAddChangedHandler = (event) => {
-        if(event){
+        if (event) {
             let nowTime = new Date();
             nowTime.setHours(0 + event.getHours());
             nowTime.setMinutes(0 + event.getMinutes());
-             this.setState({
-                 ...this.state,
-                 end: nowTime
-             })
+            this.calculateHours(this.state.start, nowTime, this.state.lunch);
         }
     }
 
-    getValue = (e) => {
-        console.log(e)
+    calculateHours = (start, end, lunch, arr = null) => {
+        let hours = end.getTime() - start.getTime();
+        if (lunch === "30 min.") {
+            hours = new Date(hours).getTime() - 30 * 60000;
+        } else if (lunch === "45 min.") {
+            hours = new Date(hours).getTime() - 45 * 60000;
+        } else if (lunch === "1 hr.") {
+            hours = new Date(hours).getTime() - 60 * 60000;
+        }
+        var diffHrs = Math.floor((hours % 86400000) / 3600000); // hours
+        var diffMins = Math.round(((hours % 86400000) % 3600000) / 60000);
+        if (arr) {
+            this.setState({
+                ...this.state,
+                hours: diffHrs,
+                minutes: diffMins,
+                start: start,
+                end: end,
+                lunch: lunch,
+                lunchShow: arr
+            })
+        } else {
+            this.setState({
+                ...this.state,
+                hours: diffHrs,
+                minutes: diffMins,
+                start: start,
+                end: end,
+                lunch: lunch
+            })
+        }
     }
 
     unitToAddChangedHandler = (event) => {
@@ -93,111 +112,34 @@ class DayView extends Component {
         })
     }
 
-    addItemHandler = () => {
-        axios.post("http://whatcook.herokuapp.com/addItems", {
+    updateItemHandler = () => {
+        let start = this.state.start.getHours() +':'+ this.state.start.getMinutes();
+        let end = this.state.end.getHours() +':'+ this.state.end.getMinutes();
+        let hours = this.state.hours + ':' + this.state.minutes;
+        console.log(start, end, this.state.lunch, hours);
+        axios.post("https://chipmantrack.herokuapp.com/updateItem", {
             userID: localStorage.getItem("userID"),
-            name: this.state.itemToAdd,
-            quantity: this.state.quantityToAdd,
-            unit: this.state.unitToAdd,
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtUW-NhL541eHkTOKzBjghAfFPz-D1FUHjNQ&usqp=CAU"
+            scheduleID: this.props.schedule._id,
+            start: start,
+            end: end,
+            lunch: this.state.lunch,
+            hours: hours
         }
         )
             .then(res => {
                 if (res.status === "error") {
                     throw new Error(res.data.message);
                 }
-                axios.get("http://whatcook.herokuapp.com/AllItems/" + localStorage.getItem("userID"))
-                    .then(res => {
-
-                        if (res.status === "error") {
-                            throw new Error(res.data.message);
-                        }
-                        res.data[0].items.sort((a, b) => {
-                            if (a.name < b.name) {
-                                return -1;
-                            }
-                            if (a.name > b.name) {
-                                return 1;
-                            }
-                            return 0;
-                        })
-                        this.setState({
-                            ...this.state,
-                            items: res.data[0].items,
-                            itemToAdd: '',
-                            quantityToAdd: '',
-                            unitToAdd: ''
-                        })
-                    })
-                    .catch(err => this.setState({ error: err.message }));
-            })
-            .catch(err => this.setState({ error: err.message }));
-
-    }
-
-    updateItemHandler = (id) => {
-        console.log(this.state.items[id]);
-        axios.post("http://whatcook.herokuapp.com/updateItem", {
-            userID: localStorage.getItem("userID"),
-            itemID: this.state.items[id]._id,
-            name: this.state.items[id].name,
-            quantity: this.state.items[id].quantity,
-            unit: this.state.items[id].unit
-        }
-        )
-            .then(res => {
-                if (res.status === "error") {
-                    throw new Error(res.data.message);
-                }
-                axios.get("http://whatcook.herokuapp.com/AllItems/" + localStorage.getItem("userID"))
-                    .then(res => {
-                        if (res.status === "error") {
-                            throw new Error(res.data.message);
-                        }
-                        res.data[0].items.sort((a, b) => {
-                            if (a.name < b.name) {
-                                return -1;
-                            }
-                            if (a.name > b.name) {
-                                return 1;
-                            }
-                            return 0;
-                        })
-                        this.setState({
-                            ...this.state,
-                            items: res.data[0].items
-                        })
-                    })
-                    .catch(err => this.setState({ error: err.message }));
+                console.log(res);
             })
             .catch(err => this.setState({ error: err.message }));
     }
 
-    deleteItemHandler = (id, event) => {
-        axios.post("http://whatcook.herokuapp.com/deleteItem", {
-            userID: localStorage.getItem("userID"),
-            itemID: this.state.items[id]._id,
-        })
-            .then(res => {
-                if (res.status === "error") {
-                    throw new Error(res.data.message);
-                }
-                axios.get("http://whatcook.herokuapp.com/AllItems/" + localStorage.getItem("userID"))
-                    .then(res => {
-                        if (res.status === "error") {
-                            throw new Error(res.data.message);
-                        }
-                        this.setState({
-                            ...this.state,
-                            items: res.data[0].items
-                        })
-                    })
-                    .catch(err => this.setState({ error: err.message }));
-            })
-            .catch(err => this.setState({ error: err.message }));
+    deleteItemHandler = () => {
     }
 
     render() {
+        let data = this.props.schedule.scheduleContent.split('\n');
         return (
             <div className="DayView">
                 <div className={this.props.isManaging ? "collapsed" : "collapse"} id="collapseManage">
@@ -207,48 +149,50 @@ class DayView extends Component {
                                 <h5>{this.props.schedule.date}</h5>
                                 <hr></hr>
                                 {this.props.schedule.updated ? <h6 style={{ background: "lightsalmon" }}><strong>{this.props.schedule.updatedContent}</strong></h6> : null}
-                                <h6 style={{ background: "lightblue" }}>{this.props.schedule.scheduleContent}</h6>
+                                {data.map((cont, i) => (
+                                    <h6 key={cont + " " + i} style={{ background: "lightblue", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</h6>
+                                ))}
                             </div>
                         </div>
                         <hr></hr>
                         <div className="row " style={{ justifyContent: 'space-between' }}>
-                            <h6>Total hours: {this.props.schedule.shift.hours}</h6>
+                            <label style={{ background: 'yellow', padding: '5px' }}>Total hours: {this.state.hours}:{this.state.minutes}</label>
                         </div>
                         <div className="row " style={{ justifyContent: 'center', display: 'flex' }}>
                             <div className="Col-md-4" style={{ display: 'inline' }}>
-                                <h6>From:</h6>
-                                    <TimePicker
+                                {/* <h6>From:</h6> */}
+                                <TimePicker
                                     className="mt-2 mb-2"
-                                    style={{cursor:'pointer'}}
+                                    style={{ cursor: 'pointer' }}
                                     clearable
                                     ampm={false}
                                     openTo="hours"
                                     views={["hours", "minutes"]}
                                     format="HH:mm"
-                                    label={"Select Time"}
+                                    label={"From"}
                                     value={new Date(this.state.start)}
-                                    onChange={(e) => this.startToAddChangedHandler(e)}/>
+                                    onChange={(e) => this.startToAddChangedHandler(e)} />
                             </div>
                             <div className="Col-md-4" style={{ display: 'inline' }}>
-                                <h6>To:</h6>
-                                    <TimePicker
+                                {/* <h6>To:</h6> */}
+                                <TimePicker
                                     className="mt-2 mb-2"
-                                    style={{cursor:'pointer'}}
+                                    style={{ cursor: 'pointer' }}
                                     clearable
                                     ampm={false}
                                     openTo="hours"
                                     views={["hours", "minutes"]}
                                     format="HH:mm"
-                                    label={"Select Time"}
+                                    label={"To"}
                                     value={new Date(this.state.end)}
-                                    onChange={(e) => this.endToAddChangedHandler(e)}/>
+                                    onChange={(e) => this.endToAddChangedHandler(e)} />
                             </div>
                             <div className="Col-md-4">
-                                <h6>Lunch:</h6>
+                                <label>Lunch:</label>
                                 <select onChange={(event) => this.lunchUnitChangedHandler(event)} className="custom-select" id="SelectUnit" style={{ width: '70px' }}>
                                     <option key={this.state.lunch} value={this.state.lunch} >{this.state.lunch}.</option>
-                                    {this.state.lunchTime.map((u, i) => (
-                                        <option key={u + "" + i} value={u}>{u}.</option>
+                                    {this.state.lunchShow.map((u, i) => (
+                                        <option key={u + "" + i} value={u}>{u}</option>
                                     ))}
                                 </select>
                             </div>
