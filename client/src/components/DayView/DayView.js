@@ -17,12 +17,10 @@ class DayView extends Component {
 
     componentDidMount = () => {
         let t = this.props.schedule.shift.start;
-        t = t.substring(0,5);
         t = t.split(':')
         let val1 = new Date(this.props.schedule.date).setHours(t[0]);
         val1 = val1 + t[1]*60000;
         let t2 = this.props.schedule.shift.end;
-        t2 = t2.substring(0,5);
         t2 = t2.split(':')
         let val2 = new Date(this.props.schedule.date).setHours(t2[0]);
         val2 = val2 + t2[1]*60000;

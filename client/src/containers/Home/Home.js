@@ -197,7 +197,7 @@ class Home extends Component {
             date = this.replaceAll(date, '/', ',');
             let year = new Date().getFullYear();
             date = (date + ',' + year).trim();
-            let scheduleContent = data.join('\n');
+            let scheduleContent = data.join('<br />');
             let googleId = messages[idx].id;
             let mContent = {data: message.data};
             let schedule = {};
