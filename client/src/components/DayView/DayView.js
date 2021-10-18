@@ -18,28 +18,28 @@ class DayView extends Component {
     }
 
     componentDidMount = () => {
-        let t = this.props.schedule.shift.start;
+        let t = this.props.schedule.start;
         t = t.split(':')
         let val1 = new Date(this.props.schedule.date).setHours(t[0]);
         val1 = val1 + t[1] * 60000;
-        let t2 = this.props.schedule.shift.end;
+        let t2 = this.props.schedule.end;
         t2 = t2.split(':')
         let val2 = new Date(this.props.schedule.date).setHours(t2[0]);
         val2 = val2 + t2[1] * 60000;
         let arr = [];
         for (let i = 0; i < this.state.lunchTime.length; i++) {
-            if (this.props.schedule.shift.lunch !== this.state.lunchTime[i]) {
+            if (this.props.schedule.lunch !== this.state.lunchTime[i]) {
                 arr.push(this.state.lunchTime[i]);
             }
         }
-        let hrs = this.props.schedule.shift.hours.split(':');
+        let hrs = this.props.schedule.hours.split(':');
         this.setState({
             ...this.state,
             start: new Date(val1),
             end: new Date(val2),
             hours: hrs[0],
             minutes: hrs[1],
-            lunch: this.props.schedule.shift.lunch,
+            lunch: this.props.schedule.lunch,
             lunchShow: arr
         })
     }
