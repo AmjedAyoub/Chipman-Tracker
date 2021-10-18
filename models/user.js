@@ -18,7 +18,7 @@ const UserSchema = new Schema({
       supervisor:{type: String, default: "WILL BE UPDATED"},
       lead:{type: String, default: "WILL BE UPDATED"},
       updated:{type: Boolean, default: false},
-      updatedAt:{type: String, default: "NOT-UPDATED"},
+      updatedContent:{type: String, default: "NOT-UPDATED"},
       shift:{
         start:{type: String, default: "00:00 AM"},
         end:{type: String, default: "00:00 PM"},

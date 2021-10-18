@@ -84,7 +84,6 @@ class Home extends Component {
           }
         }
         if (newMessages.length > 0) {
-          console.log(newMessages.length);
           this.setState({
             ...this.state,
             showCal: false
@@ -139,6 +138,29 @@ class Home extends Component {
         .then((message) => {
           let m = Buffer.from(message.data.raw, 'base64').toString('ascii');
           let content = "";
+          let updateContent;
+          let updateStart = m.indexOf("Update");
+          let updateEnd = m.indexOf("MOVE DETAILS");
+          if(updateStart > -1 && updateEnd > -1) {
+            updateContent = m.substring(updateStart, updateEnd);
+            updateStart = updateContent.indexOf("Update");
+            if(updateContent.indexOf("On Mon,") > -1){
+              updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Mon,"));
+            }else if(updateContent.indexOf("On Tue,") > -1){
+              updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Tue,"));
+            }else if(updateContent.indexOf("On Wen,") > -1){
+              updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Wen,"));
+            }else if(updateContent.indexOf("On Thu,") > -1){
+              updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Thu,"));
+            }else if(updateContent.indexOf("On Fri,") > -1){
+              updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Fri,"));
+            }else if(updateContent.indexOf("On Sat,") > -1){
+              updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Sat,"));
+            }else if(updateContent.indexOf("On Sun,") > -1){
+              updateContent = updateContent.substring(updateStart, updateContent.indexOf("On Sun,"));
+            }
+            console.log(updateContent);
+          }
           let start = m.indexOf("MOVE DETAILS");
           let end = m.split("--000", 2).join("--000").length;
           if (start > -1) {
@@ -196,16 +218,33 @@ class Home extends Component {
               }
 
             }
-            let schedule = {
-              googleId: googleId,
-              content: mContent,
-              date: date,
-              time: time,
-              building: building,
-              location: location,
-              scope: scope,
-              supervisor: supervisor,
-              lead: lead
+            let schedule = {};
+            if(updateContent){
+              schedule = {
+                googleId: googleId,
+                content: mContent,
+                date: date,
+                time: time,
+                building: building,
+                location: location,
+                scope: scope,
+                supervisor: supervisor,
+                lead: lead,
+                updated: true,
+                updatedContent: updateContent
+              }
+            }else{
+              schedule = {
+                googleId: googleId,
+                content: mContent,
+                date: date,
+                time: time,
+                building: building,
+                location: location,
+                scope: scope,
+                supervisor: supervisor,
+                lead: lead
+              }
             }
             this.addScheduleHandler(schedule);
           }
@@ -238,7 +277,9 @@ class Home extends Component {
       location: schedule.location,
       scope: schedule.scope,
       supervisor: schedule.supervisor,
-      lead: schedule.lead
+      lead: schedule.lead,
+      updated: schedule.updated,
+      updatedContent: schedule.updatedContent
     }
     )
       .then(res => {
@@ -388,10 +429,10 @@ class Home extends Component {
           {/* Overlay content */}
           <div className="overlay-content">
             <Link to="" onClick={() => this.closeNav("Close")}><Logintbygoogle checked={() => this.compDidChanged()} /></Link>
-            <Link to="" onClick={() => this.closeNav("Cal")}>Calender</Link>
+            <Link to="" onClick={() => this.closeNav("Calendar")}>Calendar</Link>
             <Link to="" onClick={() => this.closeNav("Emalis")}>Emails</Link>
             <Link to="" onClick={() => this.closeNav("Hours")}>Hours</Link>
-            <Link to="" onClick={() => this.closeNav("Hours")}>Chipman Tracker</Link>
+            <Link to="" onClick={() => this.closeNav("Chipman Tracker")}>Chipman Tracker</Link>
             <Link to="" onClick={() => this.closeNav("TERRA")}>TERRA</Link>
           </div>
         </div>
