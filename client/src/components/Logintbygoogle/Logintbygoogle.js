@@ -20,7 +20,6 @@ class Logintbygoogle extends Component {
   }
 
   logout = () => {
-    console.log("Logged out from Google");
     localStorage.removeItem("userID");
     localStorage.clear("userID");
     localStorage.removeItem("token");

@@ -7,19 +7,6 @@ const User = require('../models/user');
 const ObjectID = require('mongodb').ObjectID;
 const path = require('path');
 
-// router.get('/', function (req, res, next) {
-//   // return res.sendFile(path.join(__dirname + '/templateLogReg/index.html'));
-//   return true;
-// });
-
-// router.get('/Logging', function (req, res, next) {
-//   return res.sendFile(path.join(__dirname + '/templateLogReg/index.html'));
-// });
-
-// router.get('/Home', function (req, res, next) {
-//   return res.sendFile(path.join(__dirname + '/templateLogReg/index.html'));
-// });
-
 router.post("/signup",
   [
       check("user", "Please Enter a Valid Name").not().isEmpty(),
@@ -159,48 +146,6 @@ router.post('/addSchedule', function (req, res, next) {
   });
 });
 
-router.post('/cookItems', function (req, res, next) {
-   User.find({_id: req.body.userID}).then(function(user){
-    for (let i = 0; i < user[0].items.length; i++){
-      if(user[0].items[i].name.toLowerCase() === req.body.name.toLowerCase()){
-        const qty = parseFloat(user[0].items[i].quantity)
-        const total = qty-parseFloat(req.body.quantity)
-        const newData = User.updateOne({"_id": user[0]._id,"items.name": user[0].items[i].name}, {$set: {"items.$.quantity":total}, new: true})
-        return newData
-      }      
-    }  
-  }).then(function(data){
-    return res.json(data)
-  }).catch(function(err){
-    throw err
-  });  
-});
-
-router.post('/deleteItem', function(req, res) {
-  User.update(
-    {"_id": ObjectID(req.body.userID)}, {$pull: {items:{_id:ObjectID(req.body.itemID)}}})         
-.then(function(data){
-  return res.json(data)
-}).catch(function(err){
-  console.log(err)
-});
-});
-
-router.post('/addRecipe', function(req, res) {
-  User.update(
-    {"_id": ObjectID(req.body.userID)}, {$addToSet: {meals:{  
-      id: req.body.id,
-      image: req.body.image,
-      title: req.body.title,
-      readyInMinutes:req.body.readyInMinutes
-    }}})         
-.then(function(data){
-  return res.json(data)
-}).catch(function(err){
-  console.log(err)
-});
-});
-
 router.post('/updateItem', function (req, res, next) {
   User.find({_id: req.body.userID}).then(function(user){  
     for (let i = 0; i < user[0].schedule.length; i++){   
@@ -224,50 +169,6 @@ router.post('/updateItem', function (req, res, next) {
  }).catch(function(err){
    throw err
  }); 
-});
-
-router.post('/deleteRecipe', function(req, res) {
-  // Remove a note using the objectID
-  User.update(
-    {"_id": ObjectID(req.body.userID)}, {$pull: {meals:{_id:ObjectID(req.body.recipeID)}}})         
-.then(function(data){
-  return res.json(data)
-}).catch(function(err){
-  console.log(err)
-});
-});
-
-router.post('/cooking', function(req, res) {
-  // Remove a note using the objectID
-  User.update(
-    {"_id": ObjectID(req.body.userID)}, {cookingId:req.body.cookingId})         
-.then(function(data){
-  return res.json(data)
-}).catch(function(err){
-  console.log(err)
-});
-});
-
-router.post('/finishTime', function(req, res) {
-  // Remove a note using the objectID
-  User.update(
-    {"_id": ObjectID(req.body.userID)}, {finishTime:req.body.finishTime})         
-.then(function(data){
-  return res.json(data)
-}).catch(function(err){
-  console.log(err)
-});
-});
-
-router.post('/wash', function(req, res) {
-  // Remove a note using the objectID
-  User.update(
-    {"_id": ObjectID(req.body.userID)}, {washLoads:req.body.washLoads})         
-.then(function(data){
-  return res.json(data)
-}).catch(function(err){
-  console.log(err)
-});
 });
 
 router.get('/AllSchedule/:query', function (req,res) {

@@ -72,7 +72,6 @@ class DayView extends Component {
     }
 
     calculateHours = (start, end, lunch, arr = null) => {
-        console.log(start, end, lunch)
         let hours = end.getTime() - start.getTime();
         if (lunch === "30 min.") {
             hours = new Date(hours).getTime() - 30 * 60000;
@@ -116,7 +115,6 @@ class DayView extends Component {
         let start = this.state.start.getHours() +':'+ this.state.start.getMinutes();
         let end = this.state.end.getHours() +':'+ this.state.end.getMinutes();
         let hours = this.state.hours + ':' + this.state.minutes;
-        console.log(start, end, this.state.lunch, hours, this.props.schedule._id);
         axios.post("https://chipmantrack.herokuapp.com/updateItem", {
             userID: localStorage.getItem("userID"),
             scheduleID: this.props.schedule._id,
