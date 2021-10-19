@@ -74,21 +74,23 @@ class DayView extends Component {
     }
 
     calculateHours = (start, end, lunch, arr = null) => {
-        let hours = end.getTime() - start.getTime();
+        let diffInMilliSeconds = Math.abs(end - start) / 1000;
         if (lunch === "30 min.") {
-            hours = new Date(hours).getTime() - 30 * 60000;
+            diffInMilliSeconds = diffInMilliSeconds - 30 * 60;
         } else if (lunch === "45 min.") {
-            hours = new Date(hours).getTime() - 45 * 60000;
+            diffInMilliSeconds = diffInMilliSeconds - 45 * 60;
         } else if (lunch === "1 hr.") {
-            hours = new Date(hours).getTime() - 60 * 60000;
+            diffInMilliSeconds = diffInMilliSeconds - 60 * 60;
         }
-        var diffHrs = Math.floor((hours % 86400000) / 3600000); // hours
-        var diffMins = Math.round(((hours % 86400000) % 3600000) / 60000);
+        const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
+        diffInMilliSeconds -= hours * 3600;
+        const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
+        diffInMilliSeconds -= minutes * 60;
         if (arr) {
             this.setState({
                 ...this.state,
-                hours: diffHrs,
-                minutes: diffMins,
+                hours: hours,
+                minutes: minutes,
                 start: start,
                 end: end,
                 lunch: lunch,
@@ -97,8 +99,8 @@ class DayView extends Component {
         } else {
             this.setState({
                 ...this.state,
-                hours: diffHrs,
-                minutes: diffMins,
+                hours: hours,
+                minutes: minutes,
                 start: start,
                 end: end,
                 lunch: lunch
