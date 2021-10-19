@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
 import axios from "axios";
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
@@ -8,7 +7,6 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import Modal from "../../components/UI/Modal/Modal";
 import Alert from "../../components/UI/Alert/Alert";
 import DayView from "../../components/DayView/DayView";
-import Cook from "../../components/Cook/Cook";
 import Calendar from 'react-calendar';
 import Logintbygoogle from '../../components/Logintbygoogle/Logintbygoogle';
 
@@ -404,11 +402,6 @@ class Home extends Component {
           <DayView schedule={this.state.scheduleToView} />
         );
         break;
-      case 'Cook':
-        model = (
-          <Cook />
-        );
-        break
       default:
         model = null;
         break;
@@ -431,14 +424,16 @@ class Home extends Component {
             : <div className="loaderDiv"><div className="loader"></div><strong>Please wait...</strong></div>
         );
         break;
-      case 'hoursView':
-        page = (
-          <div>here is the hours</div>
-        );
-        break
       case 'chipmanView':
         page = (
-          <div>Chipman</div>
+          <div>
+            <div className="row"style={{justifyContent:'center', marginTop: "10%"}}>
+              <div className="Col-md-3" style={{marginBlock:'auto'}}>
+                  <img alt="" src="https://sismo.app/wp-content/uploads/2019/02/under-construction-gif-11.gif" style={{width:'220px', height:'220px', padding:'5px'}}/>
+                  <h6>Hey, welcome to chipman tracker this part will be our future inventory system</h6>
+              </div>
+            </div>
+          </div>
         );
         break
       default:
@@ -468,7 +463,6 @@ class Home extends Component {
           <div className="overlay-content">
             <Logintbygoogle checked={() => this.compDidChanged()} />
             <button className="navbtn" onClick={() => this.closeNav("calendarView")}>Calendar</button>
-            <button className="navbtn" onClick={() => this.closeNav("hoursView")}>Hours</button>
             <button className="navbtn" onClick={() => this.closeNav("chipmanView")}>Chipman Tracker</button>
             <button className="navbtn" onClick={() => this.closeNav("TERRA")}>TERRA</button>
           </div>
