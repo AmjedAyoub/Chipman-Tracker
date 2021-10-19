@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
+import "./Logintbygoogle.css";
 class Logintbygoogle extends Component {
 
   responseGoogle = (response) => {
@@ -34,9 +35,12 @@ class Logintbygoogle extends Component {
   }
 
   render() {
+    let t = localStorage.getItem("token");
+    let g = localStorage.getItem("google")
     return (
       <div>
         <GoogleLogin
+          className={( t && !g ) ? "showSingIn" : "hideSignIn" }
           clientId="604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com"
           buttonText="Login with Google"
           redirectUri={["https://chipmantrack.herokuapp.com","http://localhost:3000"]}
@@ -49,6 +53,7 @@ class Logintbygoogle extends Component {
           cookiePolicy={'single_host_origin'}>
         </GoogleLogin>
         <GoogleLogout
+          className={( t && g ) ? "showSingout" : "hideSignout" }
           clientId="604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com"
           buttonText="Logout"
           redirectUri={["https://chipmantrack.herokuapp.com","http://localhost:3000"]}

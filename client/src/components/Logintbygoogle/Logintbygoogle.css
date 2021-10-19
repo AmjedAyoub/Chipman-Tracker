@@ -1,0 +1,16 @@
+
+.showSingout {
+    display: inline-flex !important;
+}
+
+.hideSignout {
+    display: none !important;
+}
+
+.showSingIn {
+    display: inline-flex !important;
+}
+
+.hideSignIn {
+    display: none !important;
+}

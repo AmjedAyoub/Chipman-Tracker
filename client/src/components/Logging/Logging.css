@@ -108,7 +108,11 @@
   }
 
   .btnHome {
-    display: block;
+    display: block;    
+    background: #6495edad;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
   }
 
   @media (max-width: 600px) {

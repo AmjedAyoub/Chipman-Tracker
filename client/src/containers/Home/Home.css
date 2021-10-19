@@ -1,3 +1,10 @@
+.Home {
+    position: absolute; 
+    top: 0; 
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
 /* The Overlay (background) */
 .overlay {
     /* Height & width depends on how you want to reveal the overlay (see JS below) */   
@@ -44,6 +51,14 @@
     top: 20px;
     right: 45px;
     font-size: 60px;
+  }
+  
+  .btnHome {
+    display: block;    
+    background: #6495edad;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
   }
 
   .navbtn {

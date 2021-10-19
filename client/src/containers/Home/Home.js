@@ -430,7 +430,19 @@ class Home extends Component {
             <div className="row"style={{justifyContent:'center', marginTop: "10%"}}>
               <div className="Col-md-3" style={{marginBlock:'auto'}}>
                   <img alt="" src="https://sismo.app/wp-content/uploads/2019/02/under-construction-gif-11.gif" style={{width:'220px', height:'220px', padding:'5px'}}/>
-                  <h6>Hey, welcome to chipman tracker this part will be our future inventory system</h6>
+                  <h6>Hey, welcome to chipman tracker, maybe this part will be our future inventory system</h6>
+              </div>
+            </div>
+          </div>
+        );
+        break;case 'hoursView':
+        page = (
+          <div>
+            <div className="row"style={{justifyContent:'center', marginTop: "10%"}}>
+              <div className="Col-md-3" style={{marginBlock:'auto'}}>
+                  <img alt="" src="https://sismo.app/wp-content/uploads/2019/02/under-construction-gif-11.gif" style={{width:'220px', height:'220px', padding:'5px'}}/>
+                  <h6>Hey, welcome to the hours section, here we will be able to manage our hours and view them in a very nice way!!</h6>
+                  <h6>Coming very soon!!</h6>
               </div>
             </div>
           </div>
@@ -463,6 +475,7 @@ class Home extends Component {
           <div className="overlay-content">
             <Logintbygoogle checked={() => this.compDidChanged()} />
             <button className="navbtn" onClick={() => this.closeNav("calendarView")}>Calendar</button>
+            <button className="navbtn" onClick={() => this.closeNav("hoursView")}>Hours</button>
             <button className="navbtn" onClick={() => this.closeNav("chipmanView")}>Chipman Tracker</button>
             <button className="navbtn" onClick={() => this.closeNav("TERRA")}>TERRA</button>
           </div>

@@ -12,7 +12,8 @@ class DayView extends Component {
         hours: '',
         minutes: '',
         lunchTime: ['00', '30 min.', '45 min.', '1 hr.'],
-        lunchShow: []
+        lunchShow: [],
+        success: false
     }
 
     componentDidMount = () => {
@@ -39,7 +40,8 @@ class DayView extends Component {
             hours: hrs[0],
             minutes: hrs[1],
             lunch: this.props.schedule.lunch,
-            lunchShow: arr
+            lunchShow: arr,
+            success: false
         })
     }
 
@@ -147,9 +149,10 @@ class DayView extends Component {
                     start: new Date(val1),
                     end: new Date(val2),
                     hours: d[0],
-                    minutes: d[1]
+                    minutes: d[1],
+                    success: true
                 })
-                alert("Data has been saved");
+                // alert("Data has been saved");
             })
             .catch(err => this.setState({ error: err.message }));
     }
@@ -178,7 +181,8 @@ class DayView extends Component {
             hours: hrs[0],
             minutes: hrs[1],
             lunch: this.props.schedule.lunch,
-            lunchShow: arr
+            lunchShow: arr,
+            success: false
         })
     }
 
@@ -242,9 +246,12 @@ class DayView extends Component {
                             </div>
                         </div>
                         <hr></hr>
-                        <div className="row " style={{ justifyContent: 'space-between' }}>
-                            <button className="btn success" onClick={this.updateItemHandler}>SAVE</button>
-                            <button className="btn danger" onClick={this.resetHandler}><strong>RESET</strong></button>
+                        <div className={this.state.success ? "successSave" : ""}>
+                            <div className="row" style={{ justifyContent: 'space-between' }}>
+                                <button className="btn success" onClick={this.updateItemHandler}>SAVE</button>
+                                <button className="btn danger" onClick={this.resetHandler}><strong>RESET</strong></button>
+                                {this.state.success ? <h6 style={{color: "darkgreen"}}>Saved successfully!</h6> : null}
+                            </div>
                         </div>
                     </div>
                 </div>

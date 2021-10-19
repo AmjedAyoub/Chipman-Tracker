@@ -29,4 +29,13 @@ input[type="file"] {
     position: relative;
 }
 
+.successSave {
+    animation: mymove 3s;
+}
+  
+@keyframes mymove {
+    from {background-color: transparent;}
+    to {background-color: rgba(9, 241, 9, 0.651);}
+}
+
   

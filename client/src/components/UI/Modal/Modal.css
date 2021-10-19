@@ -11,11 +11,37 @@
     overflow-x: auto;
     box-sizing: border-box;
     transition: all 0.3s ease-out;
-    margin: -95% auto;
-}
+    margin: -500px auto;
+    /* position: fixed; */
+    /* top: 50%;    
+    top: '50%';
+    left: '50%';
+    right: 'auto';
+    bottom: 'auto';
+    margin-right: '-50%';
+    transform: 'translate(-50%, -50%)'; */
+  }
+  .modal:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -4px;
+  }
+  .modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+  }
 
 @media (min-width: 600px) {
     .Modal {
-        margin: -40% auto;
+        /* margin: -60vh auto; */
+    }
+}
+
+@media (max-height: 600px) {
+    .Modal {
+        /* margin: -90vh auto; */
     }
 }
