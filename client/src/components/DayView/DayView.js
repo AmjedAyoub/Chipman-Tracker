@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import { TimePicker } from '@material-ui/pickers';
-import { alpha } from '@material-ui/core/styles';
-import API from "../../utils/API";
 import "./DayView.css";
 import axios from "axios";
 
@@ -18,13 +16,14 @@ class DayView extends Component {
     }
 
     componentDidMount = () => {
+        let today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
         let t = this.props.schedule.start;
         t = t.split(':')
-        let val1 = new Date(this.props.schedule.date).setHours(t[0]);
+        let val1 = today.setHours(t[0]);
         val1 = val1 + t[1] * 60000;
         let t2 = this.props.schedule.end;
         t2 = t2.split(':')
-        let val2 = new Date(this.props.schedule.date).setHours(t2[0]);
+        let val2 = today.setHours(t2[0]);
         val2 = val2 + t2[1] * 60000;
         let arr = [];
         for (let i = 0; i < this.state.lunchTime.length; i++) {
@@ -73,6 +72,7 @@ class DayView extends Component {
     }
 
     calculateHours = (start, end, lunch, arr = null) => {
+        console.log(start, end, lunch)
         let hours = end.getTime() - start.getTime();
         if (lunch === "30 min.") {
             hours = new Date(hours).getTime() - 30 * 60000;
@@ -130,12 +130,58 @@ class DayView extends Component {
                 if (res.status === "error") {
                     throw new Error(res.data.message);
                 }
-                console.log(res);
+                this.props.schedule.start = start;
+                this.props.schedule.end = end;
+                this.props.schedule.lunch = this.state.lunch;
+                this.props.schedule.hours = hours;
+                let d = hours.split(':');
+                let t = this.props.schedule.start;
+                let today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
+                t = t.split(':')
+                let val1 = today.setHours(t[0]);
+                val1 = val1 + t[1] * 60000;
+                let t2 = this.props.schedule.end;
+                t2 = t2.split(':')
+                let val2 = today.setHours(t2[0]);
+                val2 = val2 + t2[1] * 60000;
+                this.setState({
+                    ...this.state,
+                    start: new Date(val1),
+                    end: new Date(val2),
+                    hours: d[0],
+                    minutes: d[1]
+                })
+                alert("Data has been saved");
             })
             .catch(err => this.setState({ error: err.message }));
     }
 
-    deleteItemHandler = () => {
+    resetHandler = () => {
+        let today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
+        let t = this.props.schedule.start;
+        t = t.split(':')
+        let val1 = today.setHours(t[0]);
+        val1 = val1 + t[1] * 60000;
+        let t2 = this.props.schedule.end;
+        t2 = t2.split(':')
+        let val2 = today.setHours(t2[0]);
+        val2 = val2 + t2[1] * 60000;
+        let arr = [];
+        for (let i = 0; i < this.state.lunchTime.length; i++) {
+            if (this.props.schedule.lunch !== this.state.lunchTime[i]) {
+                arr.push(this.state.lunchTime[i]);
+            }
+        }
+        let hrs = this.props.schedule.hours.split(':');
+        this.setState({
+            ...this.state,
+            start: new Date(val1),
+            end: new Date(val2),
+            hours: hrs[0],
+            minutes: hrs[1],
+            lunch: this.props.schedule.lunch,
+            lunchShow: arr
+        })
     }
 
     render() {
@@ -199,8 +245,8 @@ class DayView extends Component {
                         </div>
                         <hr></hr>
                         <div className="row " style={{ justifyContent: 'space-between' }}>
-                            <button className="btn success" onClick={() => this.updateItemHandler()}>SAVE</button>
-                            <button className="btn danger" onClick={() => this.deleteItemHandler()}><strong>X</strong></button>
+                            <button className="btn success" onClick={this.updateItemHandler}>SAVE</button>
+                            <button className="btn danger" onClick={this.resetHandler}><strong>RESET</strong></button>
                         </div>
                     </div>
                 </div>
