@@ -4,6 +4,7 @@ import "./Logintbygoogle.css";
 class Logintbygoogle extends Component {
 
   responseGoogle = (response) => {
+    console.log(response);
     localStorage.setItem('google', true);
     localStorage.setItem('googleToken', response.accessToken);
     localStorage.setItem('googleEmail', response.profileObj.email);
@@ -45,12 +46,10 @@ class Logintbygoogle extends Component {
           buttonText="Login with Google"
           redirectUri={["https://chipmantrack.herokuapp.com","http://localhost:3000"]}
           apiKey="AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs"
-          scope={["https://www.googleapis.com/auth/gmail.readonly","https://www.googleapis.com/auth/cloud-platform"]}
+          scope={["https://www.googleapis.com/auth/gmail.readonly","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/userinfo.profile"]}
           onSuccess={this.responseGoogle}
           onFailure={this.errGoogle}
           isSignedIn={true}
-          accessType="offline"
-          uxMode="redirect"
           cookiePolicy={'single_host_origin'}>
         </GoogleLogin>
         <GoogleLogout
