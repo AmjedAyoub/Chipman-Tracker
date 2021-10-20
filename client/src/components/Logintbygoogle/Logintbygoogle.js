@@ -51,8 +51,7 @@ class Logintbygoogle extends Component {
           onFailure={this.errGoogle}
           isSignedIn={true}
           accessType="online"
-          cookiePolicy={'single_host_origin'}>
-        </GoogleLogin>
+          cookiePolicy={'single_host_origin'}/>
         <GoogleLogout
           className={( t && g ) ? "showSingout" : "hideSingout" }
           clientId={"604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com"}
