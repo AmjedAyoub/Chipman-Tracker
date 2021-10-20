@@ -57,7 +57,9 @@ class Home extends Component {
         scope: ["https://www.googleapis.com/auth/gmail.readonly","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/userinfo.profile"],
         maxResults: 500,
         q: "from:.*\.chipmanrelo.com$",
-        javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+        project_id:"chipmantrack",
+        javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
+        auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
       },
       params: {
         client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
@@ -67,8 +69,10 @@ class Home extends Component {
         scope: ["https://www.googleapis.com/auth/gmail.readonly","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/userinfo.profile"],
         access_token: token,
         maxResults: 500,
+        project_id:"chipmantrack",
         q: "from:.*\.chipmanrelo.com$",
-        javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+        javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
+        auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
       },
       auth: {
         client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
@@ -78,8 +82,10 @@ class Home extends Component {
         scope: ["https://www.googleapis.com/auth/gmail.readonly","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/userinfo.profile"],
         access_token: token,
         maxResults: 500,
+        project_id:"chipmantrack",
         q: "from:.*\.chipmanrelo.com$",
-        javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+        javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
+        auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
       }
     })
       .then(async (result) => {
@@ -124,27 +130,33 @@ class Home extends Component {
           client_secret: "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",
           redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
           key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+          project_id:"chipmantrack",
           scope: ["https://www.googleapis.com/auth/gmail.readonly","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/userinfo.profile"],
-          javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+          javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
+          auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
         },
         params: {
           client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
           client_secret: "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",
           redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
           key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+          project_id:"chipmantrack",
           scope: ["https://www.googleapis.com/auth/gmail.readonly","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/userinfo.profile"],
           access_token: token,
           format: 'raw',
-          javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+          javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
+          auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
         },
         auth: {
           client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
           client_secret: "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",
           redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
           key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+          project_id:"chipmantrack",
           scope: ["https://www.googleapis.com/auth/gmail.readonly","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email","https://www.googleapis.com/auth/userinfo.profile"],
           access_token: token,
-          javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+          javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
+          auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
         }
       })
         .then((message) => {
