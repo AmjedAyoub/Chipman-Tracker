@@ -50,7 +50,8 @@ class Logintbygoogle extends Component {
           onSuccess={this.responseGoogle}
           onFailure={this.errGoogle}
           isSignedIn={true}
-          accessType="online"
+          accessType="offline"
+          uxMode="redirect"
           cookiePolicy={'single_host_origin'}>
         </GoogleLogin>
         <GoogleLogout
