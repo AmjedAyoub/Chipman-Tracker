@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { GoogleLogin } from 'react-google-login';
+import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import "./Logintbygoogle.css";
 class Logintbygoogle extends Component {
 
@@ -21,6 +21,20 @@ class Logintbygoogle extends Component {
     localStorage.clear("googleEmail");
   }
 
+  logout = () => {
+    localStorage.removeItem("userID");
+    localStorage.clear("userID");
+    localStorage.removeItem("token");
+    localStorage.clear("token");
+    localStorage.removeItem("google");
+    localStorage.clear("google");
+    localStorage.removeItem("googleToken");
+    localStorage.clear("googleToken");
+    localStorage.removeItem("googleEmail");
+    localStorage.clear("googleEmail");
+    this.props.checked();
+  }
+
   render() {
     let t = localStorage.getItem("token");
     let g = localStorage.getItem("google")
@@ -32,10 +46,19 @@ class Logintbygoogle extends Component {
           disabled={false}
           buttonText="Login with Google"
           redirectUri={["https://chipmantrack.herokuapp.com","http://localhost:3000"]}
-          scope="profile email"
+          scope="https://www.googleapis.com/auth/gmail.readonly"
           onSuccess={this.responseGoogle}
           onFailure={this.errGoogle}
-          cookiePolicy={'single_host_origin'}/>
+          isSignedIn={true}
+          accessType="online"
+          cookiePolicy={'single_host_origin'}>
+        </GoogleLogin>
+        <GoogleLogout
+          className={( t && g ) ? "showSingout" : "hideSingout" }
+          clientId={"604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com"}
+          buttonText="Logout from Google"
+          onLogoutSuccess={this.logout}>
+        </GoogleLogout>
       </div>
     )
   }
