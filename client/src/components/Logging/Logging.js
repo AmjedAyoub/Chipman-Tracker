@@ -168,6 +168,23 @@ class Logging extends Component {
         if (navBtn === "TERRA") {
             document.location.replace("https://www.terrastaffinggroup.com/myaccount/login");
         }
+        else if (navBtn === "Logout") {
+            this.logout();
+        }
+    }
+    
+    logout = () => {
+        localStorage.removeItem("userID");
+        localStorage.clear("userID");
+        localStorage.removeItem("token");
+        localStorage.clear("token");
+        localStorage.removeItem("google");
+        localStorage.clear("google");
+        localStorage.removeItem("googleToken");
+        localStorage.clear("googleToken");
+        localStorage.removeItem("googleEmail");
+        localStorage.clear("googleEmail");
+        this.props.checked();
     }
 
     render() {
@@ -181,6 +198,7 @@ class Logging extends Component {
                     <div className="overlay-content">
                         <Logintbygoogle checked={() => this.compDidChanged()} />
                         <button className="navbtn" onClick={() => this.closeNav("TERRA")}>TERRA</button>
+                        <button className="navbtn" onClick={() => this.closeNav("Logout")}>Logout</button>
                     </div>
                 </div>
                 {/* Use any element to open/show the overlay navigation menu */}
