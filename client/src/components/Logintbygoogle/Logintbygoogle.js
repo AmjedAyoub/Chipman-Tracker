@@ -46,7 +46,7 @@ class Logintbygoogle extends Component {
           buttonText="Login with Google"
           redirectUri={["https://chipmantrack.herokuapp.com","http://localhost:3000"]}
           apiKey="AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs"
-          scope="https://www.googleapis.com/auth/gmail.readonly"
+          scope={["https://www.googleapis.com/auth/gmail.readonly","https://www.googleapis.com/auth/cloud-platform"]}
           onSuccess={this.responseGoogle}
           onFailure={this.errGoogle}
           isSignedIn={true}
