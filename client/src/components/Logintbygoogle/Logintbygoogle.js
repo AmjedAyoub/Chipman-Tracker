@@ -41,7 +41,6 @@ class Logintbygoogle extends Component {
     return (
       <div>
         <GoogleLogin
-          disabled={false}
           className={( t && !g ) ? "showSingIn" : "hideSignIn" }
           clientId="604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com"
           buttonText="Login with Google"
@@ -53,7 +52,6 @@ class Logintbygoogle extends Component {
           isSignedIn={true}
           cookiePolicy={'single_host_origin'}/>
         <GoogleLogout
-          disabled={false}
           className={( t && g ) ? "showSingout" : "hideSignout" }
           clientId="604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com"
           buttonText="Logout"
