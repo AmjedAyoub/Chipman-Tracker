@@ -49,7 +49,6 @@ class Logintbygoogle extends Component {
           scope="https://www.googleapis.com/auth/gmail.readonly"
           onSuccess={this.responseGoogle}
           onFailure={this.errGoogle}
-          isSignedIn={true}
           accessType="online"
           cookiePolicy={'single_host_origin'}/>
         <GoogleLogout
