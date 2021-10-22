@@ -175,6 +175,10 @@ button.react-calendar__tile {
   display: inline-block;
 }
 
+.myHeader{
+  display: flex;
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -184,5 +188,9 @@ button.react-calendar__tile {
    
   .react-calendar__navigation__label {
     font-size: x-large;
+  }
+
+  .myHeader {
+    display: flow-root;
   }
 }

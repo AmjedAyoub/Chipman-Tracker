@@ -122,6 +122,7 @@ class Logging extends Component {
                 } else {
                     localStorage.setItem("token", res.data.token)
                     localStorage.setItem("userID", res.data.user._id)
+                    localStorage.setItem("userName", res.data.user.user)
                     this.setState({
                         user: "",
                         email: "",
@@ -184,6 +185,20 @@ class Logging extends Component {
         localStorage.clear("googleToken");
         localStorage.removeItem("googleEmail");
         localStorage.clear("googleEmail");
+        localStorage.removeItem("userName");
+        localStorage.clear("userName");
+        this.setState({
+            ...this.state,
+            user: "",
+            email: "",
+            password1: "",
+            password2: "",
+            logpassword: "",
+            logemail: "",
+            isAuthenticated: false,
+            token: "",
+            googleSignedIn: false
+        })
         this.props.checked();
     }
 

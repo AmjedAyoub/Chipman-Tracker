@@ -4,7 +4,7 @@ import "./Logintbygoogle.css";
 class Logintbygoogle extends Component {
 
   responseGoogle = (response) => {
-    console.log(response);
+    // console.log(response);
     localStorage.setItem('google', true);
     localStorage.setItem('googleToken', response.accessToken);
     localStorage.setItem('googleEmail', response.profileObj.email);
@@ -32,6 +32,8 @@ class Logintbygoogle extends Component {
     localStorage.clear("googleToken");
     localStorage.removeItem("googleEmail");
     localStorage.clear("googleEmail");
+    localStorage.removeItem("userName");
+    localStorage.clear("userName");
     this.props.checked();
   }
 
@@ -45,10 +47,9 @@ class Logintbygoogle extends Component {
           clientId={"604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com"}
           buttonText="Login with Google"
           redirectUri={["https://chipmantrack.herokuapp.com","http://localhost:3000"]}
-          scope="https://www.googleapis.com/auth/gmail.readonly"
           onSuccess={this.responseGoogle}
           onFailure={this.errGoogle}
-          accessType="online"
+          isSignedIn={true}
           cookiePolicy={'single_host_origin'}/>
         <GoogleLogout
           className={( t && g ) ? "showLogout" : "hideLogout" }

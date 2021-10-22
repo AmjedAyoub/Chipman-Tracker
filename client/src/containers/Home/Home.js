@@ -15,31 +15,29 @@ import './Home.css';
 class Home extends Component {
   state = {
     showModel: false,
-    showAlert: false,
-    alertMessage: '',
-    alertConfirm: false,
-    loading: false,
     error: false,
     modelContent: '',
-    isManaging: false,
     calendarValue: new Date(),
     schedule: [],
     showCal: false,
     viewContent: "",
-    scheduleToView: null
+    scheduleToView: null,
+    userName: ""
   }
 
 
   componentDidMount = async () => {
     const token = localStorage.getItem('googleToken');
     const email = localStorage.getItem('googleEmail');
+    const name = localStorage.getItem('userName');
     await this.getSchedule();
     if (token) {
       await this.getMessages(token, email);
     }
     this.setState({
       ...this.state,
-      viewContent: "calendarView"
+      viewContent: "calendarView",
+      userName: name
     })
   }
 
@@ -305,23 +303,6 @@ class Home extends Component {
     return str.split(chr).join(replace);
   }
 
-  closeAlertHandler = () => {
-    this.setState({
-      ...this.state,
-      showAlert: false
-    });
-  }
-
-  openAlertHandler = (message, confirm = false, recipe = null) => {
-    this.setState({
-      ...this.state,
-      showAlert: true,
-      alertMessage: message,
-      alertConfirm: confirm,
-      tempRecipe: recipe
-    });
-  }
-
   closeModelHandler = () => {
     this.componentDidMount();
     this.setState({
@@ -411,6 +392,8 @@ class Home extends Component {
     localStorage.clear("googleToken");
     localStorage.removeItem("googleEmail");
     localStorage.clear("googleEmail");
+    localStorage.removeItem("userName");
+    localStorage.clear("userName");
     this.props.checked();
   }
 
@@ -448,7 +431,14 @@ class Home extends Component {
         page = (
           this.state.showCal ?
             <div className="myCalendar">
-              <h2 style={{ color: "Naive" }}>My Calendar</h2>
+              <div className="row myHeader">
+                <div className="Col-sm-3">
+                  <h2>{this.state.userName}</h2>
+                </div>
+                <div className="Col-sm-9" style={{margin:'auto'}}>
+                  <h2 style={{ color: "Naive" }}>My Calendar</h2>
+                </div>
+              </div>
               <Calendar
                 id="myCalendar"
                 onChange={this.calendarOnChange}
@@ -524,7 +514,6 @@ class Home extends Component {
           <Modal show={this.state.showModel} modalClosed={this.closeModelHandler}>
             {model}
           </Modal> : null}
-        <Alert show={this.state.showAlert} modalClosed={this.closeAlertHandler} message={this.state.alertMessage} confirm={this.state.alertConfirm} confirmYes={this.confirmYesHandler} />
       </div>
     );
   };
