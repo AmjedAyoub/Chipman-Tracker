@@ -43,7 +43,6 @@ class Logintbygoogle extends Component {
         <GoogleLogin
           className={( t && !g ) ? "showSingIn" : "hideSignIn" }
           clientId={"604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com"}
-          disabled={false}
           buttonText="Login with Google"
           redirectUri={["https://chipmantrack.herokuapp.com","http://localhost:3000"]}
           scope="https://www.googleapis.com/auth/gmail.readonly"
@@ -52,7 +51,7 @@ class Logintbygoogle extends Component {
           accessType="online"
           cookiePolicy={'single_host_origin'}/>
         <GoogleLogout
-          className={( t && g ) ? "showSingout" : "hideSingout" }
+          className={( t && g ) ? "showLogout" : "hideLogout" }
           clientId={"604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com"}
           buttonText="Logout from Google"
           onLogoutSuccess={this.logout}>

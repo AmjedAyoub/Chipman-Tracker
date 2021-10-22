@@ -1,9 +1,9 @@
 
-.showSingout {
+.showLogout {
     display: inline-flex !important;
 }
 
-.hideSignout {
+.hideLogout {
     display: none !important;
 }
 
