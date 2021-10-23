@@ -30,8 +30,7 @@ class App extends Component {
         <Redirect from="/" to="/Logging" />
       </Switch>
     );
-    if(this.state.token || t){
-      if(this.state.googleSignedIn || g){
+    if((this.state.token || t) && (this.state.googleSignedIn || g)){
         routes =  (
           <Switch>
             {/* <Route path="/Home" exact component={Home}/> */}
@@ -39,7 +38,6 @@ class App extends Component {
             <Redirect from="/" to="/Home" />
           </Switch>
         );
-      }
     }
     return (
       <div className="App">
