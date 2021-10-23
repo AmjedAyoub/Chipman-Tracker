@@ -93,7 +93,7 @@ class Home extends Component {
       }
     })
       .then(async (result) => {
-        // console.log(result.data.messages);
+        console.log(result.data.messages);
         let newMessages = [];
         if(result.data.messages){
           for (let i = 0; i < result.data.messages.length; i++) {

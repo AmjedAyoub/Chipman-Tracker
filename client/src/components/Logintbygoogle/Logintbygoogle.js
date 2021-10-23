@@ -50,7 +50,7 @@ class Logintbygoogle extends Component {
           scope="email https://mail.google.com/"
           onSuccess={this.responseGoogle}
           onFailure={this.errGoogle}
-          // isSignedIn={true}
+          isSignedIn={true}
           cookiePolicy={'single_host_origin'}/>
         <GoogleLogout
           className={( t && g ) ? "showLogout" : "hideLogout" }
