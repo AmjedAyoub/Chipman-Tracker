@@ -47,7 +47,7 @@ class Home extends Component {
         key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
         scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
         maxResults: 500,
-        q: "from:.*\.chipmanrelo.com$ from:amjadkayoub@gmail.com",
+        q: "from:amjadkayoub@gmail.com",
         project_id:"chipmantrack",
         javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
         auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
@@ -61,7 +61,7 @@ class Home extends Component {
         access_token: token,
         maxResults: 500,
         project_id:"chipmantrack",
-        q: "from:.*\.chipmanrelo.com$ from:amjadkayoub@gmail.com",
+        q: "from:amjadkayoub@gmail.com",
         javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
         auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
       },
@@ -73,7 +73,7 @@ class Home extends Component {
         key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
         scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
         maxResults: 500,
-        q: "from:.*\.chipmanrelo.com$ from:amjadkayoub@gmail.com",
+        q: "from:amjadkayoub@gmail.com",
         project_id:"chipmantrack",
         javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
         auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
@@ -87,7 +87,7 @@ class Home extends Component {
         access_token: token,
         maxResults: 500,
         project_id:"chipmantrack",
-        q: "from:.*\.chipmanrelo.com$ from:amjadkayoub@gmail.com",
+        q: "from:amjadkayoub@gmail.com",
         javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
         auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
       }
