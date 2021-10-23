@@ -47,10 +47,10 @@ class Logintbygoogle extends Component {
           clientId={"604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com"}
           buttonText="Login with Google"
           redirectUri={["https://chipmantrack.herokuapp.com","http://localhost:3000"]}
-          scope="profile email https://mail.google.com/"
+          scope="email https://mail.google.com/"
           onSuccess={this.responseGoogle}
           onFailure={this.errGoogle}
-          isSignedIn={true}
+          // isSignedIn={true}
           cookiePolicy={'single_host_origin'}/>
         <GoogleLogout
           className={( t && g ) ? "showLogout" : "hideLogout" }
