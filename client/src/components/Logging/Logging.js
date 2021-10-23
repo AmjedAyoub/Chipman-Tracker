@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import axios from 'axios';
 import Logintbygoogle from '../../components/Logintbygoogle/Logintbygoogle';
 import "./Logging.css";
@@ -133,10 +132,7 @@ class Logging extends Component {
                         isAuthenticated: true,
                         token: res.data.token
                     });
-                    // React redirect to /home route.
-                    // this.props.history.push("/Home");
                     this.props.checked();
-                    // window.location.reload();
                 }
             })
             .catch(err => this.setState({
@@ -167,7 +163,7 @@ class Logging extends Component {
     closeNav = (navBtn) => {
         document.getElementById("myNav").style.width = "0%";
         if (navBtn === "TERRA") {
-            document.location.replace("https://www.terrastaffinggroup.com/myaccount/login");
+            document.location.assign("https://www.terrastaffinggroup.com/myaccount/login");
         }
         else if (navBtn === "Logout") {
             this.logout();

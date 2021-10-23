@@ -5,7 +5,6 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 
 import Modal from "../../components/UI/Modal/Modal";
-import Alert from "../../components/UI/Alert/Alert";
 import DayView from "../../components/DayView/DayView";
 import Calendar from 'react-calendar';
 import Logintbygoogle from '../../components/Logintbygoogle/Logintbygoogle';
@@ -29,16 +28,10 @@ class Home extends Component {
   componentDidMount = async () => {
     const token = localStorage.getItem('googleToken');
     const email = localStorage.getItem('googleEmail');
-    const name = localStorage.getItem('userName');
     await this.getSchedule();
     if (token) {
       await this.getMessages(token, email);
     }
-    this.setState({
-      ...this.state,
-      viewContent: "calendarView",
-      userName: name
-    })
   }
 
   getMessages = async (token, email) => {
@@ -52,7 +45,7 @@ class Home extends Component {
         client_secret: "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",
         redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
         key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
-        scope: "https://www.googleapis.com/auth/gmail.readonly",
+        scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
         maxResults: 500,
         q: "from:.*\.chipmanrelo.com$",
         project_id:"chipmantrack",
@@ -63,12 +56,25 @@ class Home extends Component {
         client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
         client_secret: "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",
         redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
-        key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",        
-        scope: "https://www.googleapis.com/auth/gmail.readonly",
+        key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+        scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
         access_token: token,
         maxResults: 500,
         project_id:"chipmantrack",
         q: "from:.*\.chipmanrelo.com$",
+        javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
+        auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+      },
+      args:{
+        access_token: token,
+        Authorization: token, client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
+        client_secret: "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",
+        redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+        key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+        scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
+        maxResults: 500,
+        q: "from:.*\.chipmanrelo.com$",
+        project_id:"chipmantrack",
         javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
         auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
       },
@@ -77,7 +83,7 @@ class Home extends Component {
         client_secret: "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",
         redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
         key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
-        scope: "https://www.googleapis.com/auth/gmail.readonly",
+        scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
         access_token: token,
         maxResults: 500,
         project_id:"chipmantrack",
@@ -97,21 +103,10 @@ class Home extends Component {
           }
         }
         if (newMessages.length > 0) {
-          this.setState({
-            ...this.state,
-            showCal: false
-          })
           await this.getMessagesContent(token, email, newMessages);
-        }
-        else {
-          this.setState({
-            ...this.state,
-            showCal: true
-          })
         }
       })
       .catch((err) => {
-        console.log("err");
         console.log(err);
       });
   }
@@ -129,7 +124,20 @@ class Home extends Component {
           redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
           key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
           project_id:"chipmantrack",
-          scope: "https://www.googleapis.com/auth/gmail.readonly",
+          scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
+          javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
+          auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+        },
+        args:{
+          access_token: token,
+          Authorization: token, client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
+          client_secret: "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",
+          redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+          key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
+          scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
+          maxResults: 500,
+          q: "from:.*\.chipmanrelo.com$",
+          project_id:"chipmantrack",
           javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
           auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
         },
@@ -139,7 +147,7 @@ class Home extends Component {
           redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
           key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
           project_id:"chipmantrack",
-          scope: "https://www.googleapis.com/auth/gmail.readonly",
+          scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
           access_token: token,
           format: 'raw',
           javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
@@ -151,7 +159,7 @@ class Home extends Component {
           redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
           key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
           project_id:"chipmantrack",
-          scope: "https://www.googleapis.com/auth/gmail.readonly",
+          scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
           access_token: token,
           javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
           auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
@@ -271,17 +279,15 @@ class Home extends Component {
           throw new Error(res.data.message);
         }
       })
-      .catch(err => this.setState({
-        ...this.state,
-        error: err.message
-      }));
+      .catch(err => console.log(err));
   }
 
   getSchedule = async () => {
-    this.setState({
-      ...this.state,
-      showCal: false
-    })
+    // this.setState({
+    //   ...this.state,
+    //   showCal: false
+    // })
+    const name = localStorage.getItem('userName');
     await axios.get("https://chipmantrack.herokuapp.com/AllSchedule/" + localStorage.getItem("userID"))
       .then(res => {
         if (res.status === "error") {
@@ -290,13 +296,20 @@ class Home extends Component {
         this.setState({
           ...this.state,
           schedule: res.data[0].schedule,
-          showCal: true
+          showCal: true,
+          viewContent: "calendarView",
+          userName: name
         })
       })
-      .catch(err => this.setState({
-        ...this.state,
-        error: err.message
-      }));
+      .catch(err => {
+        this.setState({
+          ...this.state,
+          showCal: true,
+          viewContent: "calendarView",
+          userName: name
+        })
+        console.log(err);
+      });
   }
 
   replaceAll = (str, chr, replace) => {
@@ -319,10 +332,6 @@ class Home extends Component {
       showModel: true,
       modelContent: content
     });
-  }
-
-  calendarOnChange = () => {
-
   }
 
   calendarTitleConent = ({ date = new Date(), view = "month" }) => {
@@ -361,7 +370,7 @@ class Home extends Component {
   closeNav = (navBtn) => {
     document.getElementById("myNav").style.width = "0%";
     if (navBtn === "TERRA") {
-      document.location.replace("https://www.terrastaffinggroup.com/myaccount/login");
+      document.location.assign("https://www.terrastaffinggroup.com/myaccount/login");
     }else if (navBtn === "Logout") {
       this.logout();
     }else if (navBtn !== "close") {
@@ -441,7 +450,6 @@ class Home extends Component {
               </div>
               <Calendar
                 id="myCalendar"
-                onChange={this.calendarOnChange}
                 value={this.state.calendarValue}
                 tileContent={this.calendarTitleConent}
                 onClickDay={this.onSelect}
@@ -481,7 +489,6 @@ class Home extends Component {
               <h2 style={{ color: "Naive" }}>My Calendar</h2>
               <Calendar
                 id="myCalendar"
-                onChange={this.calendarOnChange}
                 value={this.state.calendarValue}
                 tileContent={this.calendarTitleConent}
                 onClickDay={this.onSelect}

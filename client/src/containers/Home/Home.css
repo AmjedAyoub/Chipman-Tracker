@@ -131,20 +131,17 @@ button:focus {
 }
 
 button.react-calendar__tile {
-  overflow-y: scroll !important; /* Add the ability to scroll */
+  overflow-y: scroll !important; 
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
 button.react-calendar__tile::-webkit-scrollbar {
     display: none;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
 button.react-calendar__tile {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
 }
-
 
 .react-calendar__month-view__weekdays {
   background: rgb(0 243 255);
