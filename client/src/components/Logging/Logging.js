@@ -195,7 +195,8 @@ class Logging extends Component {
             token: "",
             googleSignedIn: false
         })
-        this.props.checked();
+        // this.props.checked();
+        window.location.assign("https://chipmantrack.herokuapp.com");
     }
 
     render() {
