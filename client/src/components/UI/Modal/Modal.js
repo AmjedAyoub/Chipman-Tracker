@@ -20,7 +20,7 @@ class Modal extends Component {
                         opacity: this.props.show ? '1' : '0'
                     }}>
                     <div>
-                        <button className="btn btn-outline-danger" style={{left:'0', top:'0', float:'right'}} onClick={this.props.modalClosed}>X</button>
+                        <button className="btn btn-outline-danger" style={{display: 'flex', marginInlineStart: 'auto'}} onClick={this.props.modalClosed}>X</button>
                     </div>
                     {this.props.children}
                 </div>

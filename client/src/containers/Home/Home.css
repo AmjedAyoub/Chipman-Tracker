@@ -126,7 +126,6 @@ button:focus {
   width: auto !important;
   margin-top: 15px !important;
   border: solid rgb(27, 27, 117) 2px;
-  background: rgb(0 173 255);
   position: relative;
 }
 
@@ -172,11 +171,25 @@ button.react-calendar__tile {
   display: inline-block;
 }
 
-.myHeader{
+.myHeader {
   display: flex;
+  background: rgb(0 123 255 / 50%);
+}
+
+.notSelected {
+  background: aliceblue;
+}
+
+.selected {
+  background: aquamarine;
 }
 
 .myCalendar{
+  width: 97% !important;
+  margin: auto !important;
+}
+
+.hoursView{
   width: 97% !important;
   margin: auto !important;
 }

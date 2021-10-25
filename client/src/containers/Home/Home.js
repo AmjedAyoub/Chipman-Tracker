@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from "axios";
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import DatePicker from 'react-date-picker';
 
 
 import Modal from "../../components/UI/Modal/Modal";
@@ -21,11 +22,17 @@ class Home extends Component {
     showCal: false,
     viewContent: "",
     scheduleToView: null,
-    userName: ""
+    userName: "",
+    fromDate: new Date(),
+    toDate: new Date()
   }
 
 
   componentDidMount = async () => {
+    // let d = new Date();
+    // let day = d.getDay();
+    // let diff = d.getDate() - day + (day === 0 ? -6:1); // adjust when day is sunday
+    // console.log(new Date(d.setDate(diff)));
     const token = localStorage.getItem('googleToken');
     const email = localStorage.getItem('googleEmail');
     await this.getSchedule();
@@ -41,62 +48,62 @@ class Home extends Component {
         'Access-Control-Allow-Methods': 'GET',
         'Content-Type': 'application/json',
         access_token: token,
-        Authorization: token, 
+        Authorization: token,
         client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
         client_secret: "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",
         redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
         key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
-        scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
+        scope: ["https://www.googleapis.com/auth/gmail.readonly", "https://mail.google.com/"],
         maxResults: 500,
         q: "from:.*\.chipmanrelo.com$",
-        project_id:"chipmantrack",
-        javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
-        auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+        project_id: "chipmantrack",
+        javascript_origins: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+        auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"
       },
       params: {
         client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
         client_secret: "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",
         redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
         key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
-        scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
+        scope: ["https://www.googleapis.com/auth/gmail.readonly", "https://mail.google.com/"],
         access_token: token,
         maxResults: 500,
-        project_id:"chipmantrack",
+        project_id: "chipmantrack",
         q: "from:.*\.chipmanrelo.com$",
-        javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
-        auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+        javascript_origins: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+        auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"
       },
-      args:{
+      args: {
         access_token: token,
         Authorization: token, client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
         client_secret: "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",
         redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
         key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
-        scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
+        scope: ["https://www.googleapis.com/auth/gmail.readonly", "https://mail.google.com/"],
         maxResults: 500,
         q: "from:.*\.chipmanrelo.com$",
-        project_id:"chipmantrack",
-        javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
-        auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+        project_id: "chipmantrack",
+        javascript_origins: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+        auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"
       },
       auth: {
         client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
         client_secret: "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",
         redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
         key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
-        scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
+        scope: ["https://www.googleapis.com/auth/gmail.readonly", "https://mail.google.com/"],
         access_token: token,
         maxResults: 500,
-        project_id:"chipmantrack",
+        project_id: "chipmantrack",
         q: "from:.*\.chipmanrelo.com$",
-        javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
-        auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+        javascript_origins: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+        auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"
       }
     })
       .then(async (result) => {
         // console.log(result);
         let newMessages = [];
-        if(result.data.messages){
+        if (result.data.messages) {
           for (let i = 0; i < result.data.messages.length; i++) {
             if (!this.state.schedule.find((x) => (x.googleId === result.data.messages[i].id))) {
               newMessages.push(result.data.messages[i]);
@@ -120,51 +127,51 @@ class Home extends Component {
           'Access-Control-Allow-Methods': 'GET',
           'Content-Type': 'application/json, text/plain, */*',
           access_token: token,
-          Authorization: token, 
+          Authorization: token,
           client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
           client_secret: "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",
           redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
           key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
-          project_id:"chipmantrack",
-          scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
-          javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
-          auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+          project_id: "chipmantrack",
+          scope: ["https://www.googleapis.com/auth/gmail.readonly", "https://mail.google.com/"],
+          javascript_origins: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+          auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"
         },
-        args:{
+        args: {
           access_token: token,
           Authorization: token, client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
           client_secret: "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",
           redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
           key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
-          scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
+          scope: ["https://www.googleapis.com/auth/gmail.readonly", "https://mail.google.com/"],
           maxResults: 500,
           q: "from:.*\.chipmanrelo.com$",
-          project_id:"chipmantrack",
-          javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
-          auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+          project_id: "chipmantrack",
+          javascript_origins: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+          auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"
         },
         params: {
           client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
           client_secret: "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",
           redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
           key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
-          project_id:"chipmantrack",
-          scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
+          project_id: "chipmantrack",
+          scope: ["https://www.googleapis.com/auth/gmail.readonly", "https://mail.google.com/"],
           access_token: token,
           format: 'raw',
-          javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
-          auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+          javascript_origins: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+          auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"
         },
         auth: {
           client_id: "826665210451-qb32sd39ve6ep325dumgjs3ipjrs6ec7.apps.googleusercontent.com",
           client_secret: "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",
           redirect_uris: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
           key: "AIzaSyAdhfelovI7DcOC5GwTEF6gxRvvs9Zmazs",
-          project_id:"chipmantrack",
-          scope: ["https://www.googleapis.com/auth/gmail.readonly","https://mail.google.com/"],
+          project_id: "chipmantrack",
+          scope: ["https://www.googleapis.com/auth/gmail.readonly", "https://mail.google.com/"],
           access_token: token,
-          javascript_origins:["https://chipmantrack.herokuapp.com","http://localhost:3000"],
-          auth_provider_x509_cert_url:"https://www.googleapis.com/oauth2/v1/certs"
+          javascript_origins: ["https://chipmantrack.herokuapp.com", "http://localhost:3000"],
+          auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"
         }
       })
         .then((message) => {
@@ -344,12 +351,12 @@ class Home extends Component {
         return <div className="dayView">
           <p style={{ fontSize: "10px", background: "lightsalmon" }}><strong>{d.updatedContent}</strong></p>
           {data.map((cont, i) => (
-            <p key={cont + " " + i} style={{fontSize: "10px", background: "lightblue", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</p>
+            <p key={cont + " " + i} style={{ fontSize: "10px", background: "lightblue", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</p>
           ))}
         </div>
       } else {
         return <div className="dayView">{data.map((cont, i) => (
-          <p key={cont + " " + i} style={{fontSize: "10px", background: "lightblue", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</p>
+          <p key={cont + " " + i} style={{ fontSize: "10px", background: "lightblue", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</p>
         ))}
         </div>
       }
@@ -373,9 +380,9 @@ class Home extends Component {
     document.getElementById("myNav").style.width = "0%";
     if (navBtn === "TERRA") {
       document.location.assign("https://www.terrastaffinggroup.com/myaccount/login");
-    }else if (navBtn === "Logout") {
+    } else if (navBtn === "Logout") {
       this.logout();
-    }else if (navBtn !== "close") {
+    } else if (navBtn !== "close") {
       this.changeViewHandler(navBtn);
     }
   }
@@ -391,7 +398,7 @@ class Home extends Component {
     })
     this.props.checked();
   }
-  
+
   logout = () => {
     localStorage.removeItem("userID");
     localStorage.clear("userID");
@@ -422,6 +429,25 @@ class Home extends Component {
     })
   }
 
+  dateFromChange = (e) => {
+    this.setState({
+      ...this.state,
+      fromDate: e
+    })
+  }
+
+  dateToChange = (e) => {
+    this.setState({
+      ...this.state,
+      toDate: e
+    })
+  }
+
+  itemChanged = async (item) => {
+    await this.getSchedule();
+    this.changeViewHandler('hoursView');
+  }
+
   render() {
     let page = null;
     let model = null;
@@ -446,7 +472,7 @@ class Home extends Component {
                 <div className="Col-sm-3">
                   <h2>{this.state.userName}</h2>
                 </div>
-                <div className="Col-sm-9" style={{margin:'auto'}}>
+                <div className="Col-sm-9" style={{ margin: 'auto' }}>
                   <h2 style={{ color: "Naive" }}>My Calendar</h2>
                 </div>
               </div>
@@ -463,24 +489,105 @@ class Home extends Component {
       case 'chipmanView':
         page = (
           <div>
-            <div className="row"style={{justifyContent:'center', marginTop: "10%"}}>
-              <div className="Col-md-3" style={{marginBlock:'auto'}}>
-                  <img alt="" src="https://sismo.app/wp-content/uploads/2019/02/under-construction-gif-11.gif" style={{width:'220px', height:'220px', padding:'5px'}}/>
-                  <h6>Hey, welcome to chipman tracker, maybe this part will be our future inventory system</h6>
+            <div className="row" style={{ justifyContent: 'center', marginTop: "10%" }}>
+              <div className="Col-md-3" style={{ marginBlock: 'auto' }}>
+                <img alt="" src="https://sismo.app/wp-content/uploads/2019/02/under-construction-gif-11.gif" style={{ width: '220px', height: '220px', padding: '5px' }} />
+                <h6>Hey, welcome to chipman tracker, maybe this part will be our future inventory system</h6>
               </div>
             </div>
           </div>
         );
-        break;case 'hoursView':
+        break;
+      case 'hoursView':
+        let arr = [];
+        let fromDate = this.state.fromDate;
+        let toDate = this.state.toDate;
+        let total = 0;
+        this.state.schedule.forEach(element => {
+          if(element.date !== "WILL BE UPDATED"){
+            arr.push(element);
+            if((new Date(element.date).getDate() >= fromDate.getDate() && new Date(element.date).getMonth() >= fromDate.getMonth() && new Date(element.date).getFullYear() >= fromDate.getFullYear()) && (new Date(element.date).getDate() <= toDate.getDate() && new Date(element.date).getMonth() <= toDate.getMonth() && new Date(element.date).getFullYear() <= toDate.getFullYear())){
+              let a = element.hours.split(':');
+              let hrs = parseInt(a[0]) * 60;
+              let mins = parseInt(a[1]);
+              total += hrs + mins;
+            }
+          }
+        });
+        let h = parseFloat(total) / 60.00;
+        h += "";
+        let s = h.split('.')
+        let m;
+        if(s.length > 1){
+          if(s[1].length>1){
+            m = parseInt(s[1])/100 * 60;
+          }else{
+            m = parseInt(s[1])/10 * 60;
+          }
+        }else{
+          m = '00'
+        }
+        total = parseInt(h) + ':' + m;
         page = (
-          <div>
-            <div className="row"style={{justifyContent:'center', marginTop: "10%"}}>
-              <div className="Col-md-3" style={{marginBlock:'auto'}}>
-                  <img alt="" src="https://sismo.app/wp-content/uploads/2019/02/under-construction-gif-11.gif" style={{width:'220px', height:'220px', padding:'5px'}}/>
-                  <h6>Hey, welcome to the hours section, here we will be able to manage our hours and view them in a very nice way!!</h6>
-                  <h6>Coming very soon!!</h6>
+          <div className="hoursView">
+          <div className="row myHeader">
+            <div className="Col-sm-3">
+              <h2>{this.state.userName}</h2>
+            </div>
+            <div className="Col-sm-9" style={{ margin: 'auto' }}>
+              <h2 style={{ color: "Naive" }}>My Hours</h2>
+            </div>
+          </div>
+            <div className="card card-body" style={{background:'lavenderblush'}}>
+              <div className="row" style={{display: 'flex', justifyContent: "space-evenly", border: '1px solid indianred', padding: '5px' }}>
+                <div className="Col-sm-6">
+                  <label>From:</label>
+                  <DatePicker
+                    onChange={this.dateFromChange}
+                    value={fromDate}
+                  />
+                </div>
+                <div className="Col-sm-6">
+                  <label>To:</label>
+                  <DatePicker
+                    onChange={this.dateToChange}
+                    value={toDate}
+                  />
+                </div>
+              </div>
+              <div className="row" style={{display: 'flex', justifyContent: "center", border: '1px solid indianred', padding: '5px' }}>
+                <div className="Col-sm-12">
+                  <label>Total Hours:</label>
+                  <label>{total}</label>
+                </div>
               </div>
             </div>
+            <hr></hr>
+            <ul>
+              {arr.map((item, index) => (
+                <li key={index}>
+                  <div 
+                  className={((new Date(item.date).getDate() >= fromDate.getDate() && new Date(item.date).getMonth() >= fromDate.getMonth() && new Date(item.date).getFullYear() >= fromDate.getFullYear()) && (new Date(item.date).getDate() <= toDate.getDate() && new Date(item.date).getMonth() <= toDate.getMonth() && new Date(item.date).getFullYear() <= toDate.getFullYear())) ? "row selected" : "row notSelected"} 
+                  style={{display: 'flex', justifyContent: "space-evenly", border: '1px solid indianred', padding: '5px' }}>
+                    <div className="Col-sm-4">
+                      <label>Date:</label>
+                      {item.date}
+                    </div>
+                    <div className="Col-sm-4">
+                      <label>Hrs:</label>
+                      <label>{item.hours}</label>
+                    </div>
+                    <div className="Col-sm-4">
+                      <button className="btn btn-outline-warning" type="button" data-toggle="collapse" data-target={"#" + item._id} aria-expanded="false" aria-controls={item._id}>EDIT</button>
+                    </div>
+                    <div className="collapse" id={item._id}>
+                      <DayView schedule={item} onChange={() => this.itemChanged(item)}/>
+                    </div>
+                  </div>
+                  <hr></hr>
+                </li>
+              ))}
+            </ul>
           </div>
         );
         break
