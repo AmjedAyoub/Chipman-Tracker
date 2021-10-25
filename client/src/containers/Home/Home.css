@@ -176,6 +176,11 @@ button.react-calendar__tile {
   display: flex;
 }
 
+.myCalendar{
+  width: 97% !important;
+  margin: auto !important;
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
