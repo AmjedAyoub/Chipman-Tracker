@@ -430,10 +430,14 @@ class Home extends Component {
   }
 
   changeViewHandler = (content) => {
-    this.setState({
-      ...this.state,
-      viewContent: content
-    })
+    if(content === 'calendarView'){
+      this.getSchedule();
+    }else{
+      this.setState({
+        ...this.state,
+        viewContent: content
+      });
+    }
   }
 
 

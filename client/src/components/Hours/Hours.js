@@ -94,14 +94,28 @@ class Hours extends Component {
   }
 
   render() {
-
     let arr = [];
     let fromDate = this.state.fromDate;
     let toDate = this.state.toDate;
     let total = 0;
     this.state.schedule.forEach(element => {
       if (element.date !== "WILL BE UPDATED") {
-        arr.push(element);
+        if(!element.updated){
+          let mes = arr.find(x => ((x.date === element.date) && (x.googleId !== element.googleId)));
+          if(mes){
+            if(!arr.find(x => (x.date === mes.date))){
+              arr.push(mes);
+            }
+          }else{
+            if(!arr.find(x => (x.date === element.date))){
+              arr.push(element);
+            }
+          }
+        }else{
+          if(!arr.find(x => (x.date === element.date))){
+            arr.push(element);
+          }
+        }
         if ((new Date(element.date).getDate() >= fromDate.getDate() && new Date(element.date).getMonth() >= fromDate.getMonth() && new Date(element.date).getFullYear() >= fromDate.getFullYear()) && (new Date(element.date).getDate() <= toDate.getDate() && new Date(element.date).getMonth() <= toDate.getMonth() && new Date(element.date).getFullYear() <= toDate.getFullYear())) {
           let a = element.hours.split(':');
           let hrs = parseInt(a[0]) * 60;
@@ -110,6 +124,15 @@ class Hours extends Component {
         }
       }
     });
+    arr.sort((a, b) => {
+      if (new Date(a.date) > new Date(b.date)) {
+          return -1;
+      }
+      if (new Date(a.date) < new Date(b.date)) {
+          return 1;
+      }
+      return 0;
+  })
     let h = parseFloat(total) / 60.00;
     h += "";
     let s = h.split('.')
