@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from "axios";
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import DatePicker from 'react-date-picker';
-
 
 import Modal from "../../components/UI/Modal/Modal";
 import DayView from "../../components/DayView/DayView";
+import Hours from "../../components/Hours/Hours";
 import Calendar from 'react-calendar';
 import Logintbygoogle from '../../components/Logintbygoogle/Logintbygoogle';
 
@@ -22,17 +21,11 @@ class Home extends Component {
     showCal: false,
     viewContent: "",
     scheduleToView: null,
-    userName: "",
-    fromDate: new Date(),
-    toDate: new Date()
+    userName: ""
   }
 
 
   componentDidMount = async () => {
-    // let d = new Date();
-    // let day = d.getDay();
-    // let diff = d.getDate() - day + (day === 0 ? -6:1); // adjust when day is sunday
-    // console.log(new Date(d.setDate(diff)));
     const token = localStorage.getItem('googleToken');
     const email = localStorage.getItem('googleEmail');
     await this.getSchedule();
@@ -109,6 +102,7 @@ class Home extends Component {
               newMessages.push(result.data.messages[i]);
             }
           }
+          // newMessages = result.data.messages;
         }
         if (newMessages.length > 0) {
           await this.getMessagesContent(token, email, newMessages);
@@ -176,9 +170,10 @@ class Home extends Component {
       })
         .then((message) => {
           let m = Buffer.from(message.data.raw, 'base64').toString('ascii');
+          let lower = m.toLowerCase();
           let content = "";
           let updateContent;
-          let updateStart = m.indexOf("Update");
+          let updateStart = lower.indexOf("update");
           let updateEnd = m.indexOf("MOVE DETAILS");
           if (updateStart > -1 && updateEnd > -1) {
             updateContent = m.substring(updateStart, updateEnd);
@@ -208,9 +203,11 @@ class Home extends Component {
             content = this.replaceAll(content, '>', '');
             content = this.replaceAll(content, '--', '');
             content = this.replaceAll(content, '=20', '');
+            content = this.replaceAll(content, '*', '* ');
             content = this.replaceAll(content, '*', '\n');
             content = this.replaceAll(content, '\r', '><');
             content = this.replaceAll(content, '\n', ' ');
+            content = this.replaceAll(content, ' ', '><');
             let d = content.split("><");
             let data = [];
             for (let i = 0; i < d.length; i++) {
@@ -218,14 +215,7 @@ class Home extends Component {
                 data.push(d[i]);
               }
             }
-            let dd = data[1].split(' ');
-            let date;
-            for (let k = 0; k < dd.length; k++) {
-              if (dd[k].includes('-') || dd[k].includes('/') || dd[k].includes(',')) {
-                date = dd[k];
-                break;
-              }
-            }
+            let date = data[2];
             date = this.replaceAll(date, '-', ',');
             date = this.replaceAll(date, '/', ',');
             let year = new Date().getFullYear();
@@ -252,7 +242,7 @@ class Home extends Component {
               }
             }
             this.addScheduleHandler(schedule);
-            // console.log(schedule.scheduleContent);
+            // console.log(schedule);
           }
           else {
             let googleId = messages[idx].id;
@@ -292,19 +282,36 @@ class Home extends Component {
   }
 
   getSchedule = async () => {
-    // this.setState({
-    //   ...this.state,
-    //   showCal: false
-    // })
     const name = localStorage.getItem('userName');
     await axios.get("https://chipmantrack.herokuapp.com/AllSchedule/" + localStorage.getItem("userID"))
       .then(res => {
         if (res.status === "error") {
           throw new Error(res.data.message);
         }
+        // console.log(res.data[0].schedule);
+        let arr = [];
+        res.data[0].schedule.forEach(element => {
+          let n = null;
+          res.data[0].schedule.forEach(x => {
+            if((x.googleId !== element.googleId) && (x.date === element.date)){
+              if(element.updated){
+                n = element
+              }else{
+                n = x
+              }
+            }
+          });
+          if(!n || n === null){
+            n = element;
+          }
+          if (!arr.find((y) => (y.googleId === n.googleId))) {
+            arr.push(n);
+          } 
+        });
+        // console.log(arr);
         this.setState({
           ...this.state,
-          schedule: res.data[0].schedule,
+          schedule: arr,
           showCal: true,
           viewContent: "calendarView",
           userName: name
@@ -429,24 +436,6 @@ class Home extends Component {
     })
   }
 
-  dateFromChange = (e) => {
-    this.setState({
-      ...this.state,
-      fromDate: e
-    })
-  }
-
-  dateToChange = (e) => {
-    this.setState({
-      ...this.state,
-      toDate: e
-    })
-  }
-
-  itemChanged = async (item) => {
-    await this.getSchedule();
-    this.changeViewHandler('hoursView');
-  }
 
   render() {
     let page = null;
@@ -499,96 +488,8 @@ class Home extends Component {
         );
         break;
       case 'hoursView':
-        let arr = [];
-        let fromDate = this.state.fromDate;
-        let toDate = this.state.toDate;
-        let total = 0;
-        this.state.schedule.forEach(element => {
-          if(element.date !== "WILL BE UPDATED"){
-            arr.push(element);
-            if((new Date(element.date).getDate() >= fromDate.getDate() && new Date(element.date).getMonth() >= fromDate.getMonth() && new Date(element.date).getFullYear() >= fromDate.getFullYear()) && (new Date(element.date).getDate() <= toDate.getDate() && new Date(element.date).getMonth() <= toDate.getMonth() && new Date(element.date).getFullYear() <= toDate.getFullYear())){
-              let a = element.hours.split(':');
-              let hrs = parseInt(a[0]) * 60;
-              let mins = parseInt(a[1]);
-              total += hrs + mins;
-            }
-          }
-        });
-        let h = parseFloat(total) / 60.00;
-        h += "";
-        let s = h.split('.')
-        let m;
-        if(s.length > 1){
-          if(s[1].length>1){
-            m = parseInt(s[1])/100 * 60;
-          }else{
-            m = parseInt(s[1])/10 * 60;
-          }
-        }else{
-          m = '00'
-        }
-        total = parseInt(h) + ':' + m;
         page = (
-          <div className="hoursView">
-          <div className="row myHeader">
-            <div className="Col-sm-3">
-              <h2>{this.state.userName}</h2>
-            </div>
-            <div className="Col-sm-9" style={{ margin: 'auto' }}>
-              <h2 style={{ color: "Naive" }}>My Hours</h2>
-            </div>
-          </div>
-            <div className="card card-body" style={{background:'lavenderblush'}}>
-              <div className="row" style={{display: 'flex', justifyContent: "space-evenly", border: '1px solid indianred', padding: '5px' }}>
-                <div className="Col-sm-6">
-                  <label>From:</label>
-                  <DatePicker
-                    onChange={this.dateFromChange}
-                    value={fromDate}
-                  />
-                </div>
-                <div className="Col-sm-6">
-                  <label>To:</label>
-                  <DatePicker
-                    onChange={this.dateToChange}
-                    value={toDate}
-                  />
-                </div>
-              </div>
-              <div className="row" style={{display: 'flex', justifyContent: "center", border: '1px solid indianred', padding: '5px' }}>
-                <div className="Col-sm-12">
-                  <label>Total Hours:</label>
-                  <label>{total}</label>
-                </div>
-              </div>
-            </div>
-            <hr></hr>
-            <ul>
-              {arr.map((item, index) => (
-                <li key={index}>
-                  <div 
-                  className={((new Date(item.date).getDate() >= fromDate.getDate() && new Date(item.date).getMonth() >= fromDate.getMonth() && new Date(item.date).getFullYear() >= fromDate.getFullYear()) && (new Date(item.date).getDate() <= toDate.getDate() && new Date(item.date).getMonth() <= toDate.getMonth() && new Date(item.date).getFullYear() <= toDate.getFullYear())) ? "row selected" : "row notSelected"} 
-                  style={{display: 'flex', justifyContent: "space-evenly", border: '1px solid indianred', padding: '5px' }}>
-                    <div className="Col-sm-4">
-                      <label>Date:</label>
-                      {item.date}
-                    </div>
-                    <div className="Col-sm-4">
-                      <label>Hrs:</label>
-                      <label>{item.hours}</label>
-                    </div>
-                    <div className="Col-sm-4">
-                      <button className="btn btn-outline-warning" type="button" data-toggle="collapse" data-target={"#" + item._id} aria-expanded="false" aria-controls={item._id}>EDIT</button>
-                    </div>
-                    <div className="collapse" id={item._id}>
-                      <DayView schedule={item} onChange={() => this.itemChanged(item)}/>
-                    </div>
-                  </div>
-                  <hr></hr>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <Hours/>
         );
         break
       default:
