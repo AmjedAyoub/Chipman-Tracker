@@ -207,7 +207,7 @@ class Home extends Component {
             content = this.replaceAll(content, '*', '\n');
             content = this.replaceAll(content, '\r', '><');
             content = this.replaceAll(content, '\n', ' ');
-            content = this.replaceAll(content, ' ', '><');
+            // content = this.replaceAll(content, ' ', '><');
             let d = content.split("><");
             let data = [];
             for (let i = 0; i < d.length; i++) {
@@ -215,12 +215,24 @@ class Home extends Component {
                 data.push(d[i]);
               }
             }
-            let date = data[2];
+            let date;
+            for (let index = 0; index < data.length; index++) {
+              if(data[index].toLowerCase().includes('sunday') || data[index].toLowerCase().includes('monday') ||data[index].toLowerCase().includes('tuesday') || data[index].toLowerCase().includes('wednesday') || data[index].toLowerCase().includes('thursday') || data[index].toLowerCase().includes('friday') || data[index].toLowerCase().includes('saturday')){
+                let str = data[index].split(' ');
+                for (let i = 0; i < str.length; i++) {
+                  if(str[i].includes(',') || str[i].includes('-') || str[i].includes('/')){
+                    date = str[i];
+                  }
+                }
+              }          
+            }
+            // console.log(date)
             date = this.replaceAll(date, '-', ',');
             date = this.replaceAll(date, '/', ',');
             let year = new Date().getFullYear();
             date = (date + ',' + year).trim();
             let scheduleContent = data.join('\n');
+            // console.log(scheduleContent);
             let googleId = messages[idx].id;
             let mContent = { data: message.data };
             let schedule = {};
