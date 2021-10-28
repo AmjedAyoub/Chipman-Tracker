@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === "production") {
 
 // Connect to the Mongo DB
 mongoose.connect(
-      "mongodb+srv://amjed:5afFn6jmKxPzq56@chipmantracker.yg93a.mongodb.net/techs?retryWrites=true&w=majority", {
+      "mongodb+srv://amjed:5afFn6jmKxPzq56@chipman.jphya.mongodb.net/techs?retryWrites=true&w=majority", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true

@@ -10,6 +10,12 @@ ul {
     width: 95%;
 }
 
+.myHeader {
+  display: flex;
+  background: rgb(0 123 255 / 50%);
+  margin-top: 40px;
+}
+
 li {
     padding: 1px;
     width: 95%;

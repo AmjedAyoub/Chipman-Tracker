@@ -119,7 +119,10 @@ class DayView extends Component {
         let start = this.state.start.getHours() + ':' + this.state.start.getMinutes();
         let end = this.state.end.getHours() + ':' + this.state.end.getMinutes();
         let hours = this.state.hours + ':' + this.state.minutes;
-        axios.post("https://chipmantrack.herokuapp.com/updateItem", {
+        axios.post("https://chipmantrack.herokuapp.com/updateItem", { 
+            header: {
+              'Access-Control-Allow-Origin': '*'
+            },
             userID: localStorage.getItem("userID"),
             scheduleID: this.props.schedule._id,
             start: start,

@@ -263,7 +263,10 @@ class Home extends Component {
   }
 
   addScheduleHandler = async (schedule) => {
-    await axios.post("https://chipmantrack.herokuapp.com/addSchedule", {
+    await axios.post("https://chipmantrack.herokuapp.com/addSchedule", { 
+      header: {
+        'Access-Control-Allow-Origin': '*'
+      },
       userID: localStorage.getItem("userID"),
       googleId: schedule.googleId,
       content: schedule.content,
@@ -283,7 +286,10 @@ class Home extends Component {
 
   getSchedule = async () => {
     const name = localStorage.getItem('userName');
-    await axios.get("https://chipmantrack.herokuapp.com/AllSchedule/" + localStorage.getItem("userID"))
+    await axios.get("https://chipmantrack.herokuapp.com/AllSchedule/" + localStorage.getItem("userID"), {
+    header: {
+      'Access-Control-Allow-Origin': '*'
+    }})
       .then(res => {
         if (res.status === "error") {
           throw new Error(res.data.message);
