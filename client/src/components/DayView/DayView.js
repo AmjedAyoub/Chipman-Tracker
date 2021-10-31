@@ -76,16 +76,21 @@ class DayView extends Component {
     calculateHours = (start, end, lunch, arr = null) => {
         let diffInMilliSeconds = Math.abs(end - start) / 1000;
         if (lunch === "30 min.") {
-            diffInMilliSeconds = diffInMilliSeconds - 30 * 60;
+            diffInMilliSeconds -=  30 * 60;
         } else if (lunch === "45 min.") {
-            diffInMilliSeconds = diffInMilliSeconds - 45 * 60;
+            diffInMilliSeconds -=  45 * 60;
         } else if (lunch === "1 hr.") {
-            diffInMilliSeconds = diffInMilliSeconds - 60 * 60;
+            diffInMilliSeconds -=  60 * 60;
         }
-        const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
+        let hours = Math.floor(diffInMilliSeconds / 3600) % 24;
         diffInMilliSeconds -= hours * 3600;
-        const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
-        diffInMilliSeconds -= minutes * 60;
+        let minutes = Math.floor(diffInMilliSeconds / 60) % 60;
+        if(minutes === 14 || minutes === 29 || minutes === 44){
+            minutes += 1;
+        }else if(minutes === 59){
+            minutes = 0;
+            hours += 1;
+        }
         if (arr) {
             this.setState({
                 ...this.state,
@@ -201,7 +206,7 @@ class DayView extends Component {
                         <div className="Col-sm-12 button-wrap">
                             <h5>{this.props.schedule.date}</h5>
                             <hr></hr>
-                            {this.props.schedule.updated ? <h6 style={{ background: "lightsalmon" }}><strong>{this.props.schedule.updatedContent}</strong></h6> : null}
+                            {this.props.schedule.updated ? <h6 style={{ background: "#b3ff7a" }}><strong>{this.props.schedule.updatedContent}</strong></h6> : null}
                             {data.map((cont, i) => (
                                 <h6 key={cont + " " + i} style={{ background: "lightblue", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</h6>
                             ))}

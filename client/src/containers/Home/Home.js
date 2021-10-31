@@ -374,7 +374,7 @@ class Home extends Component {
       let data = d.scheduleContent.split('\n');
       if (d.updated) {
         return <div className="dayView">
-          <p style={{ fontSize: "10px", background: "lightsalmon" }}><strong>{d.updatedContent}</strong></p>
+          <p style={{ fontSize: "10px", background: "#b3ff7a" }}><strong>{d.updatedContent}</strong></p>
           {data.map((cont, i) => (
             <p key={cont + " " + i} style={{ fontSize: "10px", background: "lightblue", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</p>
           ))}

@@ -131,6 +131,12 @@ button:focus {
   font-size: xx-large;
 }
 
+.react-calendar__tile--active {
+  background: transparent;
+  color: crimson;
+  font-weight: bold;
+}
+
 .dayView {
   /* overflow-y: auto; */
 }
