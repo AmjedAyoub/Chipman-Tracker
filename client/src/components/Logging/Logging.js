@@ -53,12 +53,13 @@ class Logging extends Component {
         // Preventing the default behavior of the form submit (which is to refresh the page)
         event.preventDefault();
         if (this.state.password2 === this.state.password1) {
-            axios.post("https://chipmantrack.herokuapp.com/signup", { 
-                header: {
-                    'Access-Control-Allow-Origin': '*'
-                  },
+            axios.post("https://chipmantrack.herokuapp.com/signup",{
                   user: this.state.user, email: this.state.email, 
                   password: this.state.password1 
+                },{ 
+                   header: {
+                       'Access-Control-Allow-Origin': '*'
+                    }
                 })
                 .then(res => {
                     // Tell the UI we've authenticated.
@@ -106,12 +107,13 @@ class Logging extends Component {
     handleSginInSubmit = event => {
         // Preventing the default behavior of the form submit (which is to refresh the page)
         event.preventDefault();
-        axios.post("https://chipmantrack.herokuapp.com/login", { 
-            header: {
-                'Access-Control-Allow-Origin': '*'
-            },
+        axios.post("https://chipmantrack.herokuapp.com/login", {
             email: this.state.logemail, 
             password: this.state.logpassword 
+        },{ 
+            header: {
+                'Access-Control-Allow-Origin': '*'
+            }
         })
             .then(res => {
                 if (res.data.msg) {
