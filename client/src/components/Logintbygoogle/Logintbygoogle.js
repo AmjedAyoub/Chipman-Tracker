@@ -48,7 +48,6 @@ class Logintbygoogle extends Component {
           buttonText="Login with Google"
           redirectUri={["https://chipmantrack.herokuapp.com","http://localhost:3000"]}
           scope="email profile https://mail.google.com/"
-          javascript_origins={["https://chipmantrack.herokuapp.com", "http://localhost:3000"]}
           onSuccess={this.responseGoogle}
           onFailure={this.errGoogle}
           cookiePolicy={'single_host_origin'}/>
