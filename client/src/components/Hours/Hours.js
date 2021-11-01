@@ -18,10 +18,7 @@ class Hours extends Component {
 
   getSchedule = async () => {
     const name = localStorage.getItem('userName');
-    await axios.get("https://chipmantrack.herokuapp.com/AllSchedule/" + localStorage.getItem("userID"),{ 
-      header: {
-        'Access-Control-Allow-Origin': '*'
-      }})
+    await axios.get("https://chipmantrack.herokuapp.com/AllSchedule/" + localStorage.getItem("userID"))
       .then(res => {
         if (res.status === "error") {
           throw new Error(res.data.message);

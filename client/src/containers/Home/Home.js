@@ -283,10 +283,6 @@ class Home extends Component {
       scheduleContent: schedule.scheduleContent,
       updated: schedule.updated,
       updatedContent: schedule.updatedContent
-    },{ 
-      header: {
-        'Access-Control-Allow-Origin': '*'
-      }
     })
       .then(res => {
         if (res.status === "error") {
@@ -298,10 +294,7 @@ class Home extends Component {
 
   getSchedule = async () => {
     const name = localStorage.getItem('userName');
-    await axios.get("https://chipmantrack.herokuapp.com/AllSchedule/" + localStorage.getItem("userID"), {
-    header: {
-      'Access-Control-Allow-Origin': '*'
-    }})
+    await axios.get("https://chipmantrack.herokuapp.com/AllSchedule/" + localStorage.getItem("userID"))
       .then(res => {
         if (res.status === "error") {
           throw new Error(res.data.message);

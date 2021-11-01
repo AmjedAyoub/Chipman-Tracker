@@ -56,10 +56,6 @@ class Logging extends Component {
             axios.post("https://chipmantrack.herokuapp.com/signup",{
                   user: this.state.user, email: this.state.email, 
                   password: this.state.password1 
-                },{ 
-                   header: {
-                       'Access-Control-Allow-Origin': '*'
-                    }
                 })
                 .then(res => {
                     // Tell the UI we've authenticated.
@@ -110,10 +106,6 @@ class Logging extends Component {
         axios.post("https://chipmantrack.herokuapp.com/login", {
             email: this.state.logemail, 
             password: this.state.logpassword 
-        },{ 
-            header: {
-                'Access-Control-Allow-Origin': '*'
-            }
         })
             .then(res => {
                 if (res.data.msg) {
