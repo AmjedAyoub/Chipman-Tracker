@@ -234,12 +234,10 @@ class Home extends Component {
             let scheduleContent = data.join('\n');
             // console.log(scheduleContent);
             let googleId = messages[idx].id;
-            let mContent = { data: message.data };
             let schedule = {};
             if (updateContent) {
               schedule = {
                 googleId: googleId,
-                content: mContent,
                 date: date,
                 scheduleContent: scheduleContent,
                 updated: true,
@@ -248,22 +246,12 @@ class Home extends Component {
             } else {
               schedule = {
                 googleId: googleId,
-                content: mContent,
                 date: date,
                 scheduleContent: scheduleContent
               }
             }
             this.addScheduleHandler(schedule);
             // console.log(schedule);
-          }
-          else {
-            let googleId = messages[idx].id;
-            let mContent = { data: message.data };
-            let schedule = {
-              googleId: googleId,
-              content: mContent
-            }
-            this.addScheduleHandler(schedule);
           }
         })
         .catch((err) => {
@@ -278,7 +266,6 @@ class Home extends Component {
     await axios.post("https://chipmantrack.herokuapp.com/addSchedule",{
       userID: localStorage.getItem("userID"),
       googleId: schedule.googleId,
-      content: schedule.content,
       date: schedule.date,
       scheduleContent: schedule.scheduleContent,
       updated: schedule.updated,

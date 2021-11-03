@@ -8,7 +8,6 @@ const UserSchema = new Schema({
   schedule: [
     {
       googleId:{type: String, default: "WILL BE UPDATED"},
-      content:{type: Schema.Types.Mixed, default:{data:{snippet:"NO CONTENT SOMTHING WENT WRONG!"}}},
       date:{type: String, default: "WILL BE UPDATED"},
       scheduleContent:{type: String, default: "WILL BE UPDATED"},
       updated:{type: Boolean, default: false},
