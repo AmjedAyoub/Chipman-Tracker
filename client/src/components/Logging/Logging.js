@@ -138,7 +138,8 @@ class Logging extends Component {
                         isAuthenticated: true,
                         token: res.data.token
                     });
-                    this.props.checked();
+                    // this.props.checked();
+                    window.location.reload();
                 }
             })
             .catch(err => this.setState({
@@ -171,40 +172,8 @@ class Logging extends Component {
         if (navBtn === "TERRA") {
             document.location.assign("https://www.terrastaffinggroup.com/myaccount/login");
         }
-        else if (navBtn === "Logout") {
-            this.logout();
-        }
     }
     
-    logout = () => {
-        localStorage.removeItem("userID");
-        localStorage.clear("userID");
-        localStorage.removeItem("token");
-        localStorage.clear("token");
-        localStorage.removeItem("google");
-        localStorage.clear("google");
-        localStorage.removeItem("googleToken");
-        localStorage.clear("googleToken");
-        localStorage.removeItem("googleEmail");
-        localStorage.clear("googleEmail");
-        localStorage.removeItem("userName");
-        localStorage.clear("userName");
-        this.setState({
-            ...this.state,
-            user: "",
-            email: "",
-            password1: "",
-            password2: "",
-            logpassword: "",
-            logemail: "",
-            isAuthenticated: false,
-            token: "",
-            googleSignedIn: false
-        })
-        // this.props.checked();
-        window.location.assign("https://chipmantrack.herokuapp.com");
-    }
-
     render() {
         const t = localStorage.getItem("token")
         return (
@@ -216,16 +185,15 @@ class Logging extends Component {
                     <div className="overlay-content">
                         <Logintbygoogle checked={() => this.compDidChanged()} />
                         <button className="navbtn" onClick={() => this.closeNav("TERRA")}>TERRA</button>
-                        <button className="navbtn" onClick={() => this.closeNav("Logout")}>Logout</button>
                     </div>
                 </div>
                 {/* Use any element to open/show the overlay navigation menu */}
                 <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
                 {
-                    ((!localStorage.getItem('google') || !this.state.googleSignedIn) && (t || this.state.token)) ?
+                    (!localStorage.getItem('google') && t) ?
                         <div style={{ marginTop: '10%' }}>
                             <Logintbygoogle checked={() => this.compDidChanged()} />
-                        </div> : ((!localStorage.getItem('google') || !this.state.googleSignedIn) && (!t || !this.state.token)) ?
+                        </div> : (!localStorage.getItem('google') && !t) ?
                             <div className="row LogForm" style={{ justifyContent: 'space-evenly', alignItems: 'center', height: 'inherit', width: '100%' }}>
                                 <div className="Col-sm-6">
                                     <form onSubmit={this.handleSginInSubmit}>

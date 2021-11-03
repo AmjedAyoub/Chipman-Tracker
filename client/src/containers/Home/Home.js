@@ -385,15 +385,13 @@ class Home extends Component {
     document.getElementById("myNav").style.width = "0%";
     if (navBtn === "TERRA") {
       document.location.assign("https://www.terrastaffinggroup.com/myaccount/login");
-    } else if (navBtn === "Logout") {
-      this.logout();
     } else if (navBtn !== "close") {
       this.changeViewHandler(navBtn);
     }
   }
 
   compDidChanged = () => {
-    this.closeNav("close")
+    this.closeNav("close");
     const t = localStorage.getItem("token");
     const g = localStorage.getItem("google");
     this.setState({
@@ -401,22 +399,6 @@ class Home extends Component {
       token: t,
       googleSignedIn: g
     })
-    this.props.checked();
-  }
-
-  logout = () => {
-    localStorage.removeItem("userID");
-    localStorage.clear("userID");
-    localStorage.removeItem("token");
-    localStorage.clear("token");
-    localStorage.removeItem("google");
-    localStorage.clear("google");
-    localStorage.removeItem("googleToken");
-    localStorage.clear("googleToken");
-    localStorage.removeItem("googleEmail");
-    localStorage.clear("googleEmail");
-    localStorage.removeItem("userName");
-    localStorage.clear("userName");
     this.props.checked();
   }
 
@@ -523,7 +505,6 @@ class Home extends Component {
             <button className="navbtn" onClick={() => this.closeNav("hoursView")}>Hours</button>
             <button className="navbtn" onClick={() => this.closeNav("chipmanView")}>Chipman Tracker</button>
             <button className="navbtn" onClick={() => this.closeNav("TERRA")}>TERRA</button>
-            <button className="navbtn" onClick={() => this.closeNav("Logout")}>Logout</button>
           </div>
         </div>
         {/* Use any element to open/show the overlay navigation menu */}
