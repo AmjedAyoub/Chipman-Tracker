@@ -177,6 +177,17 @@ router.get('/AllSchedule/:query', function (req,res) {
   })
 });
 
+router.post('/deleteSchedule', function(req, res) {
+  User.update(
+    {"_id": ObjectID(req.body.userID)}, {$pull: {schedule:{_id:ObjectID(req.body.scheduleID)}}})         
+.then(function(data){
+  return res.json(data)
+}).catch(function(err){
+  console.log(err)
+});
+});
+
+
 module.exports = router;
 
 

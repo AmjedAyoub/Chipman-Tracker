@@ -223,7 +223,7 @@ class DayView extends Component {
                                 className="mt-2 mb-2"
                                 style={{ cursor: 'pointer' }}
                                 clearable
-                                ampm={false}
+                                ampm={true}
                                 openTo="hours"
                                 views={["hours", "minutes"]}
                                 format="HH:mm"
@@ -237,7 +237,7 @@ class DayView extends Component {
                                 className="mt-2 mb-2"
                                 style={{ cursor: 'pointer' }}
                                 clearable
-                                ampm={false}
+                                ampm={true}
                                 openTo="hours"
                                 views={["hours", "minutes"]}
                                 format="HH:mm"

@@ -116,8 +116,17 @@ button:focus {
   border: none;
 }
 
+.react-calendar__tile:hover {
+  /* background: rgba(236, 122, 144, 0.479) !important; */
+  background: radial-gradient(rgba(153, 205, 50, 0.589), transparent) !important;
+}
+
 .react-calendar__tile--active {
-  border: solid crimson 5px !important;
+  border: solid red 5px !important;
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: rgba(0,0,0, 0.9);
 }
 
 .react-calendar__navigation__label {

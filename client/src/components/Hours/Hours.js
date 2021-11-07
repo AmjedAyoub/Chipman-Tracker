@@ -13,10 +13,10 @@ class Hours extends Component {
   }
 
   componentDidMount = async () => {
-    await this.getSchedule();
+    await this.getSchedules();
   }
 
-  getSchedule = async () => {
+  getSchedules = async () => {
     const name = localStorage.getItem('userName');
     await axios.get("https://chipmantrack.herokuapp.com/AllSchedule/" + localStorage.getItem("userID"))
       .then(res => {
@@ -90,7 +90,7 @@ class Hours extends Component {
   }
 
   itemChanged = async () => {
-    await this.getSchedule();
+    await this.getSchedules();
   }
 
   render() {

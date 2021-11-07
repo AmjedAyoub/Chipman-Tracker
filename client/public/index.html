@@ -7,8 +7,8 @@
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="Chipman Tracker" />
     <meta name="google-signin-scope" content="email profile https://mail.google.com/">
-    <meta name="google-site-verification" content="604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com" />
     <meta name="google-signin-client_id" content="604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com">
+    <meta name="google-site-verification" content="604246018347-9939kn2h7g4t9o0rbmvdhjt5vhoajerg.apps.googleusercontent.com" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/chipman-tracker-logo.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -26,7 +26,6 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <title>Chipman Tracker</title>
   </head>
   <body>
@@ -50,13 +49,14 @@
         localStorage.setItem('google', true);
         localStorage.setItem('googleToken', googleUser.getAuthResponse().access_token);
         localStorage.setItem('googleEmail', profile.getEmail());
-        // window.location.assign("http://localhost:3000/#/Home");
-        window.location.assign("https://chipmantrack.herokuapp.com/#/Home");
+        window.location.assign("http://localhost:3000/#/Home");
+        // window.location.assign("https://chipmantrack.herokuapp.com/#/Home");
       }
     </script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/api.js"></script>
   </body>
 </html>

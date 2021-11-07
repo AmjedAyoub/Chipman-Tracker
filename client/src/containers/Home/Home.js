@@ -19,19 +19,55 @@ class Home extends Component {
     calendarValue: new Date(),
     schedule: [],
     showCal: false,
-    viewContent: "",
+    viewContent: "calendarView",
     scheduleToView: null,
     userName: ""
   }
 
-
   componentDidMount = async () => {
-    const token = localStorage.getItem('googleToken');
-    const email = localStorage.getItem('googleEmail');
-    await this.getSchedule();
-    if (token) {
-      await this.getMessages(token, email);
+    let allSchedule = [];
+    await axios.get("https://chipmantrack.herokuapp.com/AllSchedule/" + localStorage.getItem("userID"))
+      .then(res => {
+        if (res.status === "error") {
+          throw new Error(res.data.message);
+        }
+          allSchedule = res.data[0].schedule;
+      })
+      .catch(err => this.setState({ error: err.message }));
+    // Delete data older than 3 months old.
+      let time = new Date();
+      time.setHours(0);
+      time.setMinutes(0);
+      time.setSeconds(0);
+      time.setDate(-90);
+      allSchedule.forEach(element => {
+        if(new Date(element.date) < time){
+          console.log(element);
+          this.deleteScheduleHandler(element._id);
+        }
+      });
+      
+    if (this.state.viewContent === "calendarView") {
+      const token = localStorage.getItem('googleToken');
+      const email = localStorage.getItem('googleEmail');
+      await this.getSchedule();
+      if (token) {
+        await this.getMessages(token, email);
+      }
     }
+  }
+
+  deleteScheduleHandler = async(id) => {
+    await axios.post("https://chipmantrack.herokuapp.com/deleteSchedule", {
+      userID: localStorage.getItem("userID"),
+      scheduleID: id,
+    })
+      .then(res => {
+        if (res.status === "error") {
+          throw new Error(res.data.message);
+        }
+      })
+      .catch(err => this.setState({ error: err.message }));
   }
 
   getMessages = async (token, email) => {
@@ -217,14 +253,14 @@ class Home extends Component {
             }
             let date;
             for (let index = 0; index < data.length; index++) {
-              if(data[index].toLowerCase().includes('sunday') || data[index].toLowerCase().includes('monday') ||data[index].toLowerCase().includes('tuesday') || data[index].toLowerCase().includes('wednesday') || data[index].toLowerCase().includes('thursday') || data[index].toLowerCase().includes('friday') || data[index].toLowerCase().includes('saturday')){
+              if (data[index].toLowerCase().includes('sunday') || data[index].toLowerCase().includes('monday') || data[index].toLowerCase().includes('tuesday') || data[index].toLowerCase().includes('wednesday') || data[index].toLowerCase().includes('thursday') || data[index].toLowerCase().includes('friday') || data[index].toLowerCase().includes('saturday')) {
                 let str = data[index].split(' ');
                 for (let i = 0; i < str.length; i++) {
-                  if(str[i].includes(',') || str[i].includes('-') || str[i].includes('/')){
+                  if (str[i].includes(',') || str[i].includes('-') || str[i].includes('/')) {
                     date = str[i];
                   }
                 }
-              }          
+              }
             }
             // console.log(date)
             date = this.replaceAll(date, '-', ',');
@@ -235,23 +271,30 @@ class Home extends Component {
             // console.log(scheduleContent);
             let googleId = messages[idx].id;
             let schedule = {};
-            if (updateContent) {
-              schedule = {
-                googleId: googleId,
-                date: date,
-                scheduleContent: scheduleContent,
-                updated: true,
-                updatedContent: updateContent
+            let time = new Date();
+            time.setHours(0);
+            time.setMinutes(0);
+            time.setSeconds(0);
+            time.setDate(-90);
+            if(new Date(date) > time){
+              if (updateContent) {
+                schedule = {
+                  googleId: googleId,
+                  date: date,
+                  scheduleContent: scheduleContent,
+                  updated: true,
+                  updatedContent: updateContent
+                }
+              } else {
+                schedule = {
+                  googleId: googleId,
+                  date: date,
+                  scheduleContent: scheduleContent
+                }
               }
-            } else {
-              schedule = {
-                googleId: googleId,
-                date: date,
-                scheduleContent: scheduleContent
-              }
+              console.log(schedule);
+              this.addScheduleHandler(schedule);
             }
-            this.addScheduleHandler(schedule);
-            // console.log(schedule);
           }
         })
         .catch((err) => {
@@ -263,7 +306,7 @@ class Home extends Component {
   }
 
   addScheduleHandler = async (schedule) => {
-    await axios.post("https://chipmantrack.herokuapp.com/addSchedule",{
+    await axios.post("https://chipmantrack.herokuapp.com/addSchedule", {
       userID: localStorage.getItem("userID"),
       googleId: schedule.googleId,
       date: schedule.date,
@@ -291,20 +334,20 @@ class Home extends Component {
         res.data[0].schedule.forEach(element => {
           let n = null;
           res.data[0].schedule.forEach(x => {
-            if((x.googleId !== element.googleId) && (x.date === element.date)){
-              if(element.updated){
+            if ((x.googleId !== element.googleId) && (x.date === element.date)) {
+              if (element.updated) {
                 n = element
-              }else{
+              } else {
                 n = x
               }
             }
           });
-          if(!n || n === null){
+          if (!n || n === null) {
             n = element;
           }
           if (!arr.find((y) => (y.googleId === n.googleId))) {
             arr.push(n);
-          } 
+          }
         });
         // console.log(arr);
         this.setState({
@@ -410,9 +453,9 @@ class Home extends Component {
   }
 
   changeViewHandler = (content) => {
-    if(content === 'calendarView'){
+    if (content === 'calendarView') {
       this.getSchedule();
-    }else{
+    } else {
       this.setState({
         ...this.state,
         viewContent: content
@@ -473,7 +516,7 @@ class Home extends Component {
         break;
       case 'hoursView':
         page = (
-          <Hours/>
+          <Hours />
         );
         break
       default:
