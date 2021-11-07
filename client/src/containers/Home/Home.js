@@ -42,7 +42,7 @@ class Home extends Component {
       time.setDate(-90);
       allSchedule.forEach(element => {
         if(new Date(element.date) < time){
-          console.log(element);
+          // console.log(element);
           this.deleteScheduleHandler(element._id);
         }
       });
@@ -292,7 +292,7 @@ class Home extends Component {
                   scheduleContent: scheduleContent
                 }
               }
-              console.log(schedule);
+              // console.log(schedule);
               this.addScheduleHandler(schedule);
             }
           }
@@ -462,7 +462,6 @@ class Home extends Component {
       });
     }
   }
-
 
   render() {
     let page = null;
