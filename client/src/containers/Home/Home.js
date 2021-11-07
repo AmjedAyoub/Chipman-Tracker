@@ -5,6 +5,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import Modal from "../../components/UI/Modal/Modal";
 import DayView from "../../components/DayView/DayView";
+import NewDayView from "../../components/NewDayView/NewDayView";
 import Hours from "../../components/Hours/Hours";
 import Calendar from 'react-calendar';
 import Logintbygoogle from '../../components/Logintbygoogle/Logintbygoogle';
@@ -312,7 +313,11 @@ class Home extends Component {
       date: schedule.date,
       scheduleContent: schedule.scheduleContent,
       updated: schedule.updated,
-      updatedContent: schedule.updatedContent
+      updatedContent: schedule.updatedContent,
+      hours: schedule.hours,
+      start: schedule.start,
+      end: schedule.end,
+      lunch: schedule.lunch
     })
       .then(res => {
         if (res.status === "error") {
@@ -449,6 +454,16 @@ class Home extends Component {
     let d = this.state.schedule.find((x, i) => (new Date(x.date).getDate() === e.getDate() && new Date(x.date).getMonth() === e.getMonth() && new Date(x.date).getFullYear() === e.getFullYear()));
     if (d) {
       this.openModelHandler("DayView", d)
+    }else{
+      let date = (e.getMonth()+1)+","+e.getDate()+","+e.getFullYear();
+      let schedule ={
+        date: date,
+        scheduleContent: "",
+        start: "00:00",
+        end: "00:00",
+        hours: "00:00"
+      }
+      this.openModelHandler("NewDayView", schedule)      
     }
   }
 
@@ -471,6 +486,11 @@ class Home extends Component {
       case 'DayView':
         model = (
           <DayView schedule={this.state.scheduleToView} />
+        );
+        break;
+      case 'NewDayView':
+        model = (
+          <NewDayView schedule={this.state.scheduleToView} />
         );
         break;
       default:
