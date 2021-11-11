@@ -200,7 +200,10 @@ class DayView extends Component {
     }
 
     render() {
-        let data = this.props.schedule.scheduleContent.split('\n');
+        let data = [];
+        if(this.props.schedule.scheduleContent){
+            data = this.props.schedule.scheduleContent.split('\n');
+        }
         return (
             <div className="DayView">
                 <div className="card card-body">

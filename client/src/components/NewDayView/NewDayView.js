@@ -161,6 +161,10 @@ class NewDayView extends Component {
                 if (res.status === "error") {
                   throw new Error(res.data.message);
                 }
+                this.setState({
+                    ...this.state,
+                    success: true
+                })
                 this.props.onChange();
               })
               .catch(err => console.log(err));
@@ -182,6 +186,10 @@ class NewDayView extends Component {
                     if (res.status === "error") {
                         throw new Error(res.data.message);
                     }
+                    this.setState({
+                        ...this.state,
+                        success: true
+                    })
                     this.props.onChange();
                 })
                 .catch(err => this.setState({ error: err.message }));

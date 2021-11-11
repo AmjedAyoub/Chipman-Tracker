@@ -399,19 +399,23 @@ class Home extends Component {
   calendarTitleConent = ({ date = new Date(), view = "month" }) => {
     let d = this.state.schedule.find((x, i) => (new Date(x.date).getDate() === date.getDate() && new Date(x.date).getMonth() === date.getMonth() && new Date(x.date).getFullYear() === date.getFullYear()));
     if (d) {
-      let data = d.scheduleContent.split('\n');
-      if (d.updated) {
-        return <div className="dayView">
-          <p style={{ fontSize: "10px", color: "rgb(78,174,7)" }}><strong>{d.updatedContent}</strong></p>
-          {data.map((cont, i) => (
+      if(d.scheduleContent){
+        let data = d.scheduleContent.split('\n');
+        if (d.updated) {
+          return <div className="dayView">
+            <p style={{ fontSize: "10px", color: "rgb(78,174,7)" }}><strong>{d.updatedContent}</strong></p>
+            {data.map((cont, i) => (
+              <p key={cont + " " + i} style={{ fontSize: "10px", color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</p>
+            ))}
+          </div>
+        } else {
+          return <div className="dayView">{data.map((cont, i) => (
             <p key={cont + " " + i} style={{ fontSize: "10px", color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</p>
           ))}
-        </div>
+          </div>
+        }
       } else {
-        return <div className="dayView">{data.map((cont, i) => (
-          <p key={cont + " " + i} style={{ fontSize: "10px", color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</p>
-        ))}
-        </div>
+        return null;
       }
     } else {
       return null;
