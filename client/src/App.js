@@ -4,6 +4,7 @@ import './App.css';
 
 import Home from "./containers/Home/Home";
 import Logging from "./components/Logging/Logging";
+import Hour from "./components/Hours/Hours";
 
 class App extends Component {
   state={
@@ -35,7 +36,9 @@ class App extends Component {
           <Switch>
             {/* <Route path="/Home" exact component={Home}/> */}
             <Route path="/Home" exact render={() => <Home checked={() => this.componentDidMount()}/>} />
-            <Redirect from="/" to="/Home" />
+            {/* <Redirect from="/" to="/Home" /> */}
+            <Route path="/Hour" exact render={() => <Hour checked={() => this.componentDidMount()}/>} />
+            {/* <Redirect from="/" to="/Hour" /> */}
           </Switch>
         );
     }

@@ -1,6 +1,10 @@
 import React, { Component } from "react";
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
 import DatePicker from 'react-date-picker';
+import Logintbygoogle from '../../components/Logintbygoogle/Logintbygoogle';
 import NewDayView from "../../components/NewDayView/NewDayView";
 import "./Hours.css";
 class Hours extends Component {
@@ -89,6 +93,24 @@ class Hours extends Component {
     })
   }
 
+  /* Open when someone clicks on the span element */
+  openNav = () => {
+    const w = window.innerWidth;
+    if (w >= 600) {
+      document.getElementById("myNav").style.width = "25%";
+    } else {
+      document.getElementById("myNav").style.width = "100%";
+    }
+  }
+
+  /* Close when someone clicks on the "x" symbol inside the overlay */
+  closeNav = (navBtn) => {
+    document.getElementById("myNav").style.width = "0%";
+    if(navBtn === "TERRA"){
+      window.location.assign("https://www.terrastaffinggroup.com/myaccount/login");
+    }
+  }
+
   itemChanged = async () => {
     await this.getSchedules();
   }
@@ -160,6 +182,20 @@ class Hours extends Component {
 
     return (
       <div className="hoursView">
+      <div id="myNav" className="overlay">
+        {/* Button to close the overlay navigation */}
+        <button id="closeMenuBtn" className="closebtn" onClick={() => this.closeNav("close")}>&times;</button>
+        {/* Overlay content */}
+        <div className="overlay-content">
+          <Logintbygoogle checked={() => this.compDidChanged()} />
+          <Link to="/Home"><button className="navbtn" onClick={() => this.closeNav("calendarView")}>Calendar</button></Link>
+          <Link to="/Hour"><button className="navbtn" onClick={() => this.closeNav("hoursView")}>Hours</button></Link>
+          <Link to="/Home"><button className="navbtn" onClick={() => this.closeNav("chipmanView")}>Chipman Tracker</button></Link>
+          <button className="navbtn" onClick={() => this.closeNav("TERRA")}>TERRA</button>
+        </div>
+      </div>
+      {/* Use any element to open/show the overlay navigation menu */}
+      <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
         <div className="row myHeader">
           <div className="Col-sm-3">
             <h2>{this.state.userName}</h2>

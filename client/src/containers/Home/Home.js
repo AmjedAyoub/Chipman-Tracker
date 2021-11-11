@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from "axios";
 import { faBars } from '@fortawesome/free-solid-svg-icons';
@@ -441,9 +442,9 @@ class Home extends Component {
   /* Close when someone clicks on the "x" symbol inside the overlay */
   closeNav = (navBtn) => {
     document.getElementById("myNav").style.width = "0%";
-    if (navBtn === "TERRA") {
-      document.location.assign("https://www.terrastaffinggroup.com/myaccount/login");
-    } else if (navBtn !== "close") {
+    if(navBtn === "TERRA"){
+      window.location.assign("https://www.terrastaffinggroup.com/myaccount/login");
+    } else if (navBtn !== "close" && navBtn !== "hoursView") {
       this.changeViewHandler(navBtn);
     }
   }
@@ -543,11 +544,6 @@ class Home extends Component {
           </div>
         );
         break;
-      case 'hoursView':
-        page = (
-          <Hours />
-        );
-        break
       default:
         page = (
           this.state.showCal ?
@@ -573,8 +569,8 @@ class Home extends Component {
           {/* Overlay content */}
           <div className="overlay-content">
             <Logintbygoogle checked={() => this.compDidChanged()} />
-            <button className="navbtn" onClick={() => this.closeNav("calendarView")}>Calendar</button>
-            <button className="navbtn" onClick={() => this.closeNav("hoursView")}>Hours</button>
+            <Link to="/Home"><button className="navbtn" onClick={() => this.closeNav("calendarView")}>Calendar</button></Link>
+            <Link to="/Hour"><button className="navbtn" onClick={() => this.closeNav("hoursView")}>Hours</button></Link>
             <button className="navbtn" onClick={() => this.closeNav("chipmanView")}>Chipman Tracker</button>
             <button className="navbtn" onClick={() => this.closeNav("TERRA")}>TERRA</button>
           </div>
