@@ -205,8 +205,12 @@ class Hours extends Component {
                     {item.date}<br></br>{weekday[new Date(item.date).getDay()]}
                   </div>
                   <div className="Col-sm-4">
-                    <label>Hrs:</label>
-                    <label>{item.hours}</label>
+                    {!item.dayOff ? <div>
+                      <label>Hrs:</label>
+                      <label>{item.hours}</label>
+                    </div>:
+                    <img className="dayOff2" src="dayoff.jpg" alt="Day off"/>
+                    }
                   </div>
                   <div className="Col-sm-4">
                     <button className="btn btn-outline-warning" type="button" data-toggle="collapse" data-target={"#" + item._id} aria-expanded="false" aria-controls={item._id}>EDIT</button>

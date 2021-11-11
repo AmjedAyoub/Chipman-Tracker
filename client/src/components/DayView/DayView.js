@@ -184,6 +184,7 @@ class DayView extends Component {
                 if (res.status === "error") {
                     throw new Error(res.data.message);
                 }
+                this.props.schedule.dayOff = false;
                 this.props.onChange();
             })
             .catch(err => this.setState({ error: err.message }));
@@ -203,6 +204,7 @@ class DayView extends Component {
                 if (res.status === "error") {
                     throw new Error(res.data.message);
                 }
+                this.props.schedule.dayOff = true;
                 this.props.onChange();
             })
             .catch(err => this.setState({ error: err.message }));
@@ -251,6 +253,7 @@ class DayView extends Component {
                             <button className="btn btn-outline-danger" onClick={this.takeDayOff}>TAKE DAY OFF</button> :
                             <button className="btn btn-outline-success" onClick={this.returnToWork}>RETURN TO WORK</button>
                             }
+                            <hr></hr>
                             <h5>{this.props.schedule.date}</h5>
                             <hr></hr>
                             {!this.props.schedule.dayOff ?

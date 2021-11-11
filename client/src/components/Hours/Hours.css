@@ -16,6 +16,10 @@ ul {
   margin-top: 40px;
 }
 
+.dayOff2 {
+    width: 50px !important;
+}
+
 li {
     padding: 1px;
     width: 95%;
