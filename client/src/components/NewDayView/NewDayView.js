@@ -170,6 +170,7 @@ class NewDayView extends Component {
                   'Access-Control-Allow-Origin': '*'
                 },
                 userID: localStorage.getItem("userID"),
+                scheduleID: this.props.schedule._id,
                 scheduleContent: this.state.details,
                 updatedContent: this.state.update,
                 start: start,

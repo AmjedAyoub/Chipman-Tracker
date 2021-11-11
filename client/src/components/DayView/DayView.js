@@ -130,6 +130,8 @@ class DayView extends Component {
             },
             userID: localStorage.getItem("userID"),
             scheduleID: this.props.schedule._id,
+            scheduleContent: this.props.schedule.scheduleContent,
+            updatedContent: this.props.schedule.updatedContent,
             start: start,
             end: end,
             lunch: this.state.lunch,
