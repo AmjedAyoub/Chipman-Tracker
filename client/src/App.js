@@ -26,12 +26,6 @@ class App extends Component {
   render(){
     const g = localStorage.getItem("google");
     const t = localStorage.getItem("token");
-    console.log(this.props.location.pathname);
-    console.log(this.state.path);
-    // console.log(this.props);
-    // if(this.props.location.pathname === "/Home" && this.state.path === "/Hour"){
-    //   this.props.history.goBack();
-    // }
     let routes =  (
       <Switch>
         <Route path="/Logging" exact={true} render={() => <Logging checked={() => this.componentDidMount()}/>} />
