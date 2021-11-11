@@ -236,16 +236,16 @@ class NewDayView extends Component {
                             {!this.props.isEditMode ? 
                             <h6 style={{ display: "inline-grid", color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}>
                                 Details:
-                                <textarea id="details" name="details" rows="6" cols="50"
+                                <textarea placeholder="Enter Move details here..." id="details" name="details" rows="6" cols="50"
                                 value={this.state.details}
                                 onChange={(e) => this.detailsChangedHandler(e)}>
                                 </textarea>
                             </h6> : 
                             <div>
-                                {this.props.schedule.updated ? <textarea id="update" name="update" rows="6" cols="50"
+                                {this.props.schedule.updated ? <textarea placeholder="Enter Move update details here..." id="update" name="update" rows="6" cols="50"
                                 value={this.state.update}
                                 onChange={(e) => this.updateChangedHandler(e)} style={{ color: "rgb(78,174,7)" }}></textarea> : null}
-                                <textarea id="details" name="details" rows="6" cols="50"
+                                <textarea placeholder="Enter Move details here..." id="details" name="details" rows="6" cols="50"
                                 value={this.state.details}
                                 onChange={(e) => this.detailsChangedHandler(e)} style={{ color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}></textarea>
                             </div>
