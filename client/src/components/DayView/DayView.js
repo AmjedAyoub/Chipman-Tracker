@@ -170,6 +170,44 @@ class DayView extends Component {
             .catch(err => this.setState({ error: err.message }));
     }
 
+    returnToWork = () => {
+        axios.post("https://chipmantrack.herokuapp.com/dayOff", { 
+            header: {
+              'Access-Control-Allow-Origin': '*'
+            },
+            userID: localStorage.getItem("userID"),
+            scheduleID: this.props.schedule._id,
+            dayOff: false,
+        }
+        )
+        .then(res => {
+                if (res.status === "error") {
+                    throw new Error(res.data.message);
+                }
+                this.props.onChange();
+            })
+            .catch(err => this.setState({ error: err.message }));
+    }
+
+    takeDayOff = () => {
+        axios.post("https://chipmantrack.herokuapp.com/dayOff", { 
+            header: {
+              'Access-Control-Allow-Origin': '*'
+            },
+            userID: localStorage.getItem("userID"),
+            scheduleID: this.props.schedule._id,
+            dayOff: true,
+        }
+        )
+        .then(res => {
+                if (res.status === "error") {
+                    throw new Error(res.data.message);
+                }
+                this.props.onChange();
+            })
+            .catch(err => this.setState({ error: err.message }));
+    }
+
     resetHandler = () => {
         let today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
         let t = this.props.schedule.start;
@@ -209,12 +247,23 @@ class DayView extends Component {
                 <div className="card card-body">
                     <div className="row" style={{ justifyContent: 'center', border: '1px solid indianred', padding: '5px' }}>
                         <div className="Col-sm-12 button-wrap">
+                            {!this.props.schedule.dayOff ?
+                            <button className="btn btn-outline-danger" onClick={this.takeDayOff}>TAKE DAY OFF</button> :
+                            <button className="btn btn-outline-success" onClick={this.returnToWork}>RETURN TO WORK</button>
+                            }
                             <h5>{this.props.schedule.date}</h5>
                             <hr></hr>
-                            {this.props.schedule.updated ? <h6 style={{ color: "rgb(78,174,7)" }}><strong>{this.props.schedule.updatedContent}</strong></h6> : null}
-                            {data.map((cont, i) => (
-                                <h6 key={cont + " " + i} style={{ color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</h6>
-                            ))}
+                            {!this.props.schedule.dayOff ?
+                                <div>
+                                    {this.props.schedule.updated ? <h6 style={{ color: "rgb(78,174,7)" }}><strong>{this.props.schedule.updatedContent}</strong></h6> : null}
+                                    {data.map((cont, i) => (
+                                        <h6 key={cont + " " + i} style={{ color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</h6>
+                                    ))}
+                                </div> : 
+                                <div>
+                                    <img src="dayoff.jpg" alt="Day off"/>
+                                </div>
+                            }
                         </div>
                     </div>
                     <hr></hr>

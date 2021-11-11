@@ -173,6 +173,28 @@ router.post('/updateItem', function (req, res, next) {
  }); 
 });
 
+router.post('/dayOff', function (req, res, next) {
+  User.find({_id: req.body.userID}).then(function(user){  
+    for (let i = 0; i < user[0].schedule.length; i++){   
+          if(user[0].schedule[i]._id == req.body.scheduleID){
+            const newData = User.updateOne(
+              {
+                "schedule._id": user[0].schedule[i]._id,
+              }, 
+              {$set:
+                {
+                  "schedule.$.dayOff":req.body.dayOff,
+          }, new: true})
+            return newData
+          }      
+   }
+ }).then(function(data){
+   return res.json(data)
+ }).catch(function(err){
+   throw err
+ }); 
+});
+
 router.get('/AllSchedule/:query', function (req,res) {
   User.find({_id: req.params.query}).then(function(user){
     return res.json(user);

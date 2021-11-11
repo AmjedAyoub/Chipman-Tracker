@@ -11,6 +11,7 @@ const UserSchema = new Schema({
       date:{type: String, default: "WILL BE UPDATED"},
       scheduleContent:{type: String, default: "WILL BE UPDATED"},
       updated:{type: Boolean, default: false},
+      dayOff:{type: Boolean, default: false},
       updatedContent:{type: String, default: "NOT-UPDATED"},
       start:{type: String, default: "00:00"},
       end:{type: String, default: "00:00"},
