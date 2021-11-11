@@ -234,7 +234,7 @@ class Home extends Component {
             updateContent = this.replaceAll(updateContent, '\n', ' ');
           }
           let start = m.indexOf("MOVE DETAILS");
-          let end = m.indexOf("Black");
+          let end = m.indexOf("Black or Blue");
           if (start > -1 && end > -1) {
             content = m.substring(start, end);
             content = this.replaceAll(content, '>', '');
