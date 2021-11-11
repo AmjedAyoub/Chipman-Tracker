@@ -150,6 +150,10 @@ button:focus {
   /* overflow-y: auto; */
 }
 
+.dayOff{
+  width: 30%;
+}
+
 .react-calendar {
   box-sizing: border-box !important;
   width: auto !important;
@@ -232,5 +236,9 @@ button.react-calendar__tile {
 
   .myHeader {
     display: flow-root;
+  }
+  
+  .dayOff{
+    width: 100%;
   }
 }

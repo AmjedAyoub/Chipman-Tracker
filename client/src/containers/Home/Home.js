@@ -417,7 +417,7 @@ class Home extends Component {
           }
         }else{
           return <div className="dayView">
-            <img src="dayoff.jpg" alt="Day off"/>
+            <img className="dayOff" src="dayoff.jpg" alt="Day off"/>
           </div>
         }
       } else {
@@ -495,7 +495,7 @@ class Home extends Component {
     switch (this.state.modelContent) {
       case 'DayView':
         model = (
-          <DayView schedule={this.state.scheduleToView} />
+          <DayView schedule={this.state.scheduleToView} onChange={this.getSchedule} />
         );
         break;
       case 'NewDayView':

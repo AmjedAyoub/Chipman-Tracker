@@ -261,7 +261,7 @@ class DayView extends Component {
                                     ))}
                                 </div> : 
                                 <div>
-                                    <img src="dayoff.jpg" alt="Day off"/>
+                                    <img className="dayOff" src="dayoff.jpg" alt="Day off"/>
                                 </div>
                             }
                         </div>

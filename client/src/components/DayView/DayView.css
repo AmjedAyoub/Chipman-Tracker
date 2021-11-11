@@ -25,6 +25,16 @@ input[type="file"] {
 .successSave {
     animation: mymove 3s;
 }
+
+.dayOff{
+    width: 30%;
+}
+  
+@media (max-width: 600px) {    
+    .dayOff{
+      width: 100%;
+    }
+  }
   
 @keyframes mymove {
     from {background-color: transparent;}
