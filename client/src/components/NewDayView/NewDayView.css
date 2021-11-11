@@ -18,6 +18,10 @@ input[type="file"] {
     color: #4d4141;
 }
 
+textarea {
+    width: 100% !important;
+}
+
 .button-wrap {
     position: relative;
 }
