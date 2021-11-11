@@ -14,7 +14,8 @@ class NewDayView extends Component {
         lunchTime: ['00', '30 min.', '45 min.', '1 hr.'],
         lunchShow: [],
         success: false,
-        details: ""
+        details: "",
+        update: "",
     }
 
     componentDidMount = () => {
@@ -42,7 +43,9 @@ class NewDayView extends Component {
             minutes: hrs[1],
             lunch: this.props.schedule.lunch,
             lunchShow: arr,
-            success: false
+            success: false,
+            update: this.props.schedule.updatedContent,
+            details: this.props.schedule.scheduleContent
         })
     }
 
@@ -70,6 +73,15 @@ class NewDayView extends Component {
             this.setState({
                 ...this.state,
                 details: e.target.value
+            })
+        }
+    }
+
+    updateChangedHandler = (e) => {
+        if(e) {
+            this.setState({
+                ...this.state,
+                update: e.target.value
             })
         }
     }
@@ -134,66 +146,45 @@ class NewDayView extends Component {
         let start = this.state.start.getHours() + ':' + this.state.start.getMinutes();
         let end = this.state.end.getHours() + ':' + this.state.end.getMinutes();
         let hours = this.state.hours + ':' + this.state.minutes;
-        await axios.post("https://chipmantrack.herokuapp.com/addSchedule", {
-          userID: localStorage.getItem("userID"),
-          googleId: this.props.schedule.date,
-          date: this.props.schedule.date,
-          scheduleContent: this.state.details,
-          updated: this.props.schedule.updated,
-          updatedContent: this.props.schedule.updatedContent,
-          start: start,
-          end: end,
-          lunch: this.state.lunch,
-          hours: hours
-        })
-          .then(res => {
-            if (res.status === "error") {
-              throw new Error(res.data.message);
-            }
-          })
-          .catch(err => console.log(err));
-        axios.post("https://chipmantrack.herokuapp.com/updateItem", { 
-            header: {
-              'Access-Control-Allow-Origin': '*'
-            },
-            userID: localStorage.getItem("userID"),
-            scheduleID: this.props.schedule._id,
-            start: start,
-            end: end,
-            lunch: this.state.lunch,
-            hours: hours
-        }
-        )
-            .then(res => {
-                if (res.status === "error") {
-                    throw new Error(res.data.message);
-                }
-                this.props.schedule.start = start;
-                this.props.schedule.end = end;
-                this.props.schedule.lunch = this.state.lunch;
-                this.props.schedule.hours = hours;
-                let d = hours.split(':');
-                let t = this.props.schedule.start;
-                let today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
-                t = t.split(':')
-                let val1 = today.setHours(t[0]);
-                val1 = val1 + t[1] * 60000;
-                let t2 = this.props.schedule.end;
-                t2 = t2.split(':')
-                let val2 = today.setHours(t2[0]);
-                val2 = val2 + t2[1] * 60000;
-                this.setState({
-                    ...this.state,
-                    start: new Date(val1),
-                    end: new Date(val2),
-                    hours: d[0],
-                    minutes: d[1],
-                    success: true
-                })
-                this.props.onChange();
-                // alert("Data has been saved");
+        if(!this.props.isEditMode){
+            await axios.post("https://chipmantrack.herokuapp.com/addSchedule", {
+              userID: localStorage.getItem("userID"),
+              googleId: this.props.schedule.date,
+              date: this.props.schedule.date,
+              scheduleContent: this.state.details,
+              start: start,
+              end: end,
+              lunch: this.state.lunch,
+              hours: hours
             })
-            .catch(err => this.setState({ error: err.message }));
+              .then(res => {
+                if (res.status === "error") {
+                  throw new Error(res.data.message);
+                }
+                this.props.onChange();
+              })
+              .catch(err => console.log(err));
+        }else{           
+            axios.post("https://chipmantrack.herokuapp.com/updateItem", { 
+                header: {
+                  'Access-Control-Allow-Origin': '*'
+                },
+                userID: localStorage.getItem("userID"),
+                scheduleContent: this.state.details,
+                updatedContent: this.state.update,
+                start: start,
+                end: end,
+                lunch: this.state.lunch,
+                hours: hours
+            })
+            .then(res => {
+                    if (res.status === "error") {
+                        throw new Error(res.data.message);
+                    }
+                    this.props.onChange();
+                })
+                .catch(err => this.setState({ error: err.message }));
+        }
     }
 
     resetHandler = () => {
@@ -233,13 +224,23 @@ class NewDayView extends Component {
                         <div className="Col-sm-12 button-wrap">
                             <h5>{this.props.schedule.date}</h5>
                             <hr></hr>
-                            <h6 style={{ display: "inline-grid", background: "lightblue", marginBlock: "0px", margin: "0px", padding: "0px" }}>
+                            {!this.props.isEditMode ? 
+                            <h6 style={{ display: "inline-grid", color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}>
                                 Details:
                                 <textarea id="details" name="details" rows="6" cols="50"
                                 value={this.state.details}
                                 onChange={(e) => this.detailsChangedHandler(e)}>
                                 </textarea>
-                            </h6>
+                            </h6> : 
+                            <div>
+                                {this.props.schedule.updated ? <textarea id="update" name="update" rows="6" cols="50"
+                                value={this.state.update}
+                                onChange={(e) => this.updateChangedHandler(e)} style={{ color: "rgb(78,174,7)" }}></textarea> : null}
+                                <textarea id="details" name="details" rows="6" cols="50"
+                                value={this.state.details}
+                                onChange={(e) => this.detailsChangedHandler(e)} style={{ color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}></textarea>
+                            </div>
+                            }
                         </div>
                     </div>
                     <hr></hr>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import DatePicker from 'react-date-picker';
-import DayView from "../../components/DayView/DayView";
+import NewDayView from "../../components/NewDayView/NewDayView";
 import "./Hours.css";
 class Hours extends Component {
   state = {
@@ -148,6 +148,16 @@ class Hours extends Component {
     }
     total = parseInt(h) + ':' + m;
 
+    const weekday = new Array(7);
+      weekday[0] = "Sunday";
+      weekday[1] = "Monday";
+      weekday[2] = "Tuesday";
+      weekday[3] = "Wednesday";
+      weekday[4] = "Thursday";
+      weekday[5] = "Friday";
+      weekday[6] = "Saturday";
+
+
     return (
       <div className="hoursView">
         <div className="row myHeader">
@@ -192,7 +202,7 @@ class Hours extends Component {
                   style={{ display: 'flex', justifyContent: "space-evenly", border: '1px solid indianred', padding: '5px' }}>
                   <div className="Col-sm-4">
                     <label>Date:</label>
-                    {item.date}
+                    {item.date}<br></br>{weekday[new Date(item.date).getDay()]}
                   </div>
                   <div className="Col-sm-4">
                     <label>Hrs:</label>
@@ -202,7 +212,7 @@ class Hours extends Component {
                     <button className="btn btn-outline-warning" type="button" data-toggle="collapse" data-target={"#" + item._id} aria-expanded="false" aria-controls={item._id}>EDIT</button>
                   </div>
                   <div className="collapse" id={item._id}>
-                    <DayView schedule={item} onChange={this.itemChanged} />
+                    <NewDayView schedule={item} onChange={this.itemChanged} isEditMode={true}/>
                   </div>
                 </div>
                 <hr></hr>

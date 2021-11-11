@@ -159,7 +159,9 @@ router.post('/updateItem', function (req, res, next) {
                   "schedule.$.start":req.body.start,
                   "schedule.$.end":req.body.end,
                   "schedule.$.lunch":req.body.lunch,
-                  "schedule.$.hours":req.body.hours
+                  "schedule.$.hours":req.body.hours,
+                  "schedule.$.updatedContent":req.body.updatedContent,
+                  "schedule.$.scheduleContent":req.body.scheduleContent
           }, new: true})
             return newData
           }      

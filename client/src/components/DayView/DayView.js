@@ -206,9 +206,9 @@ class DayView extends Component {
                         <div className="Col-sm-12 button-wrap">
                             <h5>{this.props.schedule.date}</h5>
                             <hr></hr>
-                            {this.props.schedule.updated ? <h6 style={{ background: "#b3ff7a" }}><strong>{this.props.schedule.updatedContent}</strong></h6> : null}
+                            {this.props.schedule.updated ? <h6 style={{ color: "rgb(78,174,7)" }}><strong>{this.props.schedule.updatedContent}</strong></h6> : null}
                             {data.map((cont, i) => (
-                                <h6 key={cont + " " + i} style={{ background: "lightblue", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</h6>
+                                <h6 key={cont + " " + i} style={{ color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</h6>
                             ))}
                         </div>
                     </div>
