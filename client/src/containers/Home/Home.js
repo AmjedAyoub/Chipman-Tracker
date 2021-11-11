@@ -7,7 +7,6 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import Modal from "../../components/UI/Modal/Modal";
 import DayView from "../../components/DayView/DayView";
 import NewDayView from "../../components/NewDayView/NewDayView";
-import Hours from "../../components/Hours/Hours";
 import Calendar from 'react-calendar';
 import Logintbygoogle from '../../components/Logintbygoogle/Logintbygoogle';
 

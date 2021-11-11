@@ -9,7 +9,8 @@ import Hour from "./components/Hours/Hours";
 class App extends Component {
   state={
     token: "",
-    googleSignedIn: false
+    googleSignedIn: false,
+    path: ""
   }
 
   componentDidMount () {
@@ -17,30 +18,34 @@ class App extends Component {
     const g = localStorage.getItem("google");
     this.setState({
       token: t,
-      googleSignedIn: g
+      googleSignedIn: g,
+      path: this.props.location.pathname
     })
   }
 
   render(){
     const g = localStorage.getItem("google");
     const t = localStorage.getItem("token");
+    console.log(this.props.location.pathname);
+    console.log(this.state.path);
+    // console.log(this.props);
+    // if(this.props.location.pathname === "/Home" && this.state.path === "/Hour"){
+    //   this.props.history.goBack();
+    // }
     let routes =  (
       <Switch>
-        {/* <Route path="/Logging" exact component={Logging}/> */}
-        <Route path="/Logging" exact render={() => <Logging checked={() => this.componentDidMount()}/>} />
+        <Route path="/Logging" exact={true} render={() => <Logging checked={() => this.componentDidMount()}/>} />
         <Redirect from="/" to="/Logging" />
       </Switch>
     );
     if(t && g){
-        routes =  (
-          <Switch>
-            {/* <Route path="/Home" exact component={Home}/> */}
-            <Route path="/Home" exact render={() => <Home checked={() => this.componentDidMount()}/>} />
-            {/* <Redirect from="/" to="/Home" /> */}
-            <Route path="/Hour" exact render={() => <Hour checked={() => this.componentDidMount()}/>} />
-            <Redirect from="/" to="/Home" />
-          </Switch>
-        );
+          routes =  (
+            <Switch>
+              <Route exact path="/Hour" render={() => <Hour checked={() => this.componentDidMount()}/>} />
+              <Route exact path="/Home" render={() => <Home checked={() => this.componentDidMount()}/>} />
+              <Redirect exact from="/" to="/Home" />
+            </Switch>
+          );
     }
     return (
       <div className="App">

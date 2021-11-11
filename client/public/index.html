@@ -49,8 +49,7 @@
         localStorage.setItem('google', true);
         localStorage.setItem('googleToken', googleUser.getAuthResponse().access_token);
         localStorage.setItem('googleEmail', profile.getEmail());
-        // window.location.assign("http://localhost:3000/#/Home");
-        window.location.assign("https://chipmantrack.herokuapp.com/#/Home");
+        window.location.assign(window.location.href);
       }
     </script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
