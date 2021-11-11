@@ -38,7 +38,7 @@ class App extends Component {
             <Route path="/Home" exact render={() => <Home checked={() => this.componentDidMount()}/>} />
             {/* <Redirect from="/" to="/Home" /> */}
             <Route path="/Hour" exact render={() => <Hour checked={() => this.componentDidMount()}/>} />
-            {/* <Redirect from="/" to="/Hour" /> */}
+            <Redirect from="/" to="/Home" />
           </Switch>
         );
     }
