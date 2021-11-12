@@ -249,7 +249,10 @@ class Hours extends Component {
                     }
                   </div>
                   <div className="Col-sm-4">
-                    <button className="btn btn-outline-warning" type="button" data-toggle="collapse" data-target={"#" + item._id} aria-expanded="false" aria-controls={item._id}>EDIT</button>
+                    <button className="btn btn-outline-warning btn-text collapsed" type="button" data-toggle="collapse" data-target={"#" + item._id} aria-expanded="false" aria-controls={item._id}>
+                      <span>EDIT</span>
+                      <b>CLOSE</b>
+                    </button>
                   </div>
                   <div className="collapse" id={item._id}>
                     <NewDayView schedule={item} onChange={this.itemChanged} isEditMode={true}/>

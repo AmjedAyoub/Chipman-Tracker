@@ -168,4 +168,15 @@ input[type="file"] {
     to {background-color: rgba(9, 241, 9, 0.651);}
 }
 
+.btn-text b {
+  display:inline
+}
+
+.btn-text.collapsed b {
+  display:none
+}
+
+.btn-text:not(.collapsed) span {
+  display:none
+}
   

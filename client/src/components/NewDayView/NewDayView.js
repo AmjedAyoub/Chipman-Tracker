@@ -271,11 +271,15 @@ class NewDayView extends Component {
                 <div className="card card-body">
                     <div className="row" style={{ justifyContent: 'center', border: '1px solid indianred', padding: '5px' }}>
                         <div className="Col-sm-12 button-wrap">
-                            {!this.props.schedule.dayOff ?
-                            <button className="btn btn-outline-danger" onClick={this.takeDayOff}>TAKE DAY OFF</button> :
-                            <button className="btn btn-outline-success" onClick={this.returnToWork}>RETURN TO WORK</button>
+                            {this.props.isEditMode ? 
+                                <div>
+                                    {!this.props.schedule.dayOff ?
+                                    <button className="btn btn-outline-danger" onClick={this.takeDayOff}>TAKE DAY OFF</button> :
+                                    <button className="btn btn-outline-success" onClick={this.returnToWork}>RETURN TO WORK</button>
+                                    }
+                                    <hr></hr>
+                                </div>:null
                             }
-                            <hr></hr>
                             <h5>{this.props.schedule.date}</h5>
                             <hr></hr>
                             {!this.props.isEditMode ? 
