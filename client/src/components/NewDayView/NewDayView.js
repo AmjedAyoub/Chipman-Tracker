@@ -198,42 +198,65 @@ class NewDayView extends Component {
 
     returnToWork = () => {
         axios.post("https://chipmantrack.herokuapp.com/dayOff", { 
-            header: {
-              'Access-Control-Allow-Origin': '*'
-            },
-            userID: localStorage.getItem("userID"),
-            scheduleID: this.props.schedule._id,
-            dayOff: false,
-        }
-        )
-        .then(res => {
-                if (res.status === "error") {
-                    throw new Error(res.data.message);
-                }
-                this.props.schedule.dayOff = false;
-                this.props.onChange();
+                header: {
+                  'Access-Control-Allow-Origin': '*'
+                },
+                userID: localStorage.getItem("userID"),
+                scheduleID: this.props.schedule._id,
+                dayOff: false,
             })
-            .catch(err => this.setState({ error: err.message }));
+        .then(res => {
+                    if (res.status === "error") {
+                        throw new Error(res.data.message);
+                    }
+                    this.props.schedule.dayOff = false;
+                    this.props.onChange();
+        })
+        .catch(err => this.setState({ error: err.message }));
     }
 
-    takeDayOff = () => {
-        axios.post("https://chipmantrack.herokuapp.com/dayOff", { 
-            header: {
-              'Access-Control-Allow-Origin': '*'
-            },
-            userID: localStorage.getItem("userID"),
-            scheduleID: this.props.schedule._id,
-            dayOff: true,
-        }
-        )
-        .then(res => {
+    takeDayOff = async() => {
+        if(this.props.isEditMode){
+            await axios.post("https://chipmantrack.herokuapp.com/dayOff", { 
+                header: {
+                'Access-Control-Allow-Origin': '*'
+                },
+                userID: localStorage.getItem("userID"),
+                scheduleID: this.props.schedule._id,
+                dayOff: true,
+            })
+            .then(res => {
+                    if (res.status === "error") {
+                        throw new Error(res.data.message);
+                    }
+                    this.props.schedule.dayOff = true;
+                    this.props.onChange();
+            })
+            .catch(err => this.setState({ error: err.message }));
+        }else{
+            let start = this.state.start.getHours() + ':' + this.state.start.getMinutes();
+            let end = this.state.end.getHours() + ':' + this.state.end.getMinutes();
+            let hours = this.state.hours + ':' + this.state.minutes;
+            await axios.post("https://chipmantrack.herokuapp.com/addSchedule", {
+              userID: localStorage.getItem("userID"),
+              googleId: this.props.schedule.date,
+              date: this.props.schedule.date,
+              scheduleContent: this.state.details,
+              start: start,
+              end: end,
+              lunch: this.state.lunch,
+              hours: hours,
+              dayOff: true
+            })
+              .then(res => {
                 if (res.status === "error") {
-                    throw new Error(res.data.message);
+                  throw new Error(res.data.message);
                 }
                 this.props.schedule.dayOff = true;
                 this.props.onChange();
-            })
-            .catch(err => this.setState({ error: err.message }));
+              })
+              .catch(err => console.log(err));
+        }
     }
 
     resetHandler = () => {
@@ -271,15 +294,11 @@ class NewDayView extends Component {
                 <div className="card card-body">
                     <div className="row" style={{ justifyContent: 'center', border: '1px solid indianred', padding: '5px' }}>
                         <div className="Col-sm-12 button-wrap">
-                            {this.props.isEditMode ? 
-                                <div>
-                                    {!this.props.schedule.dayOff ?
-                                    <button className="btn btn-outline-danger" onClick={this.takeDayOff}>TAKE DAY OFF</button> :
-                                    <button className="btn btn-outline-success" onClick={this.returnToWork}>RETURN TO WORK</button>
-                                    }
-                                    <hr></hr>
-                                </div>:null
+                            {!this.props.schedule.dayOff ?
+                            <button className="btn btn-outline-danger" onClick={this.takeDayOff}>TAKE DAY OFF</button> :
+                            <button className="btn btn-outline-success" onClick={this.returnToWork}>RETURN TO WORK</button>
                             }
+                            <hr></hr>
                             <h5>{this.props.schedule.date}</h5>
                             <hr></hr>
                             {!this.props.isEditMode ? 
