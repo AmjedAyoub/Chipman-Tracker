@@ -141,6 +141,7 @@ class Home extends Component {
           }
           // newMessages = result.data.messages;
         }
+        // console.log(newMessages);
         if (newMessages.length > 0) {
           await this.getMessagesContent(token, email, newMessages);
         }
@@ -207,6 +208,7 @@ class Home extends Component {
       })
         .then((message) => {
           let m = Buffer.from(message.data.raw, 'base64').toString('ascii');
+          // console.log(m)
           let lower = m.toLowerCase();
           let content = "";
           let updateContent;
@@ -235,6 +237,12 @@ class Home extends Component {
           }
           let start = m.indexOf("MOVE DETAILS");
           let end = m.indexOf("Black or Blue");
+          if(end === -1){
+            end = m.indexOf("*Black* or *Blue*")
+          }
+          if(end === -1){
+            end = m.indexOf("*Scheduled techs")
+          }
           if (start > -1 && end > -1) {
             content = m.substring(start, end);
             content = this.replaceAll(content, '>', '');
@@ -263,12 +271,12 @@ class Home extends Component {
                 }
               }
             }
-            // console.log(date)
             date = this.replaceAll(date, '-', ',');
             date = this.replaceAll(date, '/', ',');
             let year = new Date().getFullYear();
             date = (date + ',' + year).trim();
             let scheduleContent = data.join('\n');
+            // console.log(date)
             // console.log(scheduleContent);
             let googleId = messages[idx].id;
             let schedule = {};
