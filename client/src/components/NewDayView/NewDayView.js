@@ -234,6 +234,10 @@ class NewDayView extends Component {
             })
             .catch(err => this.setState({ error: err.message }));
         }else{
+            let details = this.state.details; 
+            if(!details || details === "" || details === null){
+                details = "Day Off!"
+            }
             let start = this.state.start.getHours() + ':' + this.state.start.getMinutes();
             let end = this.state.end.getHours() + ':' + this.state.end.getMinutes();
             let hours = this.state.hours + ':' + this.state.minutes;
@@ -241,7 +245,7 @@ class NewDayView extends Component {
               userID: localStorage.getItem("userID"),
               googleId: this.props.schedule.date,
               date: this.props.schedule.date,
-              scheduleContent: this.state.details,
+              scheduleContent: details,
               start: start,
               end: end,
               lunch: this.state.lunch,
