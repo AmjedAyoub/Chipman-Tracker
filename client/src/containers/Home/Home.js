@@ -364,22 +364,32 @@ class Home extends Component {
           }
         });
         // console.log(arr);
+        let dark = localStorage.getItem("dark");
+        let v = false;
+        if(dark === "true"){
+          v = true
+        }
         this.setState({
           ...this.state,
           schedule: arr,
           showCal: true,
           viewContent: "calendarView",
           userName: name,
-          dark: localStorage.getItem("dark")
+          dark: v
         })
       })
       .catch(err => {
+        let dark = localStorage.getItem("dark");
+        let v = false;
+        if(dark === "true"){
+          v = true
+        }
         this.setState({
           ...this.state,
           showCal: true,
           viewContent: "calendarView",
           userName: name,
-          dark: localStorage.getItem("dark")
+          dark: v
         })
         console.log(err);
       });
@@ -517,11 +527,9 @@ class Home extends Component {
         throw new Error(res.data.message);
       }
       localStorage.setItem("dark", v);
-      dark = localStorage.getItem("dark");
-      this.setState({
-        ...this.state,
-        dark: v
-      });
+      // dark = localStorage.getItem("dark");
+      this.props.checked();
+      this.getSchedule()
     })
     .catch(err => this.setState({ error: err.message }));
   }
@@ -567,7 +575,7 @@ class Home extends Component {
                 onClickDay={this.onSelect}
               />
             </div>
-            : <div className="loaderDiv"><div className="loader"></div><strong>Please wait...</strong></div>
+            : <div className="loaderDiv"><div className="loader"></div><strong className={this.state.dark ? "loaderDark" : "loaderLight"}>Please wait...</strong></div>
         );
         break;
       case 'chipmanView':
@@ -594,7 +602,7 @@ class Home extends Component {
                 onClickDay={this.onSelect}
               />
             </div>
-            : <div className="loaderDiv"><div className="loader"></div><strong>Please wait...</strong></div>
+            : <div className="loaderDiv"><div className="loader"></div><strong className={this.state.dark ? "loaderDark" : "loaderLight"}>Please wait...</strong></div>
         );
         break;
     }

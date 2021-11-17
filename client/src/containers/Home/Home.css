@@ -15,6 +15,14 @@
     background: rgb(15, 15, 15);
   }
 
+  .loaderLight {
+    color: black !important;
+  }
+  
+  .loaderDark {
+    color: aliceblue !important;
+  }
+
 /* The Overlay (background) */
 .overlay {
     /* Height & width depends on how you want to reveal the overlay (see JS below) */   
@@ -185,6 +193,11 @@ button:focus {
   margin-top: 15px !important;
   border: solid rgb(27, 27, 117) 2px;
   position: relative;
+  background: transparent !important;
+}
+
+.react-calendar button {
+  color: rgb(75, 163, 240);
   background: transparent !important;
 }
 

@@ -10,16 +10,23 @@ class App extends Component {
   state={
     token: "",
     googleSignedIn: false,
-    path: ""
+    path: "",
+    dark: false
   }
 
   componentDidMount () {
     const t = localStorage.getItem("token");
     const g = localStorage.getItem("google");
+    let dark = localStorage.getItem("dark");
+    let v = false;
+    if(dark === "true"){
+      v = true
+    }
     this.setState({
       token: t,
       googleSignedIn: g,
-      path: this.props.location.pathname
+      path: this.props.location.pathname,
+      dark: v
     })
   }
 
@@ -42,7 +49,7 @@ class App extends Component {
           );
     }
     return (
-      <div className="App">
+      <div className={this.state.dark ? "App dark" : "App"}>
         {routes}   
       </div>
     );

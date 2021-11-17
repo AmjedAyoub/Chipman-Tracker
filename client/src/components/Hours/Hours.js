@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
-import DatePicker from 'react-date-picker';
 import Logintbygoogle from '../../components/Logintbygoogle/Logintbygoogle';
 import NewDayView from "../../components/NewDayView/NewDayView";
 import "./Hours.css";
@@ -54,46 +53,71 @@ class Hours extends Component {
         // adjust to Monday first day of week
         let diff = d.getDate() - day + (day === 0 ? -6 : 1);
         if (this.state.fromDate === null || !this.state.fromDate) {
+          let dark = localStorage.getItem("dark");
+          let v = false;
+          if (dark === "true") {
+            v = true
+          }
           this.setState({
             ...this.state,
             schedule: arr,
             userName: name,
             showHours: true,
             fromDate: new Date(d.setDate(diff)),
-            dark: localStorage.getItem("dark")
+            dark: v
           });
         } else {
+          let dark = localStorage.getItem("dark");
+          let v = false;
+          if (dark === "true") {
+            v = true
+          }
           this.setState({
             ...this.state,
             schedule: arr,
             userName: name,
             showHours: true,
-            dark: localStorage.getItem("dark")
+            dark: v
           })
         }
       })
       .catch(err => {
+        let dark = localStorage.getItem("dark");
+        let v = false;
+        if (dark === "true") {
+          v = true
+        }
         this.setState({
           ...this.state,
           userName: name,
           showHours: true,
-          dark: localStorage.getItem("dark")
+          dark: v
         })
         console.log(err);
       });
   }
 
   dateFromChange = (e) => {
+    let date = new Date(e.target.value);
+    date.setHours(0);
+    date.setHours(+24);
+    date.setMinutes(0);
+    date.setSeconds(0);
     this.setState({
       ...this.state,
-      fromDate: e
+      fromDate: date
     })
   }
 
   dateToChange = (e) => {
+    let date = new Date(e.target.value);
+    date.setHours(0);
+    date.setHours(+24);
+    date.setMinutes(0);
+    date.setSeconds(0);
     this.setState({
       ...this.state,
-      toDate: e
+      toDate: date
     })
   }
 
@@ -110,7 +134,7 @@ class Hours extends Component {
   /* Close when someone clicks on the "x" symbol inside the overlay */
   closeNav = (navBtn) => {
     document.getElementById("myNav").style.width = "0%";
-    if(navBtn === "TERRA"){
+    if (navBtn === "TERRA") {
       window.location.assign("https://www.terrastaffinggroup.com/myaccount/login");
     }
   }
@@ -122,27 +146,25 @@ class Hours extends Component {
   changeMode = async () => {
     let dark = localStorage.getItem("dark");
     let v = false;
-    if(dark === "false"){
+    if (dark === "false") {
       v = true
     }
-    await axios.post("https://chipmantrack.herokuapp.com/dark", { 
-        header: {
-          'Access-Control-Allow-Origin': '*'
-        },
-        userID: localStorage.getItem("userID"),
-        dark: v,
+    await axios.post("https://chipmantrack.herokuapp.com/dark", {
+      header: {
+        'Access-Control-Allow-Origin': '*'
+      },
+      userID: localStorage.getItem("userID"),
+      dark: v,
     })
-    .then(res => {
-            if (res.status === "error") {
-                throw new Error(res.data.message);
-              }
-              localStorage.setItem("dark", v);
-              this.setState({
-                ...this.state,
-                dark: v
-              });
-            })
-        .catch(err => this.setState({ error: err.message }));
+      .then(res => {
+        if (res.status === "error") {
+          throw new Error(res.data.message);
+        }
+        localStorage.setItem("dark", v);
+        this.props.checked();
+        this.getSchedules();
+      })
+      .catch(err => this.setState({ error: err.message }));
   }
 
   render() {
@@ -152,19 +174,19 @@ class Hours extends Component {
     let total = 0;
     this.state.schedule.forEach(element => {
       if (element.date !== "WILL BE UPDATED") {
-        if(!element.updated){
+        if (!element.updated) {
           let mes = arr.find(x => ((x.date === element.date) && (x.googleId !== element.googleId)));
-          if(mes){
-            if(!arr.find(x => (x.date === mes.date))){
+          if (mes) {
+            if (!arr.find(x => (x.date === mes.date))) {
               arr.push(mes);
             }
-          }else{
-            if(!arr.find(x => (x.date === element.date))){
+          } else {
+            if (!arr.find(x => (x.date === element.date))) {
               arr.push(element);
             }
           }
-        }else{
-          if(!arr.find(x => (x.date === element.date))){
+        } else {
+          if (!arr.find(x => (x.date === element.date))) {
             arr.push(element);
           }
         }
@@ -178,13 +200,13 @@ class Hours extends Component {
     });
     arr.sort((a, b) => {
       if (new Date(a.date) > new Date(b.date)) {
-          return -1;
+        return -1;
       }
       if (new Date(a.date) < new Date(b.date)) {
-          return 1;
+        return 1;
       }
       return 0;
-  })
+    })
     let h = parseFloat(total) / 60.00;
     h += "";
     let s = h.split('.')
@@ -201,33 +223,40 @@ class Hours extends Component {
     total = parseInt(h) + ':' + m;
 
     const weekday = new Array(7);
-      weekday[0] = "Sunday";
-      weekday[1] = "Monday";
-      weekday[2] = "Tuesday";
-      weekday[3] = "Wednesday";
-      weekday[4] = "Thursday";
-      weekday[5] = "Friday";
-      weekday[6] = "Saturday";
+    weekday[0] = "Sunday";
+    weekday[1] = "Monday";
+    weekday[2] = "Tuesday";
+    weekday[3] = "Wednesday";
+    weekday[4] = "Thursday";
+    weekday[5] = "Friday";
+    weekday[6] = "Saturday";
 
-
-    let dark = localStorage.getItem("dark");
-      
+    let fDate = "";
+    let tDate = "";
+    if (fromDate) {
+      fDate = fromDate.toISOString()
+      let s = fDate.split("T");
+      fDate = s[0];
+      tDate = toDate.toISOString()
+      let t = tDate.split("T");
+      tDate = t[0];
+    }
     return (
       <div className={this.state.dark ? "hoursView dark" : "hoursView"}>
-      <div id="myNav" className="overlay">
-        {/* Button to close the overlay navigation */}
-        <button id="closeMenuBtn" className="closebtn" onClick={() => this.closeNav("close")}>&times;</button>
-        {/* Overlay content */}
-        <div className="overlay-content">
-          <Logintbygoogle checked={() => this.compDidChanged()} />
-          <Link to="/Home"><button className="navbtn" onClick={() => this.closeNav("calendarView")}>Calendar</button></Link>
-          <Link to="/Hour"><button className="navbtn" onClick={() => this.closeNav("hoursView")}>Hours</button></Link>
-          <Link to="/Home"><button className="navbtn" onClick={() => this.closeNav("chipmanView")}>Chipman Tracker</button></Link>
-          <button className="navbtn" onClick={() => this.closeNav("TERRA")}>TERRA</button>
+        <div id="myNav" className="overlay">
+          {/* Button to close the overlay navigation */}
+          <button id="closeMenuBtn" className="closebtn" onClick={() => this.closeNav("close")}>&times;</button>
+          {/* Overlay content */}
+          <div className="overlay-content">
+            <Logintbygoogle checked={() => this.compDidChanged()} />
+            <Link to="/Home"><button className="navbtn" onClick={() => this.closeNav("calendarView")}>Calendar</button></Link>
+            <Link to="/Hour"><button className="navbtn" onClick={() => this.closeNav("hoursView")}>Hours</button></Link>
+            <Link to="/Home"><button className="navbtn" onClick={() => this.closeNav("chipmanView")}>Chipman Tracker</button></Link>
+            <button className="navbtn" onClick={() => this.closeNav("TERRA")}>TERRA</button>
+          </div>
         </div>
-      </div>
-      {/* Use any element to open/show the overlay navigation menu */}
-      <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
+        {/* Use any element to open/show the overlay navigation menu */}
+        <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
         <button className="btnDark" onClick={this.changeMode}>{this.state.dark ? "GO LIGHT" : "GO DARK"}</button>
         <div className="myHours">
           <div className="row myHeader">
@@ -242,17 +271,17 @@ class Hours extends Component {
             <div className="row" style={{ display: 'flex', justifyContent: "space-evenly", border: '1px solid indianred', padding: '1px' }}>
               <div className="Col-sm-6">
                 <label>From:</label>
-                <DatePicker
+                <input type="date"
                   onChange={this.dateFromChange}
-                  value={fromDate}
-                />
+                  data-date-format="mm-dd-YYYY"
+                  value={fDate} />
               </div>
               <div className="Col-sm-6">
                 <label>To:</label>
-                <DatePicker
+                <input type="date"
                   onChange={this.dateToChange}
-                  value={toDate}
-                />
+                  data-date-format="mm-dd-YYYY"
+                  value={tDate} />
               </div>
             </div>
             <div className="row" style={{ display: 'flex', justifyContent: "center", border: '1px solid indianred', padding: '5px' }}>
@@ -268,7 +297,7 @@ class Hours extends Component {
               {arr.map((item, index) => (
                 <li key={index}>
                   <div
-                    className={((new Date(item.date).getDate() >= fromDate.getDate() && new Date(item.date).getMonth() >= fromDate.getMonth() && new Date(item.date).getFullYear() >= fromDate.getFullYear()) && (new Date(item.date).getDate() <= toDate.getDate() && new Date(item.date).getMonth() <= toDate.getMonth() && new Date(item.date).getFullYear() <= toDate.getFullYear())) ? this.state.dark ? "row selected sDark": "row selected" : this.state.dark ? "row notSselected notSDark" : "row notSelected"}
+                    className={((new Date(item.date).getDate() >= fromDate.getDate() && new Date(item.date).getMonth() >= fromDate.getMonth() && new Date(item.date).getFullYear() >= fromDate.getFullYear()) && (new Date(item.date).getDate() <= toDate.getDate() && new Date(item.date).getMonth() <= toDate.getMonth() && new Date(item.date).getFullYear() <= toDate.getFullYear())) ? this.state.dark ? "row selected sDark" : "row selected" : this.state.dark ? "row notSselected notSDark" : "row notSelected"}
                     style={{ display: 'flex', justifyContent: "space-evenly", border: '1px solid indianred', padding: '5px' }}>
                     <div className="Col-sm-4">
                       <label>Date:</label>
@@ -278,8 +307,8 @@ class Hours extends Component {
                       {!item.dayOff ? <div>
                         <label>Hrs:</label>
                         <label>{item.hours}</label>
-                      </div>:
-                      <img className="dayOff2" src="dayoff.jpg" alt="Day off"/>
+                      </div> :
+                        <img className="dayOff2" src="dayoff.jpg" alt="Day off" />
                       }
                     </div>
                     <div className="Col-sm-4">
@@ -289,14 +318,14 @@ class Hours extends Component {
                       </button>
                     </div>
                     <div className="collapse" id={item._id}>
-                      <NewDayView schedule={item} onChange={this.itemChanged} isEditMode={true} dark={this.state.dark}/>
+                      <NewDayView schedule={item} onChange={this.itemChanged} isEditMode={true} dark={this.state.dark} />
                     </div>
                   </div>
                   <hr></hr>
                 </li>
               ))}
             </ul>
-            : <div className="loaderDiv"><div className="loader"></div><strong>Please wait...</strong></div>}
+            : <div className="loaderDiv"><div className="loader"></div><strong className={this.state.dark ? "loaderDark" : "loaderLight"}>Please wait...</strong></div>}
         </div>
       </div>
     )

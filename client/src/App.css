@@ -8,6 +8,10 @@
   overflow: hidden;
 }
 
+.dark {
+  background: rgb(15, 15, 15);
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

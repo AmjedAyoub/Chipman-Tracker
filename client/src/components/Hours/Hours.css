@@ -184,6 +184,14 @@ input[type="file"] {
 .btn-text:not(.collapsed) span {
   display:none
 }
+
+.loaderLight {
+  color: black !important;
+}
+
+.loaderDark {
+  color: aliceblue !important;
+}
   
 .dark {
   background: rgb(15, 15, 15);
