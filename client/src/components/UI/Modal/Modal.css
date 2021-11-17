@@ -28,6 +28,6 @@
 
 @media (max-width: 600px) {
     .Modal {
-      margin: -650px auto;
+      /* margin: -650px auto; */
     }
 }
