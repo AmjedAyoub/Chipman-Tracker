@@ -5,6 +5,7 @@ const UserSchema = new Schema({
   user: { type: String, required: false, trim: true },
   email: { type: String, required: true, trim: true },
   password: { type: String, required: true },
+  dark:{type: Boolean, default: false},
   schedule: [
     {
       googleId:{type: String, default: "WILL BE UPDATED"},
@@ -12,7 +13,6 @@ const UserSchema = new Schema({
       scheduleContent:{type: String, default: "WILL BE UPDATED"},
       updated:{type: Boolean, default: false},
       dayOff:{type: Boolean, default: false},
-      dark:{type: Boolean, default: false},
       updatedContent:{type: String, default: "NOT-UPDATED"},
       start:{type: String, default: "00:00"},
       end:{type: String, default: "00:00"},
