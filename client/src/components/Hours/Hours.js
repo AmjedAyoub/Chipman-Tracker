@@ -119,23 +119,27 @@ class Hours extends Component {
     await this.getSchedules();
   }
 
-  changeMode = () => {
+  changeMode = async () => {
     let dark = localStorage.getItem("dark");
-    axios.post("https://chipmantrack.herokuapp.com/dark", { 
+    let v = false;
+    if(dark === "false"){
+      v = true
+    }
+    await axios.post("https://chipmantrack.herokuapp.com/dark", { 
         header: {
           'Access-Control-Allow-Origin': '*'
         },
         userID: localStorage.getItem("userID"),
-        dark: !dark,
+        dark: v,
     })
     .then(res => {
             if (res.status === "error") {
                 throw new Error(res.data.message);
               }
-              localStorage.setItem("dark", !dark);
+              localStorage.setItem("dark", v);
               this.setState({
                 ...this.state,
-                dark: !dark
+                dark: v
               });
             })
         .catch(err => this.setState({ error: err.message }));
@@ -209,7 +213,7 @@ class Hours extends Component {
     let dark = localStorage.getItem("dark");
       
     return (
-      <div className={dark ? "hoursView dark" : "hoursView"}>
+      <div className={this.state.dark ? "hoursView dark" : "hoursView"}>
       <div id="myNav" className="overlay">
         {/* Button to close the overlay navigation */}
         <button id="closeMenuBtn" className="closebtn" onClick={() => this.closeNav("close")}>&times;</button>

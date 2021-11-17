@@ -501,26 +501,32 @@ class Home extends Component {
 
   changeMode = async() => {
     let dark = localStorage.getItem("dark");
+    let v = false;
+    if(dark === "false"){
+      v = true
+    }
     await axios.post("https://chipmantrack.herokuapp.com/dark", { 
-        header: {
-          'Access-Control-Allow-Origin': '*'
-        },
-        userID: localStorage.getItem("userID"),
-        dark: !dark,
+      header: {
+        'Access-Control-Allow-Origin': '*'
+      },
+      userID: localStorage.getItem("userID"),
+      dark: v,
     })
     .then(res => {
-            if (res.status === "error") {
-                throw new Error(res.data.message);
-              }
-              localStorage.setItem("dark", !dark);
-              this.setState({
-                ...this.state,
-                dark: !dark
-              });
-            })
-        .catch(err => this.setState({ error: err.message }));
+      if (res.status === "error") {
+        throw new Error(res.data.message);
+      }
+      localStorage.setItem("dark", v);
+      dark = localStorage.getItem("dark");
+      this.setState({
+        ...this.state,
+        dark: v
+      });
+    })
+    .catch(err => this.setState({ error: err.message }));
   }
-
+  
+          
   render() {
     let page = null;
     let model = null;
@@ -593,10 +599,9 @@ class Home extends Component {
         break;
     }
 
-    let dark = localStorage.getItem("dark");
 
     return (
-      <div className={dark ? "Home dark" : "Home"}>
+      <div className={this.state.dark ? "Home dark" : "Home"}>
         <div id="myNav" className="overlay">
           {/* Button to close the overlay navigation */}
           <button id="closeMenuBtn" className="closebtn" onClick={() => this.closeNav("close")}>&times;</button>
