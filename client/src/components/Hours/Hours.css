@@ -1,10 +1,15 @@
 .hoursView {
-    width: 97% !important;
+    width: 100% !important;
     height: 100% !important;
     overflow-y: scroll !important; 
     -ms-overflow-style: none;  
     scrollbar-width: none; 
     margin: auto !important;
+}
+
+.myHours {
+  width: 97% !important;
+  margin: auto !important;
 }
 
 .hoursView::-webkit-scrollbar {
@@ -180,3 +185,16 @@ input[type="file"] {
   display:none
 }
   
+.dark {
+  background: rgb(15, 15, 15);
+}
+
+.btnDark {
+  display: block;    
+  background: #6495edad;
+  height: 30px;
+  margin-top: 5px;
+  margin-right: 5px;
+  float: right;
+  z-index: 600;
+}

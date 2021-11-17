@@ -245,8 +245,8 @@ class DayView extends Component {
             data = this.props.schedule.scheduleContent.split('\n');
         }
         return (
-            <div className="DayView">
-                <div className="card card-body">
+            <div className={this.props.dark ? "DayView dark" : "DayView"}>
+                <div className={this.props.dark ? "card card-body darkV" : "card card-body"}>
                     <div className="row" style={{ justifyContent: 'center', border: '1px solid indianred', padding: '5px' }}>
                         <div className="Col-sm-12 button-wrap">
                             {!this.props.schedule.dayOff ?
@@ -260,7 +260,7 @@ class DayView extends Component {
                                 <div>
                                     {this.props.schedule.updated ? <h6 style={{ color: "rgb(78,174,7)" }}><strong>{this.props.schedule.updatedContent}</strong></h6> : null}
                                     {data.map((cont, i) => (
-                                        <h6 key={cont + " " + i} style={{ color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</h6>
+                                        <h6 key={cont + " " + i} className={this.props.dark ? "contentDark" : "content"} style={{ marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</h6>
                                     ))}
                                 </div> : 
                                 <div>
@@ -271,13 +271,12 @@ class DayView extends Component {
                     </div>
                     <hr></hr>
                     <div className="row " style={{ justifyContent: 'space-between' }}>
-                        <label style={{ background: 'yellow', padding: '5px' }}>Total hours: {this.state.hours}:{this.state.minutes}</label>
+                        <label className={this.props.dark ? "darkI" : ""} style={{ background: 'yellow', padding: '5px' }}>Total hours: {this.state.hours}:{this.state.minutes}</label>
                     </div>
                     <div className="row " style={{ justifyContent: 'center', display: 'flex' }}>
                         <div className="Col-md-4" style={{ display: 'inline' }}>
                             {/* <h6>From:</h6> */}
                             <TimePicker
-                                className="mt-2 mb-2"
                                 style={{ cursor: 'pointer' }}
                                 clearable
                                 ampm={true}
@@ -291,7 +290,6 @@ class DayView extends Component {
                         <div className="Col-md-4" style={{ display: 'inline' }}>
                             {/* <h6>To:</h6> */}
                             <TimePicker
-                                className="mt-2 mb-2"
                                 style={{ cursor: 'pointer' }}
                                 clearable
                                 ampm={true}

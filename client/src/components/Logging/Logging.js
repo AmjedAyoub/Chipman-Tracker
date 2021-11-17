@@ -128,6 +128,7 @@ class Logging extends Component {
                     localStorage.setItem("token", res.data.token)
                     localStorage.setItem("userID", res.data.user._id)
                     localStorage.setItem("userName", res.data.user.user)
+                    localStorage.setItem("dark", res.data.user.dark)
                     this.setState({
                         user: "",
                         email: "",

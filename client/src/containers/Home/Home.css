@@ -10,6 +10,11 @@
   .Home::-webkit-scrollbar {
       display: none;
   }
+
+  .dark {
+    background: rgb(15, 15, 15);
+  }
+
 /* The Overlay (background) */
 .overlay {
     /* Height & width depends on how you want to reveal the overlay (see JS below) */   
@@ -77,6 +82,16 @@
     z-index: 600;
   }
 
+  .btnDark {
+    display: block;    
+    background: #6495edad;
+    height: 30px;
+    margin-top: 5px;
+    margin-right: 5px;
+    float: right;
+    z-index: 600;
+  }
+
   .navbtn {
     border: none !important;
     background: transparent !important;
@@ -121,8 +136,8 @@ button:focus {
   background: radial-gradient(rgba(153, 205, 50, 0.589), transparent) !important;
 }
 
-.react-calendar__tile--active {
-  border: solid red 5px !important;
+.react-calendar__tile--now {
+  background: transparent !important;
 }
 
 .react-calendar__month-view__days__day--weekend {
@@ -141,9 +156,10 @@ button:focus {
 }
 
 .react-calendar__tile--active {
-  background: transparent;
-  color: crimson;
+  background: transparent !important;
+  color: crimson !important;
   font-weight: bold;
+  border: solid red 5px !important;
 }
 
 .dayView {
@@ -154,12 +170,25 @@ button:focus {
   width: 30%;
 }
 
+.content { 
+  color: navy !important;
+}
+
+.contentDark {
+  color: #0000ff !important;
+}
+
 .react-calendar {
   box-sizing: border-box !important;
   width: auto !important;
   margin-top: 15px !important;
   border: solid rgb(27, 27, 117) 2px;
   position: relative;
+  background: transparent !important;
+}
+
+.react-calendar__navigation {
+  background: rgba(0, 0, 139, 0.63);
 }
 
 button.react-calendar__tile {
@@ -212,6 +241,16 @@ button.react-calendar__tile {
 
 .notSelected {
   background: aliceblue;
+}
+
+.notSDark {
+  background: #0f3251;
+  color: aliceblue;
+}
+
+.sDark {
+  background: #04714d !important;
+  color: aliceblue;
 }
 
 .selected {

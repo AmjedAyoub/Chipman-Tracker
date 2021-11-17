@@ -25,6 +25,8 @@ class Logintbygoogle extends Component {
       localStorage.clear("googleEmail");
       localStorage.removeItem("userName");
       localStorage.clear("userName");
+      localStorage.removeItem("dark");
+      localStorage.clear("dark");
       this.props.checked();
     });
   }

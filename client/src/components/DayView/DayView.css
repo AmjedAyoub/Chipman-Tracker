@@ -4,6 +4,27 @@
     width: 100%;
 }
 
+.dark {
+  background: rgb(15, 15, 15);
+}
+
+.darkV {
+   background: #0f3251 !important;
+   color: aliceblue;
+}
+
+.darkI {
+   color: black !important;
+}
+
+.content { 
+    color: navy !important;
+}
+  
+.contentDark {
+    color: #0000ff !important;
+}
+
 li {
     padding: 1px;
     width: 95%;

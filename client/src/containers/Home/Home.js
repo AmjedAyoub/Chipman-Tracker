@@ -22,7 +22,8 @@ class Home extends Component {
     showCal: false,
     viewContent: "calendarView",
     scheduleToView: null,
-    userName: ""
+    userName: "",
+    dark: false
   }
 
   componentDidMount = async () => {
@@ -368,7 +369,8 @@ class Home extends Component {
           schedule: arr,
           showCal: true,
           viewContent: "calendarView",
-          userName: name
+          userName: name,
+          dark: localStorage.getItem("dark")
         })
       })
       .catch(err => {
@@ -376,7 +378,8 @@ class Home extends Component {
           ...this.state,
           showCal: true,
           viewContent: "calendarView",
-          userName: name
+          userName: name,
+          dark: localStorage.getItem("dark")
         })
         console.log(err);
       });
@@ -414,12 +417,12 @@ class Home extends Component {
             return <div className="dayView">
               <p style={{ fontSize: "10px", color: "rgb(78,174,7)" }}><strong>{d.updatedContent}</strong></p>
               {data.map((cont, i) => (
-                <p key={cont + " " + i} style={{ fontSize: "10px", color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</p>
+                <p key={cont + " " + i} className={this.state.dark ? "contentDark" : "content"} style={{ fontSize: "10px", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</p>
               ))}
             </div>
           } else {
             return <div className="dayView">{data.map((cont, i) => (
-              <p key={cont + " " + i} style={{ fontSize: "10px", color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</p>
+              <p key={cont + " " + i} className={this.state.dark ? "contentDark" : "content"} style={{ fontSize: "10px", marginBlock: "0px", margin: "0px", padding: "0px" }}>{cont}</p>
             ))}
             </div>
           }
@@ -496,6 +499,26 @@ class Home extends Component {
     }
   }
 
+  changeMode = () => {
+    axios.post("https://chipmantrack.herokuapp.com/dark", { 
+        header: {
+          'Access-Control-Allow-Origin': '*'
+        },
+        userID: localStorage.getItem("userID"),
+        dark: !localStorage.getItem("dark"),
+    })
+    .then(res => {
+            if (res.status === "error") {
+                throw new Error(res.data.message);
+              }
+              this.setState({
+                ...this.state,
+                dark: !this.state.dark
+              });
+            })
+        .catch(err => this.setState({ error: err.message }));
+  }
+
   render() {
     let page = null;
     let model = null;
@@ -503,12 +526,12 @@ class Home extends Component {
     switch (this.state.modelContent) {
       case 'DayView':
         model = (
-          <DayView schedule={this.state.scheduleToView} onChange={this.getSchedule} />
+          <DayView schedule={this.state.scheduleToView} onChange={this.getSchedule} dark={this.state.dark}/>
         );
         break;
       case 'NewDayView':
         model = (
-          <NewDayView schedule={this.state.scheduleToView} onChange={this.getSchedule} isEditMode={false}/>
+          <NewDayView schedule={this.state.scheduleToView} onChange={this.getSchedule} isEditMode={false}  dark={this.state.dark}/>
         );
         break;
       default:
@@ -569,7 +592,7 @@ class Home extends Component {
     }
 
     return (
-      <div className="Home">
+      <div className={this.state.dark ? "Home dark" : "Home"}>
         <div id="myNav" className="overlay">
           {/* Button to close the overlay navigation */}
           <button id="closeMenuBtn" className="closebtn" onClick={() => this.closeNav("close")}>&times;</button>
@@ -584,6 +607,7 @@ class Home extends Component {
         </div>
         {/* Use any element to open/show the overlay navigation menu */}
         <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
+        <button className="btnDark" onClick={this.changeMode}>{this.state.dark ? "GO LIGHT" : "GO DARK"}</button>
         {page}
         {this.state.showModel ?
           <Modal show={this.state.showModel} modalClosed={this.closeModelHandler}>

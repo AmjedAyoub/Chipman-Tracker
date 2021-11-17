@@ -294,8 +294,8 @@ class NewDayView extends Component {
 
     render() {
         return (
-            <div className="NewDayView">
-                <div className="card card-body">
+            <div className={this.props.dark ? "NewDayView dark" : "NewDayView"}>
+            <div className={this.props.dark ? "card card-body darkV" : "card card-body"}>
                     <div className="row" style={{ justifyContent: 'center', border: '1px solid indianred', padding: '5px' }}>
                         <div className="Col-sm-12 button-wrap">
                             {!this.props.schedule.dayOff ?
@@ -306,7 +306,7 @@ class NewDayView extends Component {
                             <h5>{this.props.schedule.date}</h5>
                             <hr></hr>
                             {!this.props.isEditMode ? 
-                            <h6 style={{ display: "inline-grid", color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}>
+                            <h6 className={this.props.dark ? "contentDark" : "content"} style={{ display: "inline-grid", marginBlock: "0px", margin: "0px", padding: "0px" }}>
                                 Details:
                                 <textarea placeholder="Enter Move details here..." id="details" name="details" rows="6" cols="50"
                                 value={this.state.details}
@@ -319,14 +319,14 @@ class NewDayView extends Component {
                                 onChange={(e) => this.updateChangedHandler(e)} style={{ color: "rgb(78,174,7)" }}></textarea> : null}
                                 <textarea placeholder="Enter Move details here..." id="details" name="details" rows="6" cols="50"
                                 value={this.state.details}
-                                onChange={(e) => this.detailsChangedHandler(e)} style={{ color: "navy", marginBlock: "0px", margin: "0px", padding: "0px" }}></textarea>
+                                onChange={(e) => this.detailsChangedHandler(e)} className={this.props.dark ? "contentDark" : "content"} style={{ marginBlock: "0px", margin: "0px", padding: "0px" }}></textarea>
                             </div>
                             }
                         </div>
                     </div>
                     <hr></hr>
                     <div className="row " style={{ justifyContent: 'space-between' }}>
-                        <label style={{ background: 'yellow', padding: '5px' }}>Total hours: {this.state.hours}:{this.state.minutes}</label>
+                        <label className={this.props.dark ? "darkI" : ""} style={{ background: 'yellow', padding: '5px' }}>Total hours: {this.state.hours}:{this.state.minutes}</label>
                     </div>
                     <div className="row " style={{ justifyContent: 'center', display: 'flex' }}>
                         <div className="Col-md-4" style={{ display: 'inline' }}>
