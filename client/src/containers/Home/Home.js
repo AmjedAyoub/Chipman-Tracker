@@ -529,11 +529,13 @@ class Home extends Component {
       localStorage.setItem("dark", v);
       // dark = localStorage.getItem("dark");
       this.props.checked();
-      this.getSchedule()
+      this.setState({
+        ...this.state,
+        dark: v
+      })
     })
     .catch(err => this.setState({ error: err.message }));
   }
-  
           
   render() {
     let page = null;
@@ -553,6 +555,12 @@ class Home extends Component {
       default:
         model = null;
         break;
+    }
+
+    let dark = localStorage.getItem("dark");
+    let v = false;
+    if(dark === "true"){
+      v = true
     }
 
     switch (this.state.viewContent) {
@@ -575,7 +583,7 @@ class Home extends Component {
                 onClickDay={this.onSelect}
               />
             </div>
-            : <div className="loaderDiv"><div className="loader"></div><strong className={this.state.dark ? "loaderDark" : "loaderLight"}>Please wait...</strong></div>
+            : <div className="loaderDiv"><div className="loader"></div><strong className={v ? "loaderDark" : "loaderLight"}>Please wait...</strong></div>
         );
         break;
       case 'chipmanView':
@@ -602,7 +610,7 @@ class Home extends Component {
                 onClickDay={this.onSelect}
               />
             </div>
-            : <div className="loaderDiv"><div className="loader"></div><strong className={this.state.dark ? "loaderDark" : "loaderLight"}>Please wait...</strong></div>
+            : <div className="loaderDiv"><div className="loader"></div><strong className={v ? "loaderDark" : "loaderLight"}>Please wait...</strong></div>
         );
         break;
     }

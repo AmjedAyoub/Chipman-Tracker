@@ -162,7 +162,10 @@ class Hours extends Component {
         }
         localStorage.setItem("dark", v);
         this.props.checked();
-        this.getSchedules();
+        this.setState({
+          ...this.state,
+          dark: v
+        })
       })
       .catch(err => this.setState({ error: err.message }));
   }
@@ -241,6 +244,14 @@ class Hours extends Component {
       let t = tDate.split("T");
       tDate = t[0];
     }
+
+    
+    let dark = localStorage.getItem("dark");
+    let v = false;
+    if(dark === "true"){
+      v = true
+    }
+
     return (
       <div className={this.state.dark ? "hoursView dark" : "hoursView"}>
         <div id="myNav" className="overlay">
@@ -325,7 +336,7 @@ class Hours extends Component {
                 </li>
               ))}
             </ul>
-            : <div className="loaderDiv"><div className="loader"></div><strong className={this.state.dark ? "loaderDark" : "loaderLight"}>Please wait...</strong></div>}
+            : <div className="loaderDiv"><div className="loader"></div><strong className={v ? "loaderDark" : "loaderLight"}>Please wait...</strong></div>}
         </div>
       </div>
     )
