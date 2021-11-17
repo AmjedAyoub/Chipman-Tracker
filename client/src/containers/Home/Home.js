@@ -626,10 +626,10 @@ class Home extends Component {
         <button className="btnHome" onClick={this.openNav}><FontAwesomeIcon icon={faBars} /></button>
         <button className="btnDark" onClick={this.changeMode}>{this.state.dark ? "GO LIGHT" : "GO DARK"}</button>
         {page}
-        {this.state.showModel ?
-          <Modal show={this.state.showModel} modalClosed={this.closeModelHandler}>
-            {model}
-          </Modal> : null}
+              {this.state.showModel ?
+                <Modal show={this.state.showModel} modalClosed={this.closeModelHandler}>
+                  {model}
+                </Modal> : null}
       </div>
     );
   };

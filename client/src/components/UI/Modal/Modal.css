@@ -11,7 +11,7 @@
     overflow-x: auto;
     box-sizing: border-box;
     transition: all 0.3s ease-out;
-    margin: -600px auto;
+    margin: -590px auto;
   }
   .modal:before {
     content: '';
