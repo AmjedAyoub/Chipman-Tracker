@@ -90,6 +90,7 @@
     margin-right: 5px;
     float: right;
     z-index: 600;
+    clear: both;
   }
 
   .navbtn {
