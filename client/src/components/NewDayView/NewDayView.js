@@ -306,7 +306,7 @@ class NewDayView extends Component {
                             <h5>{this.props.schedule.date}</h5>
                             <hr></hr>
                             {!this.props.isEditMode ? 
-                            <h6 className={this.props.dark ? "contentDark" : "content"} style={{ display: "inline-grid", marginBlock: "0px", margin: "0px", padding: "0px" }}>
+                            <h6 className={this.props.dark ? "contentDark2" : "content2"} style={{ display: "inline-grid", marginBlock: "0px", margin: "0px", padding: "0px" }}>
                                 Details:
                                 <textarea placeholder="Enter Move details here..." id="details" name="details" rows="6" cols="50"
                                 value={this.state.details}
@@ -319,7 +319,7 @@ class NewDayView extends Component {
                                 onChange={(e) => this.updateChangedHandler(e)} style={{ color: "rgb(78,174,7)" }}></textarea> : null}
                                 <textarea placeholder="Enter Move details here..." id="details" name="details" rows="6" cols="50"
                                 value={this.state.details}
-                                onChange={(e) => this.detailsChangedHandler(e)} className={this.props.dark ? "contentDark" : "content"} style={{ marginBlock: "0px", margin: "0px", padding: "0px" }}></textarea>
+                                onChange={(e) => this.detailsChangedHandler(e)} className={this.props.dark ? "contentDark2" : "content2"} style={{ marginBlock: "0px", margin: "0px", padding: "0px" }}></textarea>
                             </div>
                             }
                         </div>

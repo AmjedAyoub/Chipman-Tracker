@@ -278,7 +278,7 @@ class Hours extends Component {
               <h2 style={{ color: "Naive" }}>My Hours</h2>
             </div>
           </div>
-          <div className="card card-body" style={{ background: this.state.dark ? "#5e5e5e" : "lavenderblush" }}>
+          <div className="card card-body" style={{ background: v ? "#5e5e5e" : "lavenderblush" }}>
             <div className="row" style={{ display: 'flex', justifyContent: "space-evenly", border: '1px solid indianred', padding: '1px' }}>
               <div className="Col-sm-6">
                 <label>From:</label>
@@ -297,8 +297,7 @@ class Hours extends Component {
             </div>
             <div className="row" style={{ display: 'flex', justifyContent: "center", border: '1px solid indianred', padding: '5px' }}>
               <div className="Col-sm-12">
-                <label>Total Hours:</label>
-                <label>{total}</label>
+                <h6 style={{background:"yellow", padding:"2px"}}>Total Hours: {total}</h6>
               </div>
             </div>
           </div>
